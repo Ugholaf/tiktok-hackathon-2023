@@ -1,21 +1,18 @@
 import { useState } from "react";
 import Logo from "./Logo";
 
-interface NavbarProps {
-  isLogin: boolean;
-}
-
 const tabs: string[] = ["Home", "Transaction", "About"];
 
-const Navbar: React.FC<NavbarProps> = ({ isLogin }) => {
+const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("Home");
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
+  const isLogin = false;
 
   return (
-    <div className=" bg-white w-full h-full">
+    <div className=" bg-white px-32 py-4">
       {isLogin ? (
         <div className="flex flex-row items-center justify-between gap-3">
           <Logo />
@@ -43,14 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ isLogin }) => {
           </div>
         </div>
       ) : (
-        <div className="flex space-x-4">
-          <button className="bg-white text-red-600 py-2 px-4 rounded border border-red-600">
-            Login
-          </button>
-          <button className="bg-red-600 text-white py-2 px-4 rounded">
-            Register
-          </button>
-        </div>
+        <Logo />
       )}
     </div>
   );

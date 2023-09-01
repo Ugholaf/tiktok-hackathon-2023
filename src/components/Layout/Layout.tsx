@@ -3,14 +3,13 @@ import Navbar from "./navbar/Navbar";
 
 interface LayoutProps {
   children: React.ReactNode;
-  isLogin: boolean;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, isLogin }) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
-      <Navbar isLogin={isLogin} />
-      <main>{children}</main>
+      <Navbar />
+      <div className="bg-slate-200">{children}</div>
       <Footer />
     </>
   );
