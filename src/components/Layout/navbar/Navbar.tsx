@@ -9,10 +9,10 @@ const Navbar = () => {
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
-  const isLogin = false;
+  const isLogin = true;
 
   return (
-    <div className=" bg-white px-32 py-4 fixed w-full z-10">
+    <div className=" bg-white px-32 py-4 sticky top-0 w-full z-10">
       {isLogin ? (
         <div className="flex flex-row items-center justify-between gap-3">
           <Logo />
