@@ -9,7 +9,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <Navbar />
-      <div className="bg-slate-200">{children}</div>
+      <div className="bg-slate-200 w-full">{children}</div>
       <Footer />
     </>
   );

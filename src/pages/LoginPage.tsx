@@ -5,8 +5,8 @@ import LoginRegistration from "../components/LoginRegistration.tsx/LoginRegistra
 const LoginPage = () => {
   return (
     <Layout>
-      <div className="inline-flex items-center py-20">
-        <Card sx={{ display: "flex" }}>
+      <div className="flex items-center justify-center py-20 w-full">
+        <Card className="flex">
           <CardMedia
             component="img"
             sx={{ width: "24.5rem" }}
