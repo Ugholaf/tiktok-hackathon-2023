@@ -1,8 +1,8 @@
 const FutureImprovementsCard = () => {
     return (
-        <div className="flex flex-col items-center py-6 px-11 w-full bg-white rounded-lg shadow-md">
+        <div className="flex flex-col items-center py-6 px-4 sm:px-11 w-full overflow-hidden md:shrink-0 bg-white rounded-lg shadow-md">
             <p className="text-2xl font-bold border-b-2 border-red-500 mb-6">Future Improvements</p>
-                <div className="grid grid-cols-8 gap-3 self-stretch">
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3 self-stretch">
                     <div className="col-span-1 flex flex-col items-center gap-2 justify-center">
                         <img src="/src/assets/future/invest.svg" alt="invest" />
                         <p className="text-base font-bold">invest</p>

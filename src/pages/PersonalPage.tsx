@@ -1,8 +1,10 @@
 import TransactionOverviewCard from "../components/Card/TransactionOverviewCard";
 import WalletBalanceCard from "../components/Card/WalletBalanceCard";
 import FutureImprovementsCard from "../components/Card/FutureImprovementsCard";
-import Layout from "../components/Layout/Layout";
+import RecentContacts from "../components/Card/RecentContacts";
 import RecentTransactionsCard from "../components/Card/RecentTransactionsCard";
+import Layout from "../components/Layout/Layout";
+
 
 const PersonalPage = () => {
   return (
@@ -16,7 +18,7 @@ const PersonalPage = () => {
           <div className="flex justify-center items-center gap-3 self-stretch">
             <RecentTransactionsCard />
             {/* replace this with contact card */}
-            <TransactionOverviewCard />
+            <RecentContacts />
           </div>
           <div className="flex justify-center items-center gap-3 self-stretch">
             <FutureImprovementsCard />
