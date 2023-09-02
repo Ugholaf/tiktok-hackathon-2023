@@ -12,7 +12,7 @@ const Navbar = () => {
   const isLogin = false;
 
   return (
-    <div className=" bg-white px-32 py-4">
+    <div className=" bg-white px-32 py-4 fixed w-full z-10">
       {isLogin ? (
         <div className="flex flex-row items-center justify-between gap-3">
           <Logo />
