@@ -40,11 +40,16 @@ const RecentTransactionsCard = () => {
         <div className="flex flex-col justify-between items-center self-stretch px-11 py-3 bg-gray-200 w-full rounded-lg">
           <div className="flex flex-row justify-between items-center self-stretch border-b border-black mb-2">
             {columns.map((column) => (
-              <p className="font-bold">{column.label}</p>
+              <p key={column.label} className="font-bold">
+                {column.label}
+              </p>
             ))}
           </div>
-          {data.map((row) => (
-            <div className="flex flex-row justify-between items-center self-stretch border-b border-neutral-300 mb-2">
+          {data.map((row, i) => (
+            <div
+              key={i}
+              className="flex flex-row justify-between items-center self-stretch border-b border-neutral-300 mb-2"
+            >
               <p className="text-gray-500">{row.date}</p>
               <p className="text-gray-500">{row.details}</p>
               <p className="text-gray-500">{row.amount}</p>
