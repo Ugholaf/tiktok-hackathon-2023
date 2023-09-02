@@ -15,6 +15,7 @@ function App() {
       <Route path="/" element={<LoginPage />} />
       <Route element={<PrivateRoute />}>
         <Route path="/personal" element={<PersonalPage />} />
+        
       </Route>
     </Routes>
   );
