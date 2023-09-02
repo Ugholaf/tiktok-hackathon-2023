@@ -1,5 +1,6 @@
 import TransactionOverviewCard from "../components/Card/TransactionOverviewCard";
 import WalletBalanceCard from "../components/Card/WalletBalanceCard";
+import FutureImprovementsCard from "../components/Card/FutureImprovementsCard";
 import Layout from "../components/Layout/Layout";
 import RecentTransactionsCard from "../components/Card/RecentTransactionsCard";
 
@@ -16,6 +17,9 @@ const PersonalPage = () => {
             <RecentTransactionsCard />
             {/* replace this with contact card */}
             <TransactionOverviewCard />
+          </div>
+          <div className="flex justify-center items-center gap-3 self-stretch">
+            <FutureImprovementsCard />
           </div>
         </div>
       </div>
