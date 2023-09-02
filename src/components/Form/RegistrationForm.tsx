@@ -6,11 +6,8 @@ import {
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
+import { AccountType } from "../../generated/graphql";
 
-enum AccountType {
-  Personal = "Personal",
-  Business = "Business",
-}
 
 interface FormValues {
   username: string | undefined;

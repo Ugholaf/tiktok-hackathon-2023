@@ -1,0 +1,36 @@
+mutation RegisterIndividual(
+  $username: String!
+  $email: String!
+  $password: String!
+  $firstName: String!
+  $lastName: String!
+  $dateOfBirth: String!
+  $country: String!
+  $postcode: String!
+  $occupation: String!
+  $businessName: String!
+  $uen: String!
+  $businessCountry: String!
+  $businessPostcode: String!
+  $businessAddress: String!
+) {
+  registerBusiness(
+    username: $username
+    email: $email
+    password: $password
+    firstName: $firstName
+    lastName: $lastName
+    dateOfBirth: $dateOfBirth
+    country: $country
+    postcode: $postcode
+    occupation: $occupation
+    businessName: $businessName
+    uen: $uen
+    businessCountry: $businessCountry
+    businessPostcode: $businessPostcode
+    businessAddress: $businessAddress
+  ) {
+    accessToken
+    refreshToken
+  }
+}
