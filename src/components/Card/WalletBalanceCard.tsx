@@ -1,6 +1,6 @@
 const WalletBalanceCard = () => {
   return (
-    <div className="flex flex-col rounded-xl py-6 px-11 my-6 self-stretch items-center  bg-white w-3/6">
+    <div className="flex flex-col rounded-xl py-6 px-11 my-6 self-stretch items-center w-full bg-white w-3/6">
       <p className="text-2xl font-bold border-b-2 border-red-600 mb-6">
         Wallet Balance
       </p>
