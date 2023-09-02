@@ -1,10 +1,6 @@
 import { MenuItem, Select, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-
-enum AccountType {
-  Personal = "Personal",
-  Business = "Business",
-}
+import { AccountType } from "../../generated/graphql";
 
 interface FormValues {
   usernameEmail: string | undefined;
