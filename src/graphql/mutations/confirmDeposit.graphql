@@ -1,0 +1,13 @@
+mutation ConfirmDeposit($paypalCheckoutId: String!) {
+  confirmDeposit(paypalCheckoutId: $paypalCheckoutId) {
+    id
+    paypalCheckoutId
+    currency
+    amount
+    userId
+    fees
+    status
+    updatedAt
+    createdAt
+  }
+}
