@@ -1,6 +1,6 @@
 const RecentContacts = () => {
   return (
-    <div className="flex flex-col rounded-xl py-6 px-11 my-6 space-y-2 self-stretch items-center shadow-md bg-white w-3/6">
+    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11  my-6 space-y-2 self-stretch items-center w-full shadow-md bg-white">
 
         <p className="text-2xl font-bold border-b-2 border-red-500 mb-6">Recent Contacts</p>
 
@@ -19,7 +19,7 @@ const RecentContacts = () => {
             </div>
             <div className="col-span-1 flex flex-col items-center gap-2 justify-start">
                 <img src="/src/assets/recentcontact/person.svg" alt="person" />
-                <p className="text-base font-bold self-end">Darius</p>
+                <p className="text-base font-bold">Darius</p>
             </div>
         </div>
 
