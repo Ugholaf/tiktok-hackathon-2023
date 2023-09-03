@@ -1,6 +1,6 @@
 const RecentContacts = () => {
   return (
-    <div className="flex flex-col rounded-xl py-6 px-11 my-6 space-y-2 self-stretch items-center w-full shadow-md bg-white">
+    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11  my-6 space-y-2 self-stretch items-center w-full shadow-md bg-white">
 
         <p className="text-2xl font-bold border-b-2 border-red-500 mb-6">Recent Contacts</p>
 
