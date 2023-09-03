@@ -15,7 +15,7 @@ const CashInModal: React.FC<CashInModalProps> = ({
   const [selectedOption, setSelectedOption] = useState("paypal");
 
   const handleClose = () => {
-    setSelectedOption("");
+    setSelectedOption("paypal");
     setOpen(false);
   };
 
