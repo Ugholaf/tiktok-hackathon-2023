@@ -103,7 +103,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 value !== undefined
                   ? undefined
                   : () => (
-                      <label className="text-zinc-400">Personal/Business</label>
+                      <label className="text-zinc-400">
+                        Individual/Business
+                      </label>
                     )
               }
             >

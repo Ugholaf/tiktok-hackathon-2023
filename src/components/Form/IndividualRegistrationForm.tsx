@@ -4,13 +4,21 @@ import { Controller, useForm } from "react-hook-form";
 import { RegisterFormValues } from "./RegistrationForm";
 import dayjs from "dayjs";
 import countries from "../../constant/countries";
+import {
+  RegisterIndividualMutationVariables,
+  useRegisterIndividualMutation,
+} from "../../generated/graphql";
+import { useDispatch } from "react-redux";
+import { onLogin } from "../../redux/slices/authSlice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 interface FormValues {
   firstName: string;
   lastName: string;
-  DOB: string;
+  dateOfBirth: string;
   country: string;
-  postalCode: string;
+  postcode: string;
   occupation: string;
 }
 
@@ -21,29 +29,55 @@ interface IndividualRegistrationFormProps {
 const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
   registerFormValues,
 }) => {
-  // const [
-  //   registerIndividual,
-  //   { loading: isRegisterLoading, error: registerError },
-  // ] = useRegisterIndividualMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { control } = useForm<FormValues>({
+  const [registerIndividual] = useRegisterIndividualMutation();
+
+  const { handleSubmit, control } = useForm<FormValues>({
     defaultValues: {
       firstName: "",
       lastName: "",
-      DOB: "",
+      dateOfBirth: "",
       country: "",
-      postalCode: "",
+      postcode: "",
       occupation: "",
     },
   });
 
-  console.log(registerFormValues);
+  const onSubmit = handleSubmit(async (individualData) => {
+    const data: RegisterIndividualMutationVariables = {
+      ...individualData,
+      dateOfBirth: dayjs(individualData.dateOfBirth).format("DD-MM-YYYY"),
+      username: registerFormValues.username,
+      email: registerFormValues.email,
+      password: registerFormValues.password,
+    };
+
+    try {
+      const { data: registerData, errors } = await registerIndividual({
+        variables: {
+          ...data,
+        },
+      });
+
+      if (registerData?.registerIndividual) {
+        const accessToken = registerData.registerIndividual.accessToken;
+        dispatch(onLogin({ accessToken }));
+        navigate("/personal");
+        toast.success("Successfully registered!");
+      }
+
+      if (errors && errors.length > 0) {
+        toast.error("Error registering!");
+      }
+    } catch (error) {
+      toast.error("Error registering!");
+    }
+  });
 
   return (
-    <form
-      className="flex flex-wrap flex-col"
-      onSubmit={(data) => console.log(data)}
-    >
+    <form className="flex flex-wrap flex-col" onSubmit={onSubmit}>
       <div className="flex flex-col py-10 px-12">
         <div className="flex flex-wrap justify-center">
           <p className="text-2xl font-bold">Enter Your Personal Information </p>
@@ -89,7 +123,7 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
             </p>
             <Controller
               control={control}
-              name="DOB"
+              name="dateOfBirth"
               render={({ field }) => (
                 <DatePicker
                   {...field}
@@ -138,7 +172,7 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
             </p>
             <Controller
               control={control}
-              name="postalCode"
+              name="postcode"
               render={({ field }) => (
                 <TextField
                   {...field}
