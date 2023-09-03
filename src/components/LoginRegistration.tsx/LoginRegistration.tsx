@@ -1,8 +1,17 @@
 import { useState } from "react";
-import RegistrationForm from "../Form/RegistrationForm";
+import RegistrationForm, { RegisterFormValues } from "../Form/RegistrationForm";
 import LoginForm from "../Form/LoginForm";
+import { FormNames } from "../../pages/LoginPage";
 
-const LoginRegistration = () => {
+interface LoginRegistrationProps {
+  setForm: (formName: FormNames) => void;
+  setFormData: (formData: RegisterFormValues) => void;
+}
+
+const LoginRegistration: React.FC<LoginRegistrationProps> = ({
+  setForm,
+  setFormData,
+}) => {
   const tabs = ["Registration", "Login"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
 
@@ -25,7 +34,9 @@ const LoginRegistration = () => {
       </div>
 
       <div>
-        {activeTab === tabs[0] && <RegistrationForm />}
+        {activeTab === tabs[0] && (
+          <RegistrationForm setForm={setForm} setFormData={setFormData} />
+        )}
         {activeTab === tabs[1] && <LoginForm />}
       </div>
     </div>

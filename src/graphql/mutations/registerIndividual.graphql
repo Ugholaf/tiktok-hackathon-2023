@@ -8,13 +8,8 @@ mutation RegisterIndividual(
   $country: String!
   $postcode: String!
   $occupation: String!
-  $businessName: String!
-  $uen: String!
-  $businessCountry: String!
-  $businessPostcode: String!
-  $businessAddress: String!
 ) {
-  registerBusiness(
+  registerIndividual(
     username: $username
     email: $email
     password: $password
@@ -24,13 +19,7 @@ mutation RegisterIndividual(
     country: $country
     postcode: $postcode
     occupation: $occupation
-    businessName: $businessName
-    uen: $uen
-    businessCountry: $businessCountry
-    businessPostcode: $businessPostcode
-    businessAddress: $businessAddress
   ) {
     accessToken
-    refreshToken
   }
 }

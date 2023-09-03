@@ -15,17 +15,102 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+};
+
+export type UserInfo = {
+  __typename?: 'UserInfo';
+  id: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  lastName: Scalars['String']['output'];
+  dateOfBirth: Scalars['String']['output'];
+  country: Scalars['String']['output'];
+  postcode: Scalars['String']['output'];
+  occupation: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String']['output'];
+  username: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  emailVerificationSentAt?: Maybe<Scalars['DateTime']['output']>;
+  emailVerified: Scalars['Boolean']['output'];
+  accountType: AccountType;
+  userInfo: UserInfo;
+  businessInfo: BusinessInfo;
+  updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+};
+
+export enum AccountType {
+  INDIVIDUAL = 'INDIVIDUAL',
+  BUSINESS = 'BUSINESS'
+}
+
+export type BusinessInfo = {
+  __typename?: 'BusinessInfo';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  uen: Scalars['String']['output'];
+  country: Scalars['String']['output'];
+  postalCode: Scalars['String']['output'];
+  address: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+};
+
+export type PayPalDeposit = {
+  __typename?: 'PayPalDeposit';
+  id: Scalars['String']['output'];
+  paypalCheckoutId?: Maybe<Scalars['String']['output']>;
+  currency: Currency;
+  amount: Scalars['Float']['output'];
+  userId: Scalars['String']['output'];
+  user: User;
+  fees?: Maybe<Scalars['Float']['output']>;
+  status: PayPalStatus;
+  updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+};
+
+export enum Currency {
+  USD = 'USD',
+  SGD = 'SGD'
+}
+
+export enum PayPalStatus {
+  BEFORE_REQUEST = 'BEFORE_REQUEST',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED'
+}
+
+export type PayPalWithdraw = {
+  __typename?: 'PayPalWithdraw';
+  id: Scalars['String']['output'];
+  paypalPaymentId?: Maybe<Scalars['String']['output']>;
+  currency: Currency;
+  amount: Scalars['Float']['output'];
+  userId: Scalars['String']['output'];
+  user: User;
+  status: PayPalStatus;
+  fees?: Maybe<Scalars['Float']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
 };
 
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   accessToken: Scalars['String']['output'];
-  refreshToken: Scalars['String']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String']['output'];
+  me: User;
 };
 
 export type Mutation = {
@@ -33,6 +118,9 @@ export type Mutation = {
   registerBusiness: AuthPayload;
   registerIndividual: AuthPayload;
   login: AuthPayload;
+  requestDeposit: PayPalDeposit;
+  confirmDeposit: PayPalDeposit;
+  withdraw: PayPalWithdraw;
 };
 
 
@@ -73,10 +161,22 @@ export type MutationLoginArgs = {
   accountType: AccountType;
 };
 
-export enum AccountType {
-  INDIVIDUAL = 'INDIVIDUAL',
-  BUSINESS = 'BUSINESS'
-}
+
+export type MutationRequestDepositArgs = {
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+};
+
+
+export type MutationConfirmDepositArgs = {
+  paypalCheckoutId: Scalars['String']['input'];
+};
+
+
+export type MutationWithdrawArgs = {
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+};
 
 export type RegisterIndividualMutationVariables = Exact<{
   username: Scalars['String']['input'];
@@ -88,20 +188,15 @@ export type RegisterIndividualMutationVariables = Exact<{
   country: Scalars['String']['input'];
   postcode: Scalars['String']['input'];
   occupation: Scalars['String']['input'];
-  businessName: Scalars['String']['input'];
-  uen: Scalars['String']['input'];
-  businessCountry: Scalars['String']['input'];
-  businessPostcode: Scalars['String']['input'];
-  businessAddress: Scalars['String']['input'];
 }>;
 
 
-export type RegisterIndividualMutation = { __typename?: 'Mutation', registerBusiness: { __typename?: 'AuthPayload', accessToken: string, refreshToken: string } };
+export type RegisterIndividualMutation = { __typename?: 'Mutation', registerIndividual: { __typename?: 'AuthPayload', accessToken: string } };
 
 
 export const RegisterIndividualDocument = gql`
-    mutation RegisterIndividual($username: String!, $email: String!, $password: String!, $firstName: String!, $lastName: String!, $dateOfBirth: String!, $country: String!, $postcode: String!, $occupation: String!, $businessName: String!, $uen: String!, $businessCountry: String!, $businessPostcode: String!, $businessAddress: String!) {
-  registerBusiness(
+    mutation RegisterIndividual($username: String!, $email: String!, $password: String!, $firstName: String!, $lastName: String!, $dateOfBirth: String!, $country: String!, $postcode: String!, $occupation: String!) {
+  registerIndividual(
     username: $username
     email: $email
     password: $password
@@ -111,14 +206,8 @@ export const RegisterIndividualDocument = gql`
     country: $country
     postcode: $postcode
     occupation: $occupation
-    businessName: $businessName
-    uen: $uen
-    businessCountry: $businessCountry
-    businessPostcode: $businessPostcode
-    businessAddress: $businessAddress
   ) {
     accessToken
-    refreshToken
   }
 }
     `;
@@ -146,11 +235,6 @@ export type RegisterIndividualMutationFn = Apollo.MutationFunction<RegisterIndiv
  *      country: // value for 'country'
  *      postcode: // value for 'postcode'
  *      occupation: // value for 'occupation'
- *      businessName: // value for 'businessName'
- *      uen: // value for 'uen'
- *      businessCountry: // value for 'businessCountry'
- *      businessPostcode: // value for 'businessPostcode'
- *      businessAddress: // value for 'businessAddress'
  *   },
  * });
  */
