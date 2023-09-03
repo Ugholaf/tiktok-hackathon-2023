@@ -1,213 +1,200 @@
-// import { MenuItem, Select, TextField } from "@mui/material";
-// import { DatePicker } from "@mui/x-date-pickers";
-// import { Controller, useForm } from "react-hook-form";
-// import { RegisterFormValues } from "./RegistrationForm";
-// import dayjs from "dayjs";
-// import countries from "../../constant/countries";
-// import {
-//   RegisterIndividualMutationVariables,
-//   useRegisterIndividualMutation,
-// } from "../../generated/graphql";
-// import { useDispatch } from "react-redux";
-// import { onLogin } from "../../redux/slices/authSlice";
-// import toast from "react-hot-toast";
+import { MenuItem, Select, TextField } from "@mui/material";
 
-// interface FormValues {
-//   businessName: string;
-//   uen: string;
-//   businessCountry: string;
-//   businessPostcode: string;
-//   businessAddress: string;
+import { Controller, useForm } from "react-hook-form";
+import { RegisterFormValues } from "./RegistrationForm";
+import dayjs from "dayjs";
+import countries from "../../constant/countries";
+import {
+  RegisterBusinessMutationVariables,
+  useRegisterBusinessMutation,
+} from "../../generated/graphql";
+import { useDispatch } from "react-redux";
+import { onLogin } from "../../redux/slices/authSlice";
+import toast from "react-hot-toast";
+import { IndividualFormValues } from "./IndividualRegistrationForm";
+import { useNavigate } from "react-router";
 
-// }
+interface FormValues {
+  businessName: string;
+  uen: string;
+  businessCountry: string;
+  businessPostcode: string;
+  businessAddress: string;
+}
 
-// interface BusinessRegistrationFormProps {
-//   registerFormValues: RegisterFormValues;
-// }
+interface BusinessRegistrationFormProps {
+  registerFormValues: RegisterFormValues;
+  individualFormValues: IndividualFormValues;
+}
 
-// const BusinessRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
-//   registerFormValues,
-// }) => {
-//   const dispatch = useDispatch();
+const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
+  registerFormValues,
+  individualFormValues,
+}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-//   const [registerIndividual] = useRegisterIndividualMutation();
+  const [registerBusiness] = useRegisterBusinessMutation();
 
-//   const { handleSubmit, control } = useForm<FormValues>({
-//     defaultValues: {
-//       firstName: "",
-//       lastName: "",
-//       dateOfBirth: "",
-//       country: "",
-//       postcode: "",
-//       occupation: "",
-//     },
-//   });
+  const { handleSubmit, control } = useForm<FormValues>({
+    defaultValues: {
+      businessName: "",
+      uen: "",
+      businessCountry: "",
+      businessPostcode: "",
+      businessAddress: "",
+    },
+  });
 
-//   const onSubmit = handleSubmit(async (individualData) => {
-//     console.log(individualData);
-//     const data: RegisterIndividualMutationVariables = {
-//       ...individualData,
-//       dateOfBirth: dayjs(individualData.dateOfBirth).format("DD-MM-YYYY"),
-//       username: registerFormValues.username,
-//       email: registerFormValues.email,
-//       password: registerFormValues.password,
-//     };
+  const onSubmit = handleSubmit(async (businessData) => {
+    const data: RegisterBusinessMutationVariables = {
+      ...businessData,
+      ...individualFormValues,
+      dateOfBirth: dayjs(individualFormValues.dateOfBirth).format("DD-MM-YYYY"),
+      username: registerFormValues.username,
+      email: registerFormValues.email,
+      password: registerFormValues.password,
+    };
 
-//     try {
-//       const { data: registerData, errors } = await registerIndividual({
-//         variables: {
-//           ...data,
-//         },
-//       });
+    try {
+      const { data: registerData, errors } = await registerBusiness({
+        variables: {
+          ...data,
+        },
+      });
 
-//       if (registerData?.registerIndividual) {
-//         const accessToken = registerData.registerIndividual.accessToken;
-//         dispatch(onLogin({ accessToken }));
-//         toast.success("Successfully registered!");
-//       }
+      if (registerData?.registerBusiness) {
+        const accessToken = registerData.registerBusiness.accessToken;
+        dispatch(onLogin({ accessToken }));
+        navigate("/business");
+        toast.success("Successfully registered!");
+      }
 
-//       if (errors && errors.length > 0) {
-//         toast.error("Error registering!");
-//       }
-//     } catch (error) {
-//       toast.error("Error registering!");
-//     }
-//   });
+      if (errors && errors.length > 0) {
+        toast.error("Error registering!");
+      }
+    } catch (error) {
+      toast.error("Error registering!");
+    }
+  });
 
-//   return (
-//     <form className="flex flex-wrap flex-col" onSubmit={onSubmit}>
-//       <div className="flex flex-col py-10 px-12">
-//         <div className="flex flex-wrap justify-center">
-//           <p className="text-2xl font-bold">Enter Your Personal Information </p>
-//         </div>
-//         <div className="grid grid-col-1 gap-4 md:grid-cols-2 my-10">
-//           <div className="flex flex-col md:col-span-1">
-//             <p className="flex flex-start text-sm font-semibold mb-2">
-//               First Name
-//             </p>
-//             <Controller
-//               control={control}
-//               name="firstName"
-//               render={({ field }) => (
-//                 <TextField
-//                   {...field}
-//                   variant="outlined"
-//                   placeholder="First Name"
-//                   fullWidth
-//                 />
-//               )}
-//             />
-//           </div>
-//           <div className="flex flex-col md:col-span-1">
-//             <p className="flex flex-start text-sm font-semibold mb-2">
-//               Last Name
-//             </p>
-//             <Controller
-//               control={control}
-//               name="lastName"
-//               render={({ field }) => (
-//                 <TextField
-//                   {...field}
-//                   variant="outlined"
-//                   placeholder="Last Name"
-//                   fullWidth
-//                 />
-//               )}
-//             />
-//           </div>
-//           <div className="flex flex-col md:col-span-2">
-//             <p className="flex flex-start text-sm font-semibold mb-2">
-//               Date of Birth
-//             </p>
-//             <Controller
-//               control={control}
-//               name="dateOfBirth"
-//               render={({ field }) => (
-//                 <DatePicker
-//                   {...field}
-//                   value={field.value.length === 0 ? null : dayjs(field.value)}
-//                   views={["day", "month", "year"]}
-//                   slotProps={{ textField: { placeholder: "Please select" } }}
-//                 />
-//               )}
-//             />
-//           </div>
-//           <div className="flex flex-col md:col-span-1">
-//             <p className="flex flex-start text-sm font-semibold mb-2">
-//               Country
-//             </p>
-//             <Controller
-//               control={control}
-//               name="country"
-//               render={({ field: { onChange, value } }) => (
-//                 <Select
-//                   className="text-left"
-//                   value={value}
-//                   onChange={onChange}
-//                   renderValue={
-//                     value !== ""
-//                       ? undefined
-//                       : () => <label className="text-gray-400">Country</label>
-//                   }
-//                   MenuProps={{
-//                     style: {
-//                       maxHeight: "300px",
-//                     },
-//                   }}
-//                 >
-//                   {countries.map((country, i) => (
-//                     <MenuItem key={i} value={country} className="text">
-//                       {country}
-//                     </MenuItem>
-//                   ))}
-//                 </Select>
-//               )}
-//             />
-//           </div>
-//           <div className="flex flex-col md:col-span-1">
-//             <p className="flex flex-start text-sm font-semibold mb-2">
-//               Postal Code
-//             </p>
-//             <Controller
-//               control={control}
-//               name="postcode"
-//               render={({ field }) => (
-//                 <TextField
-//                   {...field}
-//                   variant="outlined"
-//                   placeholder="Postal Code"
-//                   fullWidth
-//                 />
-//               )}
-//             />
-//           </div>
-//           <div className="flex flex-col md:col-span-2">
-//             <p className="flex flex-start text-sm font-semibold mb-2">
-//               Occupation
-//             </p>
-//             <Controller
-//               control={control}
-//               name="occupation"
-//               render={({ field }) => (
-//                 <TextField
-//                   {...field}
-//                   variant="outlined"
-//                   placeholder="Occupation"
-//                   fullWidth
-//                 />
-//               )}
-//             />
-//           </div>
-//           <button
-//             className=" bg-red-500 hover:bg-red-600 text-white p-4 rounded md:col-span-2"
-//             type="submit"
-//           >
-//             Submit
-//           </button>
-//         </div>
-//       </div>
-//     </form>
-//   );
-// };
+  return (
+    <form className="flex flex-wrap flex-col" onSubmit={onSubmit}>
+      <div className="flex flex-col py-10 px-12">
+        <div className="flex flex-wrap justify-center">
+          <p className="text-2xl font-bold">Enter Your Business Information </p>
+        </div>
+        <div className="grid grid-col-1 gap-4 md:grid-cols-2 my-10">
+          <div className="flex flex-col md:col-span-2">
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Business Name
+            </p>
+            <Controller
+              control={control}
+              name="businessName"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Business Name"
+                  fullWidth
+                />
+              )}
+            />
+          </div>
+          <div className="flex flex-col md:col-span-2">
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Business UEN
+            </p>
+            <Controller
+              control={control}
+              name="uen"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="UEN"
+                  fullWidth
+                />
+              )}
+            />
+          </div>
+          <div className="flex flex-col md:col-span-1">
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Country
+            </p>
+            <Controller
+              control={control}
+              name="businessCountry"
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  className="text-left"
+                  value={value}
+                  onChange={onChange}
+                  renderValue={
+                    value !== ""
+                      ? undefined
+                      : () => <label className="text-gray-400">Country</label>
+                  }
+                  MenuProps={{
+                    style: {
+                      maxHeight: "300px",
+                    },
+                  }}
+                >
+                  {countries.map((country, i) => (
+                    <MenuItem key={i} value={country} className="text">
+                      {country}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+          <div className="flex flex-col md:col-span-1">
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Postal Code
+            </p>
+            <Controller
+              control={control}
+              name="businessPostcode"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Postal Code"
+                  fullWidth
+                />
+              )}
+            />
+          </div>
+          <div className="flex flex-col md:col-span-2">
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Business Address
+            </p>
+            <Controller
+              control={control}
+              name="businessAddress"
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Occupation"
+                  fullWidth
+                />
+              )}
+            />
+          </div>
+          <button
+            className=" bg-red-500 hover:bg-red-600 text-white p-4 rounded md:col-span-2"
+            type="submit"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+};
 
-// export default IndividualRegistrationForm;
+export default BusinessRegistrationForm;

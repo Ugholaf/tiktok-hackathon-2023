@@ -3,7 +3,10 @@ import Layout from "../components/Layout/Layout";
 import LoginRegistration from "../components/LoginRegistration.tsx/LoginRegistration";
 import { useState } from "react";
 import { RegisterFormValues } from "../components/Form/RegistrationForm";
-import IndividualRegistrationForm from "../components/Form/IndividualRegistrationForm";
+import IndividualRegistrationForm, {
+  IndividualFormValues,
+} from "../components/Form/IndividualRegistrationForm";
+import BusinessRegistrationForm from "../components/Form/BusinessRegistrationForm";
 
 export enum FormNames {
   REGISTERLOGIN = "registerLogin",
@@ -23,6 +26,16 @@ const LoginPage = () => {
     accountType: undefined,
   });
 
+  const [individualFormData, setIndividualFormData] =
+    useState<IndividualFormValues>({
+      firstName: "",
+      lastName: "",
+      dateOfBirth: "",
+      country: "",
+      postcode: "",
+      occupation: "",
+    });
+
   const forms = [
     {
       name: FormNames.REGISTERLOGIN,
@@ -36,11 +49,21 @@ const LoginPage = () => {
     {
       name: FormNames.INDIVIDUAL,
       form: (
-        <IndividualRegistrationForm registerFormValues={registerFormData} />
+        <IndividualRegistrationForm
+          registerFormValues={registerFormData}
+          setForm={setCurrentForm}
+          setIndividualFormValues={setIndividualFormData}
+        />
       ),
     },
     {
       name: FormNames.BUSINESS,
+      form: (
+        <BusinessRegistrationForm
+          registerFormValues={registerFormData}
+          individualFormValues={individualFormData}
+        />
+      ),
     },
   ];
 

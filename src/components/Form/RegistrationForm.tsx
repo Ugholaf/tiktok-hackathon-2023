@@ -36,11 +36,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
     setFormData(data);
-    if (data.accountType === AccountType.INDIVIDUAL) {
-      setForm(FormNames.INDIVIDUAL);
-    } else if (data.accountType === AccountType.BUSINESS) {
-      setForm(FormNames.BUSINESS);
-    }
+    setForm(FormNames.INDIVIDUAL);
   };
 
   return (

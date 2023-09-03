@@ -5,6 +5,7 @@ import { RegisterFormValues } from "./RegistrationForm";
 import dayjs from "dayjs";
 import countries from "../../constant/countries";
 import {
+  AccountType,
   RegisterIndividualMutationVariables,
   useRegisterIndividualMutation,
 } from "../../generated/graphql";
@@ -12,8 +13,9 @@ import { useDispatch } from "react-redux";
 import { onLogin } from "../../redux/slices/authSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import { FormNames } from "../../pages/LoginPage";
 
-interface FormValues {
+export interface IndividualFormValues {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
@@ -24,17 +26,21 @@ interface FormValues {
 
 interface IndividualRegistrationFormProps {
   registerFormValues: RegisterFormValues;
+  setForm: (formName: FormNames) => void;
+  setIndividualFormValues: (individualFormValues: IndividualFormValues) => void;
 }
 
 const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
   registerFormValues,
+  setForm,
+  setIndividualFormValues,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [registerIndividual] = useRegisterIndividualMutation();
 
-  const { handleSubmit, control } = useForm<FormValues>({
+  const { handleSubmit, control } = useForm<IndividualFormValues>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -46,6 +52,12 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
   });
 
   const onSubmit = handleSubmit(async (individualData) => {
+    if (registerFormValues.accountType === AccountType.BUSINESS) {
+      setForm(FormNames.BUSINESS);
+      setIndividualFormValues(individualData);
+      return;
+    }
+
     const data: RegisterIndividualMutationVariables = {
       ...individualData,
       dateOfBirth: dayjs(individualData.dateOfBirth).format("DD-MM-YYYY"),
