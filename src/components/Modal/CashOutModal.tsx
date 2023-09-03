@@ -10,6 +10,7 @@ interface CashOutModalProps {
 }
 
 const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
+  const [requestWithdraw] = useRequestWithdrawMutation();
   const checkoutRef = useRef("");
   const [modalNumber, setModalNumber] = useState(1)
   const [amount, setAmount] = useState("");
@@ -33,7 +34,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
     setEmail(e.target.value);
   };
 
-  const [requestWithdraw] = useRequestWithdrawMutation()
+
 
 
   const handleCheck = () => {

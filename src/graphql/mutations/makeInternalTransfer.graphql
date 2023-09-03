@@ -1,0 +1,12 @@
+mutation MakeInternalTransfer($amount: Float!, $currency: Currency!, $toUsername: String!, $note: String!) {
+  makeInternalTransfer(amount: $amount, currency: $currency, toUsername: $toUsername, note: $note) {
+    amount
+    createdAt
+    currency
+    id
+    note
+    receiverId
+    senderId
+    updatedAt
+  }
+}
