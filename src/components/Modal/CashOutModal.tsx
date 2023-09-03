@@ -33,7 +33,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
     setEmail(e.target.value);
   };
 
-  const [requestWithdraw, { loading }] = useRequestWithdrawMutation()
+  const [requestWithdraw] = useRequestWithdrawMutation()
 
 
   const handleCheck = () => {
