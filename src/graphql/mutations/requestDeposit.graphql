@@ -1,0 +1,13 @@
+mutation RequestDeposit($amount: Float!, $currency: Currency!) {
+  requestDeposit(amount: $amount, currency: $currency) {
+    id
+    paypalCheckoutId
+    currency
+    amount
+    userId
+    fees
+    status
+    updatedAt
+    createdAt
+  }
+}
