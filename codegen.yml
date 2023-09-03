@@ -1,7 +1,7 @@
 overwrite: true
 schema: "https://t-money-api-vugb2.ondigitalocean.app/graphql"
 documents:
-  # - "src/graphql/queries/**/*.graphql"
+  - "src/graphql/queries/**/*.graphql"
   - "src/graphql/mutations/**/*.graphql"
   # - "src/graphql/fragments/**/*.graphql"
   # - "src/graphql/subscriptions/**/*.graphql"

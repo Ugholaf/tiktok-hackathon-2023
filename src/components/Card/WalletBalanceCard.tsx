@@ -1,10 +1,12 @@
 import { useState } from "react";
 import CashInModal from "../Modal/CashInModal";
 import PaypalModal from "../Modal/PaypalModal";
+import P2PTransferModal from "../Modal/P2PTransferModal";
 
 const WalletBalanceCard = () => {
   const [openCashIn, setOpenCashIn] = useState(false);
   const [openPaypal, setOpenPaypal] = useState(false);
+  const [openP2PTransfer, setOpenP2PTransfer ] = useState(false);
 
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
@@ -27,7 +29,7 @@ const WalletBalanceCard = () => {
               <img src="/src/assets/buttons/cashOut.svg" alt="cash out" />
               Cash Out
             </button>
-            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md">
+            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md" onClick={() => setOpenP2PTransfer(true)}>
               <img
                 src="/src/assets/buttons/p2pTransfer.svg"
                 alt="p2p transfer"
@@ -45,6 +47,12 @@ const WalletBalanceCard = () => {
           </div>
         </div>
       </div>
+      {/* Modals */}
+
+      <P2PTransferModal
+        open={openP2PTransfer}
+        setOpen={setOpenP2PTransfer}
+      />
       <CashInModal
         open={openCashIn}
         setOpen={setOpenCashIn}
