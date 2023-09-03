@@ -31,6 +31,17 @@ export type UserInfo = {
   createdAt: Scalars['DateTime']['output'];
 };
 
+export type Balance = {
+  __typename?: 'Balance';
+  amount: Scalars['Float']['output'];
+  currency: Currency;
+};
+
+export enum Currency {
+  USD = 'USD',
+  SGD = 'SGD'
+}
+
 export type User = {
   __typename?: 'User';
   id: Scalars['String']['output'];
@@ -40,7 +51,8 @@ export type User = {
   emailVerified: Scalars['Boolean']['output'];
   accountType: AccountType;
   userInfo: UserInfo;
-  businessInfo: BusinessInfo;
+  businessInfo?: Maybe<BusinessInfo>;
+  balances: Array<Balance>;
   updatedAt: Scalars['DateTime']['output'];
   createdAt: Scalars['DateTime']['output'];
 };
@@ -76,11 +88,6 @@ export type PayPalDeposit = {
   createdAt: Scalars['DateTime']['output'];
 };
 
-export enum Currency {
-  USD = 'USD',
-  SGD = 'SGD'
-}
-
 export enum PayPalStatus {
   BEFORE_REQUEST = 'BEFORE_REQUEST',
   PENDING = 'PENDING',
@@ -98,6 +105,18 @@ export type PayPalWithdraw = {
   user: User;
   status: PayPalStatus;
   fees?: Maybe<Scalars['Float']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+};
+
+export type InternalTransfer = {
+  __typename?: 'InternalTransfer';
+  id: Scalars['String']['output'];
+  senderId: Scalars['String']['output'];
+  amount: Scalars['Float']['output'];
+  currency: Currency;
+  receiverId: Scalars['String']['output'];
+  note: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
   createdAt: Scalars['DateTime']['output'];
 };
@@ -121,6 +140,7 @@ export type Mutation = {
   requestDeposit: PayPalDeposit;
   confirmDeposit: PayPalDeposit;
   requestWithdraw: PayPalWithdraw;
+  makeInternalTransfer: InternalTransfer;
 };
 
 
@@ -179,6 +199,14 @@ export type MutationRequestWithdrawArgs = {
   paypalEmail: Scalars['String']['input'];
 };
 
+
+export type MutationMakeInternalTransferArgs = {
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+  toUsername: Scalars['String']['input'];
+  note: Scalars['String']['input'];
+};
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -196,6 +224,15 @@ export type ConfirmDepositMutationVariables = Exact<{
 
 export type ConfirmDepositMutation = { __typename?: 'Mutation', confirmDeposit: { __typename?: 'PayPalDeposit', id: string, paypalCheckoutId?: string | null, currency: Currency, amount: number, userId: string, fees?: number | null, status: PayPalStatus, updatedAt: any, createdAt: any } };
 
+export type RequestWithdrawMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+  paypalEmail: Scalars['String']['input'];
+}>;
+
+
+export type RequestWithdrawMutation = { __typename?: 'Mutation', requestWithdraw: { __typename?: 'PayPalWithdraw', id: string, paypalPaymentId?: string | null, currency: Currency, amount: number, userId: string, status: PayPalStatus, fees?: number | null, updatedAt: any, createdAt: any } };
+
 export type RegisterIndividualMutationVariables = Exact<{
   username: Scalars['String']['input'];
   email: Scalars['String']['input'];
@@ -210,6 +247,15 @@ export type RegisterIndividualMutationVariables = Exact<{
 
 
 export type RegisterIndividualMutation = { __typename?: 'Mutation', registerIndividual: { __typename?: 'AuthPayload', accessToken: string } };
+
+export type LoginMutationVariables = Exact<{
+  usernameOrEmail: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  accountType: AccountType;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', accessToken: string } };
 
 export type RequestDepositMutationVariables = Exact<{
   amount: Scalars['Float']['input'];
@@ -238,15 +284,6 @@ export type RegisterBusinessMutationVariables = Exact<{
 
 
 export type RegisterBusinessMutation = { __typename?: 'Mutation', registerBusiness: { __typename?: 'AuthPayload', accessToken: string } };
-
-export type LoginMutationVariables = Exact<{
-  usernameOrEmail: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  accountType: AccountType;
-}>;
-
-
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', accessToken: string } };
 
 
 export const HelloDocument = gql`
@@ -374,6 +411,49 @@ export function useConfirmDepositMutation(baseOptions?: Apollo.MutationHookOptio
 export type ConfirmDepositMutationHookResult = ReturnType<typeof useConfirmDepositMutation>;
 export type ConfirmDepositMutationResult = Apollo.MutationResult<ConfirmDepositMutation>;
 export type ConfirmDepositMutationOptions = Apollo.BaseMutationOptions<ConfirmDepositMutation, ConfirmDepositMutationVariables>;
+export const RequestWithdrawDocument = gql`
+    mutation RequestWithdraw($amount: Float!, $currency: Currency!, $paypalEmail: String!) {
+  requestWithdraw(amount: $amount, currency: $currency, paypalEmail: $paypalEmail) {
+    id
+    paypalPaymentId
+    currency
+    amount
+    userId
+    status
+    fees
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type RequestWithdrawMutationFn = Apollo.MutationFunction<RequestWithdrawMutation, RequestWithdrawMutationVariables>;
+
+/**
+ * __useRequestWithdrawMutation__
+ *
+ * To run a mutation, you first call `useRequestWithdrawMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestWithdrawMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestWithdrawMutation, { data, loading, error }] = useRequestWithdrawMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      currency: // value for 'currency'
+ *      paypalEmail: // value for 'paypalEmail'
+ *   },
+ * });
+ */
+export function useRequestWithdrawMutation(baseOptions?: Apollo.MutationHookOptions<RequestWithdrawMutation, RequestWithdrawMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RequestWithdrawMutation, RequestWithdrawMutationVariables>(RequestWithdrawDocument, options);
+      }
+export type RequestWithdrawMutationHookResult = ReturnType<typeof useRequestWithdrawMutation>;
+export type RequestWithdrawMutationResult = Apollo.MutationResult<RequestWithdrawMutation>;
+export type RequestWithdrawMutationOptions = Apollo.BaseMutationOptions<RequestWithdrawMutation, RequestWithdrawMutationVariables>;
 export const RegisterIndividualDocument = gql`
     mutation RegisterIndividual($username: String!, $email: String!, $password: String!, $firstName: String!, $lastName: String!, $dateOfBirth: String!, $country: String!, $postcode: String!, $occupation: String!) {
   registerIndividual(
@@ -425,6 +505,45 @@ export function useRegisterIndividualMutation(baseOptions?: Apollo.MutationHookO
 export type RegisterIndividualMutationHookResult = ReturnType<typeof useRegisterIndividualMutation>;
 export type RegisterIndividualMutationResult = Apollo.MutationResult<RegisterIndividualMutation>;
 export type RegisterIndividualMutationOptions = Apollo.BaseMutationOptions<RegisterIndividualMutation, RegisterIndividualMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($usernameOrEmail: String!, $password: String!, $accountType: AccountType!) {
+  login(
+    usernameOrEmail: $usernameOrEmail
+    password: $password
+    accountType: $accountType
+  ) {
+    accessToken
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      usernameOrEmail: // value for 'usernameOrEmail'
+ *      password: // value for 'password'
+ *      accountType: // value for 'accountType'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const RequestDepositDocument = gql`
     mutation RequestDeposit($amount: Float!, $currency: Currency!) {
   requestDeposit(amount: $amount, currency: $currency) {
@@ -528,42 +647,3 @@ export function useRegisterBusinessMutation(baseOptions?: Apollo.MutationHookOpt
 export type RegisterBusinessMutationHookResult = ReturnType<typeof useRegisterBusinessMutation>;
 export type RegisterBusinessMutationResult = Apollo.MutationResult<RegisterBusinessMutation>;
 export type RegisterBusinessMutationOptions = Apollo.BaseMutationOptions<RegisterBusinessMutation, RegisterBusinessMutationVariables>;
-export const LoginDocument = gql`
-    mutation Login($usernameOrEmail: String!, $password: String!, $accountType: AccountType!) {
-  login(
-    usernameOrEmail: $usernameOrEmail
-    password: $password
-    accountType: $accountType
-  ) {
-    accessToken
-  }
-}
-    `;
-export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
-
-/**
- * __useLoginMutation__
- *
- * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLoginMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [loginMutation, { data, loading, error }] = useLoginMutation({
- *   variables: {
- *      usernameOrEmail: // value for 'usernameOrEmail'
- *      password: // value for 'password'
- *      accountType: // value for 'accountType'
- *   },
- * });
- */
-export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
-      }
-export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
-export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
