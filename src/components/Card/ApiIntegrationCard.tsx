@@ -14,7 +14,7 @@ const handleCopyClick = () => {
     // Copy the API key to clipboard
     navigator.clipboard.writeText(generatedAPI);
   };
-  
+
 const generateAPI = () => {
     // Implement your logic to generate the API here
     // Return the generated API
@@ -24,7 +24,7 @@ const generateAPI = () => {
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 gap-8 self-stretch items-center w-full shadow-md bg-white">
         <div className="flex flex-col items-center gap-2 justify-start"> {/*Header Text Class*/}
-        <p className="text-2xl font-bold border-b-2 border-red-500">Business Tools</p>
+        <p className="text-2xl font-bold border-b-2 border-red-500">Generate API to enable checkout on your site</p>
         </div>
 
         <div className="flex flex-col items-start gap-1/8 self-stretch"> {/*Paragraph Text Class items-start means align to left*/}
@@ -36,10 +36,10 @@ const generateAPI = () => {
         <div className="flex flex-col items-start gap-1/8 self-stretch"> {/*Paragraph Text Class items-start means align to left*/}
             <p className="text-base font-bold text-left">Generate SECRET API</p>
             <p className="text-base text-left">Do not share this API with anyone, it is tied to your business account. </p>
-            <div className="flex flex-row items-center gap-2 py-3 self-stretch">
-                <button onClick={handleButtonClick} className="bg-red-600 text-white px-4 py-2 rounded">Generate API</button>
-                <div className="bg-gray-100 p-4 py-2 rounded flex-grow flex items-center justify-between">
-                    <input type="text" value={generatedAPI} readOnly className="w-full bg-transparent border-none" />
+            <div className="flex flex-col md:flex-row items-start gap-4 my-4 self-stretch">
+                <button onClick={handleButtonClick} className="bg-red-600 text-white py-2 px-3 rounded flex justify-center items-center">Generate API</button>
+                <div className="w-full md:w-auto bg-gray-100 p-4 py-2 rounded flex-grow flex  items-center justify-between">
+                    <input type="text" value={generatedAPI} readOnly className="flex-grow w-full bg-transparent border-none" />
                     <span onClick={handleCopyClick} className="text-gray-600 cursor-pointer">&#128203;</span>
                 </div>
             </div>
