@@ -1,7 +1,7 @@
 const TransactionOverviewCard = () => {
   return (
-    <div className="flex flex-col rounded-xl py-6 px-11 my-6 self-stretch w-full items-center bg-white">
-      <p className="text-2xl font-bold border-b-2 border-red-600 mb-6">
+    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
+      <p className="text-2xl font-bold border-b-2 inline border-red-600 mb-6 ">
         MTD Transaction Overview
       </p>
       <div className="flex flex-col self-stretch w-full items-end">
