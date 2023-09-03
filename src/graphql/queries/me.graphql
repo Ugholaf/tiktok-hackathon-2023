@@ -6,16 +6,6 @@ query Me {
     emailVerificationSentAt
     emailVerified
     accountType
-    businessInfo {
-      id
-      name
-      uen
-      country
-      postalCode
-      address
-      updatedAt
-      createdAt
-    }
     updatedAt
     createdAt
     userInfo {

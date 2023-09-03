@@ -1,5 +1,12 @@
-import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  from,
+  ApolloLink,
+} from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { store } from "../redux/store";
 
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
@@ -10,8 +17,22 @@ const errorLink = onError(({ graphQLErrors }) => {
     );
   }
 });
+
+const authLink = new ApolloLink((operation, forward) => {
+  const accessToken = store.getState().auth.accessToken;
+
+  operation.setContext({
+    headers: {
+      authorization: accessToken ? `Bearer ${accessToken}` : "",
+    },
+  });
+
+  return forward(operation);
+});
+
 const link = from([
   errorLink,
+  authLink,
   new HttpLink({ uri: "https://t-money-api-vugb2.ondigitalocean.app/graphql" }),
 ]);
 
