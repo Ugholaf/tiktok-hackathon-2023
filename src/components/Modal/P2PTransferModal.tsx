@@ -12,6 +12,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen}) => 
   const [amount, setAmount] = useState<number | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [notes, setNotes] = useState<string | null>(null);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -32,14 +33,22 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen}) => 
   const handleCheck = () => {
     if (!amount) {
       toast.error("Amount cannot be empty");
-      return;
+      return false;
     }
 
     if (amount < 0) {
       toast.error("Amount must be greater than 0");
-      return;
+      return false;
     }
     {/*setOpen(false);*/}
+
+    return true
+  };
+
+  const pressback = () => {
+    setNotes(null)
+    setAmount(null)
+    setUsername(null)
   };
 
   const handleSubmit = () => {
@@ -99,8 +108,8 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen}) => 
         </div>
       </div>
       <button className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full" onClick={() => {
+          handleCheck() && 
           setModalNumber(2);
-          handleCheck();
         }}>Next</button>
     </div>
     
@@ -121,9 +130,9 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen}) => 
       </div>
         <div className="flex flex-col gap-3 mt-3">
           <button className="py-2 px-5 border-2 border-red-500 rounded-md text-red-500 font-bold hover:opacity-70 transition w-full" 
-            onClick={() => setModalNumber(1)}>Back</button>
+            onClick={() => {setModalNumber(1); pressback();}}>Back</button>
           <button className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full" 
-            onClick={() => handleSubmit }>Pay</button>
+            onClick={() => { handleSubmit(); setModalNumber(1); setOpen(false);pressback();}}>Pay</button>
         </div>
     </div>
     
