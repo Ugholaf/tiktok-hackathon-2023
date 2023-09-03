@@ -1,32 +1,64 @@
 import { MenuItem, Select, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { AccountType } from "../../generated/graphql";
+import { AccountType, useLoginMutation } from "../../generated/graphql";
+import { onLogin } from "../../redux/slices/authSlice";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 interface FormValues {
-  usernameEmail: string | undefined;
-  password: string | undefined;
+  usernameOrEmail: string;
+  password: string;
   accountType: AccountType | undefined;
 }
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loginRequest] = useLoginMutation();
+
   const { handleSubmit, control } = useForm<FormValues>({
     defaultValues: {
-      usernameEmail: undefined,
-      password: undefined,
+      usernameOrEmail: "",
+      password: "",
       accountType: undefined,
     },
   });
 
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const { data: loginData, errors } = await loginRequest({
+        variables: {
+          ...data,
+          accountType: data.accountType as AccountType,
+        },
+      });
+
+      if (loginData?.login) {
+        const accessToken = loginData.login.accessToken;
+        dispatch(onLogin({ accessToken }));
+        if (data.accountType === AccountType.INDIVIDUAL) {
+          dispatch(onLogin({ accessToken }));
+          navigate("/personal");
+          toast.success("Login Successful");
+        }
+      }
+
+      if (errors && errors.length > 0) {
+        toast.error("Error logging in");
+      }
+    } catch (error) {
+      toast.error("Error logging in");
+    }
+  });
+
   return (
-    <form
-      className="flex flex-wrap flex-col"
-      onSubmit={handleSubmit((data) => console.log(data))}
-    >
+    <form className="flex flex-wrap flex-col" onSubmit={onSubmit}>
       <div className="flex flex-wrap justify-between py-10">
         <label className="text-base font-medium mb-2">Email *</label>
         <Controller
           control={control}
-          name="usernameEmail"
+          name="usernameOrEmail"
           render={({ field }) => (
             <TextField
               {...field}
