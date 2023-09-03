@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Modal from "./Modal";
 import { InputAdornment, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
@@ -15,7 +15,7 @@ interface PaypalModalProps {
 }
 
 const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
-  const [paypalCheckoutId, setPaypalCheckoutId] = useState<string>("");
+  const checkoutRef = useRef("");
   const amountRef = useRef<HTMLInputElement>(null);
   const handleClose = () => {
     setOpen(false);
@@ -60,8 +60,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
           throw new Error("Error requesting deposit");
         }
 
-        console.log(depositData?.requestDeposit.paypalCheckoutId);
-
+        checkoutRef.current = depositData.requestDeposit.paypalCheckoutId;
         return depositData?.requestDeposit.paypalCheckoutId;
       }}
       onApprove={async () => {
@@ -69,7 +68,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
         try {
           const { data: confirmDepositData, errors } = await confirmDeposit({
             variables: {
-              paypalCheckoutId: paypalCheckoutId,
+              paypalCheckoutId: checkoutRef.current,
             },
           });
           console.log(confirmDepositData, errors);
