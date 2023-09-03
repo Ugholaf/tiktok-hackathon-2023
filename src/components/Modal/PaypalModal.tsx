@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Modal from "./Modal";
 import { InputAdornment, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
@@ -15,14 +15,14 @@ interface PaypalModalProps {
 }
 
 const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
-  const amountRef = useRef<HTMLInputElement>(null);
+  // const amountRef = useRef<HTMLInputElement>(null);
+  const amount = "1";
   const [paypalCheckoutId, setPaypalCheckoutId] = useState<string>("");
   const handleClose = () => {
     setOpen(false);
   };
 
   const [requestDeposit] = useRequestDepositMutation();
-  console.log(amountRef.current!.value);
   const [confirmDeposit] = useConfirmDepositMutation();
 
   const bodyContent = (
@@ -33,7 +33,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
-        ref={amountRef}
+        value={amount}
         type="number"
         className="bg-gray-100"
       />
@@ -44,19 +44,19 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
     <PayPalButtons
       style={{ layout: "horizontal", tagline: false }}
       createOrder={async () => {
-        if (!amountRef.current!.value) {
+        if (amount) {
           toast.error("Amount cannot be empty");
           throw new Error("Amount cannot be empty");
         }
 
-        if (+amountRef.current!.value < 0) {
+        if (amount) {
           toast.error("Amount must be greater than 0");
           throw new Error("Amount must be greater than 0");
         }
         try {
           const { data: depositData, errors } = await requestDeposit({
             variables: {
-              amount: +amountRef.current!.value,
+              amount: amount,
               currency: Currency.SGD,
             },
           });
