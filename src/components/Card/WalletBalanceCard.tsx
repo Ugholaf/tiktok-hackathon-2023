@@ -4,6 +4,7 @@ import PaypalModal from "../Modal/PaypalModal";
 import P2PTransferModal from "../Modal/P2PTransferModal";
 import CashOutModal from "../Modal/CashOutModal";
 import QRCodeModal from "../Modal/QRCodeModal";
+import ScanModal from "../Modal/ScanModal";
 
 const WalletBalanceCard = () => {
   const [openCashIn, setOpenCashIn] = useState(false);
@@ -11,6 +12,7 @@ const WalletBalanceCard = () => {
   const [openP2PTransfer, setOpenP2PTransfer] = useState(false);
   const [OpenCashOut, setOpenCashOut] = useState(false);
   const [openQR, setOpenQR] = useState(false);
+  const [openScan, setOpenScan] = useState(false);
 
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
@@ -49,7 +51,10 @@ const WalletBalanceCard = () => {
               />
               P2P Transfer
             </button>
-            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md">
+            <button
+              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              onClick={() => setOpenScan(true)}
+            >
               <img src="/src/assets/buttons/scan.svg" alt="scan" />
               Scan
             </button>
@@ -75,6 +80,8 @@ const WalletBalanceCard = () => {
       <PaypalModal open={openPaypal} setOpen={setOpenPaypal} />
 
       <QRCodeModal open={openQR} setOpen={setOpenQR} />
+
+      <ScanModal open={openScan} setOpen={setOpenScan} />
     </div>
   );
 };
