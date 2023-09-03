@@ -3,12 +3,14 @@ import CashInModal from "../Modal/CashInModal";
 import PaypalModal from "../Modal/PaypalModal";
 import P2PTransferModal from "../Modal/P2PTransferModal";
 import CashOutModal from "../Modal/CashOutModal";
+import QRCodeModal from "../Modal/QRCodeModal";
 
 const WalletBalanceCard = () => {
   const [openCashIn, setOpenCashIn] = useState(false);
   const [openPaypal, setOpenPaypal] = useState(false);
-  const [openP2PTransfer, setOpenP2PTransfer ] = useState(false);
-  const [OpenCashOut, setOpenCashOut ] = useState(false);
+  const [openP2PTransfer, setOpenP2PTransfer] = useState(false);
+  const [OpenCashOut, setOpenCashOut] = useState(false);
+  const [openQR, setOpenQR] = useState(false);
 
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
@@ -23,15 +25,24 @@ const WalletBalanceCard = () => {
         <div className="flex flex-col items-start px-3 py-3 bg-gray-100 w-full rounded-b-lg">
           <p className="text-base mb-2">Perform Transactions</p>
           <div className="flex flex-wrap justify-between items-center gap-3 self-stretch">
-            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md" onClick={() => setOpenCashIn(true)}>
+            <button
+              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              onClick={() => setOpenCashIn(true)}
+            >
               <img src="/src/assets/buttons/cashIn.svg" alt="cash in" />
               Cash In
             </button>
-            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md" onClick={() => setOpenCashOut(true)}>
+            <button
+              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              onClick={() => setOpenCashOut(true)}
+            >
               <img src="/src/assets/buttons/cashOut.svg" alt="cash out" />
               Cash Out
             </button>
-            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md" onClick={() => setOpenP2PTransfer(true)}>
+            <button
+              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              onClick={() => setOpenP2PTransfer(true)}
+            >
               <img
                 src="/src/assets/buttons/p2pTransfer.svg"
                 alt="p2p transfer"
@@ -42,7 +53,10 @@ const WalletBalanceCard = () => {
               <img src="/src/assets/buttons/scan.svg" alt="scan" />
               Scan
             </button>
-            <button className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md">
+            <button
+              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              onClick={() => setOpenQR(true)}
+            >
               <img src="/src/assets/buttons/qrcode.svg" alt="qrcode" />
               My QR
             </button>
@@ -51,20 +65,16 @@ const WalletBalanceCard = () => {
       </div>
       {/* Modals */}
 
-      <P2PTransferModal
-        open={openP2PTransfer}
-        setOpen={setOpenP2PTransfer}
-      />
-      <CashOutModal
-        open={OpenCashOut}
-        setOpen={setOpenCashOut}
-      />
+      <P2PTransferModal open={openP2PTransfer} setOpen={setOpenP2PTransfer} />
+      <CashOutModal open={OpenCashOut} setOpen={setOpenCashOut} />
       <CashInModal
         open={openCashIn}
         setOpen={setOpenCashIn}
         setOpenPaypal={setOpenPaypal}
       />
       <PaypalModal open={openPaypal} setOpen={setOpenPaypal} />
+
+      <QRCodeModal open={openQR} setOpen={setOpenQR} />
     </div>
   );
 };

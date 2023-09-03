@@ -68,17 +68,13 @@ const Navbar = () => {
             {" "}
             {/* Desktop personal and name/logout */}
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
-              <button className="bg-white text-red-600 py-2 px-4">
-                Personal
-              </button>
+              <p className="bg-white text-red-600 py-2 ">Personal</p>
             )}
             {meData?.me?.accountType === AccountType.BUSINESS && (
-              <button className="bg-white text-red-600 py-2 px-4">
-                Business
-              </button>
+              <p className="bg-white text-red-600 py-2">Business</p>
             )}
             {!error && "|"}
-            <button className="bg-white py-2 px-4" onClick={handleLogout}>
+            <button className="bg-white py-2" onClick={handleLogout}>
               Logout
             </button>
           </div>
@@ -107,14 +103,10 @@ const Navbar = () => {
           {/* Line to separate tabs and personal/logout */}
           <div className="flex flex-row gap-3 items-center justify-between self-stretch flex-1">
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
-              <button className="bg-white text-red-600 py-2 px-4">
-                Personal
-              </button>
+              <p className="bg-white text-red-600 py-2 ">Personal</p>
             )}
             {meData?.me?.accountType === AccountType.BUSINESS && (
-              <button className="bg-white text-red-600 py-2 px-4">
-                Business
-              </button>
+              <p className="bg-white text-red-600 py-2 ">Business</p>
             )}
             <button className="bg-white">Logout</button>
           </div>
