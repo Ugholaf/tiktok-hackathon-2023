@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
-  const [isPersonalAccount, setIsPersonalAccount] = useState<boolean>(true);
+  const [isPersonalAccount, _] = useState<boolean>(true);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -33,11 +33,6 @@ const Navbar = () => {
     setShowMenu(!showMenu);
   };
 
-  const handleAccountType = () => {
-    setIsPersonalAccount(!isPersonalAccount);
-  };
-
-  const isLogin = true;
 
   return (
     <div className=" bg-white px-6 sm:px-27 md:px-32 py-4 sticky top-0 w-full z-10">

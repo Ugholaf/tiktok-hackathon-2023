@@ -2,7 +2,6 @@ import { useState } from "react";
 import CashInModal from "../Modal/CashInModal";
 import PaypalModal from "../Modal/PaypalModal";
 import P2PTransferModal from "../Modal/P2PTransferModal";
-import { set } from "react-hook-form";
 
 const WalletBalanceCard = () => {
   const [openCashIn, setOpenCashIn] = useState(false);

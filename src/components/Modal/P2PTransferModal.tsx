@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Modal from "./Modal";
-import { InputAdornment, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
-import { set } from "react-hook-form";
 
 interface P2PTransferModalProps {
   open: boolean;
