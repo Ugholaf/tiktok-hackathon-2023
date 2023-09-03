@@ -60,8 +60,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
           throw new Error("Error requesting deposit");
         }
 
-        console.log(depositData?.requestDeposit.paypalCheckoutId);
-
+        setPaypalCheckoutId(depositData.requestDeposit.paypalCheckoutId);
         return depositData?.requestDeposit.paypalCheckoutId;
       }}
       onApprove={async () => {
