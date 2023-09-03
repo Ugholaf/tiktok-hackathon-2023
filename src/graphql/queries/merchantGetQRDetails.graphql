@@ -1,0 +1,8 @@
+query MerchantGetQRDetails($merchantGetQrDetailsId: String!) {
+  merchantGetQRDetails(id: $merchantGetQrDetailsId) {
+    amount
+    currency
+    merchantId
+    orderId
+  }
+}

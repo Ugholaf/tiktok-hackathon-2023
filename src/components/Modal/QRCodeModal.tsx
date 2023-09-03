@@ -7,6 +7,8 @@ interface QRCodeModalProps {
   setOpen: (open: boolean) => void;
 }
 
+export const p2pTransactionPrefix = "p2pTransaction-";
+
 const QRCodeModal: React.FC<QRCodeModalProps> = ({ open, setOpen }) => {
   const handleClose = () => {
     setOpen(false);
@@ -17,7 +19,9 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({ open, setOpen }) => {
   const bodyContent = (
     <div className="flex flex-col gap-5 ">
       <div className="flex flex-row justify-center items-center">
-        {meData?.me && <QRCode value={meData?.me.username} />}
+        {meData?.me && (
+          <QRCode value={`${p2pTransactionPrefix}${meData?.me.username}`} />
+        )}
       </div>
       <hr className="border- border-black" />
       <div className="flex flex-row justify-between">
