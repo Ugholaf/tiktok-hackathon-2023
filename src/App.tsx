@@ -4,17 +4,26 @@ import LoginPage from "./pages/LoginPage";
 import PersonalPage from "./pages/PersonalPage";
 import BusinessPage from "./pages/BusinessPage";
 import APIIntegration from "./pages/APIIntegration";
+import { useIsLoggedIn } from "./hook/useIsLoggedIn";
 
 const PrivateRoute = () => {
-  const isLoggedIn = true;
+  const isLoggedIn = useIsLoggedIn();
 
   return isLoggedIn ? <Outlet /> : <Navigate to="/" />;
+};
+
+const PublicRoute = () => {
+  const isLoggedIn = useIsLoggedIn();
+
+  return isLoggedIn ? <Navigate to="/personal" /> : <Outlet />;
 };
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<PublicRoute />}>
+        <Route path="/" element={<LoginPage />} />
+      </Route>
       <Route element={<PrivateRoute />}>
         <Route path="/personal" element={<PersonalPage />} />
         <Route path="/business" element={<BusinessPage />} />

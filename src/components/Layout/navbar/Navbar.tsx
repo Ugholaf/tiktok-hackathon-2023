@@ -1,16 +1,32 @@
 import { useState } from "react";
 import Logo from "./Logo";
+import { useIsLoggedIn } from "../../../hook/useIsLoggedIn";
+import { onLogout } from "../../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 const tabs: string[] = ["Home", "Transaction", "About"];
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useIsLoggedIn();
+
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [isPersonalAccount, setIsPersonalAccount] = useState<boolean>(true);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
-    setShowMenu(true);  {/*Set effect to auto close menu or not or not*/}
+    setShowMenu(true);
+    {
+      /*Set effect to auto close menu or not or not*/
+    }
+  };
+
+  const handleLogout = () => {
+    dispatch(onLogout());
+    navigate("/");
   };
 
   const toggleMenu = () => {
@@ -25,13 +41,19 @@ const Navbar = () => {
 
   return (
     <div className=" bg-white px-6 sm:px-27 md:px-32 py-4 sticky top-0 w-full z-10">
-      {isLogin ? (
+      {isLoggedIn ? (
         <div className="flex flex-row items-center justify-between gap-3">
           <img src="/src/assets/logo.svg" alt="Logo" />
-
-          <div className="md:hidden block flex items-center text-4xl" onClick={toggleMenu}>&#9776;</div>  {/* Hamburger Menu */}
-
-          <ul className="hidden md:flex flex-row gap-3 items-center "> {/* Desktop Menu tabs */}
+          <div
+            className="md:hidden block flex items-center text-4xl"
+            onClick={toggleMenu}
+          >
+            &#9776;
+          </div>{" "}
+          {/* Hamburger Menu */}
+          <ul className="hidden md:flex flex-row gap-3 items-center ">
+            {" "}
+            {/* Desktop Menu tabs */}
             {tabs.map((tab) => (
               <li
                 className={`cursor-pointer font-bold ${
@@ -59,7 +81,9 @@ const Navbar = () => {
             )}
 
             {"|"}
-            <button className="bg-white py-2 px-4">Logout</button>
+            <button className="bg-white py-2 px-4" onClick={handleLogout}>
+              Logout
+            </button>
           </div>
         </div>
       ) : (
@@ -98,7 +122,6 @@ const Navbar = () => {
           </ul>
         )}
     </div>
-    
   );
 };
 
