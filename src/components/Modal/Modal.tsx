@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 interface ModalProps {
   isOpen?: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   title?: string;
   body?: React.ReactElement;
   footer?: React.ReactElement;
@@ -44,8 +44,9 @@ const Modal: React.FC<ModalProps> = ({
     if (disabled) {
       return;
     }
-
-    onSubmit();
+    if (onSubmit) {
+      onSubmit();
+    }
   }, [onSubmit, disabled]);
 
   if (!isOpen) {

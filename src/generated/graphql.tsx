@@ -179,6 +179,46 @@ export type MutationRequestWithdrawArgs = {
   paypalEmail: Scalars['String']['input'];
 };
 
+export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HelloQuery = { __typename?: 'Query', hello: string };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, username: string, email: string, emailVerificationSentAt?: any | null, emailVerified: boolean, accountType: AccountType, updatedAt: any, createdAt: any, userInfo: { __typename?: 'UserInfo', id: string, firstName: string, lastName: string, dateOfBirth: string, country: string, postcode: string, occupation: string, updatedAt: any, createdAt: any } } };
+
+export type ConfirmDepositMutationVariables = Exact<{
+  paypalCheckoutId: Scalars['String']['input'];
+}>;
+
+
+export type ConfirmDepositMutation = { __typename?: 'Mutation', confirmDeposit: { __typename?: 'PayPalDeposit', id: string, paypalCheckoutId?: string | null, currency: Currency, amount: number, userId: string, fees?: number | null, status: PayPalStatus, updatedAt: any, createdAt: any } };
+
+export type RegisterIndividualMutationVariables = Exact<{
+  username: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  dateOfBirth: Scalars['String']['input'];
+  country: Scalars['String']['input'];
+  postcode: Scalars['String']['input'];
+  occupation: Scalars['String']['input'];
+}>;
+
+
+export type RegisterIndividualMutation = { __typename?: 'Mutation', registerIndividual: { __typename?: 'AuthPayload', accessToken: string } };
+
+export type RequestDepositMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  currency: Currency;
+}>;
+
+
+export type RequestDepositMutation = { __typename?: 'Mutation', requestDeposit: { __typename?: 'PayPalDeposit', id: string, paypalCheckoutId?: string | null, currency: Currency, amount: number, userId: string, fees?: number | null, status: PayPalStatus, updatedAt: any, createdAt: any } };
+
 export type RegisterBusinessMutationVariables = Exact<{
   username: Scalars['String']['input'];
   email: Scalars['String']['input'];
@@ -208,32 +248,225 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'AuthPayload', accessToken: string } };
 
-export type RegisterIndividualMutationVariables = Exact<{
-  username: Scalars['String']['input'];
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  firstName: Scalars['String']['input'];
-  lastName: Scalars['String']['input'];
-  dateOfBirth: Scalars['String']['input'];
-  country: Scalars['String']['input'];
-  postcode: Scalars['String']['input'];
-  occupation: Scalars['String']['input'];
-}>;
 
+export const HelloDocument = gql`
+    query Hello {
+  hello
+}
+    `;
 
-export type RegisterIndividualMutation = { __typename?: 'Mutation', registerIndividual: { __typename?: 'AuthPayload', accessToken: string } };
+/**
+ * __useHelloQuery__
+ *
+ * To run a query within a React component, call `useHelloQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHelloQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHelloQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHelloQuery(baseOptions?: Apollo.QueryHookOptions<HelloQuery, HelloQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HelloQuery, HelloQueryVariables>(HelloDocument, options);
+      }
+export function useHelloLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HelloQuery, HelloQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HelloQuery, HelloQueryVariables>(HelloDocument, options);
+        }
+export type HelloQueryHookResult = ReturnType<typeof useHelloQuery>;
+export type HelloLazyQueryHookResult = ReturnType<typeof useHelloLazyQuery>;
+export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    username
+    email
+    emailVerificationSentAt
+    emailVerified
+    accountType
+    updatedAt
+    createdAt
+    userInfo {
+      id
+      firstName
+      lastName
+      dateOfBirth
+      country
+      postcode
+      occupation
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `;
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ConfirmDepositDocument = gql`
+    mutation ConfirmDeposit($paypalCheckoutId: String!) {
+  confirmDeposit(paypalCheckoutId: $paypalCheckoutId) {
+    id
+    paypalCheckoutId
+    currency
+    amount
+    userId
+    fees
+    status
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type ConfirmDepositMutationFn = Apollo.MutationFunction<ConfirmDepositMutation, ConfirmDepositMutationVariables>;
 
+/**
+ * __useConfirmDepositMutation__
+ *
+ * To run a mutation, you first call `useConfirmDepositMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmDepositMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [confirmDepositMutation, { data, loading, error }] = useConfirmDepositMutation({
+ *   variables: {
+ *      paypalCheckoutId: // value for 'paypalCheckoutId'
+ *   },
+ * });
+ */
+export function useConfirmDepositMutation(baseOptions?: Apollo.MutationHookOptions<ConfirmDepositMutation, ConfirmDepositMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConfirmDepositMutation, ConfirmDepositMutationVariables>(ConfirmDepositDocument, options);
+      }
+export type ConfirmDepositMutationHookResult = ReturnType<typeof useConfirmDepositMutation>;
+export type ConfirmDepositMutationResult = Apollo.MutationResult<ConfirmDepositMutation>;
+export type ConfirmDepositMutationOptions = Apollo.BaseMutationOptions<ConfirmDepositMutation, ConfirmDepositMutationVariables>;
+export const RegisterIndividualDocument = gql`
+    mutation RegisterIndividual($username: String!, $email: String!, $password: String!, $firstName: String!, $lastName: String!, $dateOfBirth: String!, $country: String!, $postcode: String!, $occupation: String!) {
+  registerIndividual(
+    username: $username
+    email: $email
+    password: $password
+    firstName: $firstName
+    lastName: $lastName
+    dateOfBirth: $dateOfBirth
+    country: $country
+    postcode: $postcode
+    occupation: $occupation
+  ) {
+    accessToken
+  }
+}
+    `;
+export type RegisterIndividualMutationFn = Apollo.MutationFunction<RegisterIndividualMutation, RegisterIndividualMutationVariables>;
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, username: string, email: string, emailVerificationSentAt?: any | null, emailVerified: boolean, accountType: AccountType, updatedAt: any, createdAt: any, userInfo: { __typename?: 'UserInfo', id: string, firstName: string, lastName: string, dateOfBirth: string, country: string, postcode: string, occupation: string, updatedAt: any, createdAt: any } } };
+/**
+ * __useRegisterIndividualMutation__
+ *
+ * To run a mutation, you first call `useRegisterIndividualMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRegisterIndividualMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [registerIndividualMutation, { data, loading, error }] = useRegisterIndividualMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      email: // value for 'email'
+ *      password: // value for 'password'
+ *      firstName: // value for 'firstName'
+ *      lastName: // value for 'lastName'
+ *      dateOfBirth: // value for 'dateOfBirth'
+ *      country: // value for 'country'
+ *      postcode: // value for 'postcode'
+ *      occupation: // value for 'occupation'
+ *   },
+ * });
+ */
+export function useRegisterIndividualMutation(baseOptions?: Apollo.MutationHookOptions<RegisterIndividualMutation, RegisterIndividualMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RegisterIndividualMutation, RegisterIndividualMutationVariables>(RegisterIndividualDocument, options);
+      }
+export type RegisterIndividualMutationHookResult = ReturnType<typeof useRegisterIndividualMutation>;
+export type RegisterIndividualMutationResult = Apollo.MutationResult<RegisterIndividualMutation>;
+export type RegisterIndividualMutationOptions = Apollo.BaseMutationOptions<RegisterIndividualMutation, RegisterIndividualMutationVariables>;
+export const RequestDepositDocument = gql`
+    mutation RequestDeposit($amount: Float!, $currency: Currency!) {
+  requestDeposit(amount: $amount, currency: $currency) {
+    id
+    paypalCheckoutId
+    currency
+    amount
+    userId
+    fees
+    status
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type RequestDepositMutationFn = Apollo.MutationFunction<RequestDepositMutation, RequestDepositMutationVariables>;
 
-export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type HelloQuery = { __typename?: 'Query', hello: string };
-
-
+/**
+ * __useRequestDepositMutation__
+ *
+ * To run a mutation, you first call `useRequestDepositMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestDepositMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestDepositMutation, { data, loading, error }] = useRequestDepositMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      currency: // value for 'currency'
+ *   },
+ * });
+ */
+export function useRequestDepositMutation(baseOptions?: Apollo.MutationHookOptions<RequestDepositMutation, RequestDepositMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RequestDepositMutation, RequestDepositMutationVariables>(RequestDepositDocument, options);
+      }
+export type RequestDepositMutationHookResult = ReturnType<typeof useRequestDepositMutation>;
+export type RequestDepositMutationResult = Apollo.MutationResult<RequestDepositMutation>;
+export type RequestDepositMutationOptions = Apollo.BaseMutationOptions<RequestDepositMutation, RequestDepositMutationVariables>;
 export const RegisterBusinessDocument = gql`
     mutation RegisterBusiness($username: String!, $email: String!, $password: String!, $firstName: String!, $lastName: String!, $dateOfBirth: String!, $country: String!, $postcode: String!, $occupation: String!, $businessName: String!, $uen: String!, $businessCountry: String!, $businessPostcode: String!, $businessAddress: String!) {
   registerBusiness(
@@ -334,138 +567,3 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const RegisterIndividualDocument = gql`
-    mutation RegisterIndividual($username: String!, $email: String!, $password: String!, $firstName: String!, $lastName: String!, $dateOfBirth: String!, $country: String!, $postcode: String!, $occupation: String!) {
-  registerIndividual(
-    username: $username
-    email: $email
-    password: $password
-    firstName: $firstName
-    lastName: $lastName
-    dateOfBirth: $dateOfBirth
-    country: $country
-    postcode: $postcode
-    occupation: $occupation
-  ) {
-    accessToken
-  }
-}
-    `;
-export type RegisterIndividualMutationFn = Apollo.MutationFunction<RegisterIndividualMutation, RegisterIndividualMutationVariables>;
-
-/**
- * __useRegisterIndividualMutation__
- *
- * To run a mutation, you first call `useRegisterIndividualMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterIndividualMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerIndividualMutation, { data, loading, error }] = useRegisterIndividualMutation({
- *   variables: {
- *      username: // value for 'username'
- *      email: // value for 'email'
- *      password: // value for 'password'
- *      firstName: // value for 'firstName'
- *      lastName: // value for 'lastName'
- *      dateOfBirth: // value for 'dateOfBirth'
- *      country: // value for 'country'
- *      postcode: // value for 'postcode'
- *      occupation: // value for 'occupation'
- *   },
- * });
- */
-export function useRegisterIndividualMutation(baseOptions?: Apollo.MutationHookOptions<RegisterIndividualMutation, RegisterIndividualMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterIndividualMutation, RegisterIndividualMutationVariables>(RegisterIndividualDocument, options);
-      }
-export type RegisterIndividualMutationHookResult = ReturnType<typeof useRegisterIndividualMutation>;
-export type RegisterIndividualMutationResult = Apollo.MutationResult<RegisterIndividualMutation>;
-export type RegisterIndividualMutationOptions = Apollo.BaseMutationOptions<RegisterIndividualMutation, RegisterIndividualMutationVariables>;
-export const MeDocument = gql`
-    query Me {
-  me {
-    id
-    username
-    email
-    emailVerificationSentAt
-    emailVerified
-    accountType
-    updatedAt
-    createdAt
-    userInfo {
-      id
-      firstName
-      lastName
-      dateOfBirth
-      country
-      postcode
-      occupation
-      updatedAt
-      createdAt
-    }
-  }
-}
-    `;
-
-/**
- * __useMeQuery__
- *
- * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
- * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-      }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
-export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
-export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
-export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
-export const HelloDocument = gql`
-    query Hello {
-  hello
-}
-    `;
-
-/**
- * __useHelloQuery__
- *
- * To run a query within a React component, call `useHelloQuery` and pass it any options that fit your needs.
- * When your component renders, `useHelloQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useHelloQuery({
- *   variables: {
- *   },
- * });
- */
-export function useHelloQuery(baseOptions?: Apollo.QueryHookOptions<HelloQuery, HelloQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<HelloQuery, HelloQueryVariables>(HelloDocument, options);
-      }
-export function useHelloLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HelloQuery, HelloQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<HelloQuery, HelloQueryVariables>(HelloDocument, options);
-        }
-export type HelloQueryHookResult = ReturnType<typeof useHelloQuery>;
-export type HelloLazyQueryHookResult = ReturnType<typeof useHelloLazyQuery>;
-export type HelloQueryResult = Apollo.QueryResult<HelloQuery, HelloQueryVariables>;

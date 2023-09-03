@@ -12,6 +12,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { persistor, store } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -19,14 +20,22 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <PersistGate persistor={persistor} loading={null}>
         <ApolloProvider client={client}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <BrowserRouter>
-              <App />
-              <Toaster
-                toastOptions={{
-                  duration: 3000,
-                }}
-              />
-            </BrowserRouter>
+            <PayPalScriptProvider
+              options={{
+                currency: "SGD",
+                intent: "capture",
+                clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
+              }}
+            >
+              <BrowserRouter>
+                <App />
+                <Toaster
+                  toastOptions={{
+                    duration: 3000,
+                  }}
+                />
+              </BrowserRouter>
+            </PayPalScriptProvider>
           </LocalizationProvider>
         </ApolloProvider>
       </PersistGate>
