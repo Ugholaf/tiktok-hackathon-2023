@@ -6,6 +6,7 @@ const tabs: string[] = ["Home", "Transaction", "About"];
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [isPersonalAccount, setIsPersonalAccount] = useState<boolean>(true);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -14,6 +15,10 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
+  };
+
+  const handleAccountType = () => {
+    setIsPersonalAccount(!isPersonalAccount);
   };
 
   const isLogin = true;
@@ -41,10 +46,18 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
+
           <div className= "hidden md:flex flex-row gap-3 items-center"> {/* Desktop personal and name/logout */}
-            <button className="bg-white text-red-600 py-2 px-4">
-              Personal
-            </button>
+            {isPersonalAccount ? (
+              <button className="bg-white text-red-600 py-2 px-4">
+                Personal
+              </button>
+            ) : (
+              <button className="bg-white text-red-600 py-2 px-4">
+                Business
+              </button>
+            )}
+
             {"|"}
             <button className="bg-white py-2 px-4">Logout</button>
           </div>
@@ -69,10 +82,17 @@ const Navbar = () => {
             ))}
             <div className="border-b-2 border-gray-400 w-full"></div> {/* Line to separate tabs and personal/logout */}
             <div className="flex flex-row gap-3 items-center justify-between self-stretch flex-1"> 
-              <div className = "flex flex-row items-center gap-2"> 
-                <img src="/src/assets/recentcontact/person.svg" alt="person" className="h-4 w-4 stroke-red-500"/>
-                <button className="bg-white text-red-600">Personal Account</button>
-              </div>
+                {isPersonalAccount ? (
+                  <div className="flex flex-row items-center">
+                    <img src="/src/assets/recentcontact/person.svg" alt="person" className="h-4 w-4 stroke-red-500" />
+                    <button className="bg-white text-red-600 py-2 px-4">Personal</button>
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center">
+                    <img src="/src/assets/recentcontact/person.svg" alt="person" className="h-4 w-4 stroke-red-500" />
+                    <button className="bg-white text-red-600 py-2 px-4">Business</button>
+                  </div>
+                )}
               <button className="bg-white">Logout</button>
             </div>
           </ul>
