@@ -19,5 +19,19 @@ query Me {
       updatedAt
       createdAt
     }
+    balances {
+      amount
+      currency
+    }
+    businessInfo {
+      id
+      name
+      uen
+      country
+      postalCode
+      address
+      updatedAt
+      createdAt
+    }
   }
 }

@@ -1,0 +1,13 @@
+mutation RequestWithdraw($amount: Float!, $currency: Currency!, $paypalEmail: String!) {
+  requestWithdraw(amount: $amount, currency: $currency, paypalEmail: $paypalEmail) {
+    id
+    paypalPaymentId
+    currency
+    amount
+    userId
+    status
+    fees
+    updatedAt
+    createdAt
+  }
+}

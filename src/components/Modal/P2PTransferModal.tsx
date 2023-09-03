@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Modal from "./Modal";
 import { toast } from "react-hot-toast";
+import {
+  Currency,
+  useMakeInternalTransferMutation,
+} from "../../generated/graphql";
 
 interface P2PTransferModalProps {
   open: boolean;
@@ -11,17 +15,19 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
   open,
   setOpen,
 }) => {
+  const [makeInternalTransfer] = useMakeInternalTransferMutation();
+  const checkoutRef = useRef("");
   const [modalNumber, setModalNumber] = useState(1);
-  const [amount, setAmount] = useState<number>(0);
-  const [username, setUsername] = useState<string | null>(null);
-  const [notes, setNotes] = useState<string | null>(null);
+  const [amount, setAmount] = useState("");
+  const [username, setUsername] = useState("");
+  const [notes, setNotes] = useState("");
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(e.target.value));
+    setAmount(e.target.value);
   };
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,19 +39,24 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
   };
 
   const handleCheck = () => {
+    const convertedAmount = Number(amount);
+
     if (!username) {
       toast.error("Username cannot be empty");
       return false;
     }
 
-    if (!amount) {
+    if (!convertedAmount) {
       toast.error("Amount cannot be empty");
       return false;
     }
 
-    if (amount <= 0) {
+    if (convertedAmount < 0) {
       toast.error("Amount must be greater than 0");
       return false;
+    }
+    {
+      /*setOpen(false);*/
     }
 
     {
@@ -56,21 +67,40 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
   };
 
   const pressback = () => {
-    setNotes(null);
-    setAmount(0);
-    setUsername(null);
+    setNotes("");
+    setAmount("");
+    setUsername("");
   };
 
-  const handleSubmit = () => {
-    if (!amount) {
+  const handleSubmit = async () => {
+    const convertedAmount = Number(amount);
+    if (!convertedAmount) {
       toast.error("Amount cannot be empty");
       return;
     }
 
-    if (amount < 0) {
+    if (convertedAmount < 0) {
       toast.error("Amount must be greater than 0");
       return;
     }
+
+    const { data: transferData, errors } = await makeInternalTransfer({
+      variables: {
+        amount: convertedAmount,
+        currency: Currency.SGD,
+        toUsername: username,
+        note: notes,
+      },
+    });
+    if (!transferData?.makeInternalTransfer.receiverId || errors?.length) {
+      toast.error("Error Sending money to user (Username not found)");
+      throw new Error("Error Sending money");
+    }
+
+    checkoutRef.current = transferData.makeInternalTransfer.receiverId;
+    console.log(checkoutRef.current);
+    toast.success("Successfully Sent money");
+
     {
       /*setOpen(false);*/
     }
