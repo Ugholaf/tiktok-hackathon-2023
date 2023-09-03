@@ -15,14 +15,13 @@ interface PaypalModalProps {
 }
 
 const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
-  const amountRef = useRef<HTMLInputElement>(null);
   const [paypalCheckoutId, setPaypalCheckoutId] = useState<string>("");
+  const amountRef = useRef<HTMLInputElement>(null);
   const handleClose = () => {
     setOpen(false);
   };
 
   const [requestDeposit] = useRequestDepositMutation();
-  console.log(amountRef.current!.value);
   const [confirmDeposit] = useConfirmDepositMutation();
 
   const bodyContent = (
@@ -33,7 +32,8 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
-        ref={amountRef}
+        // onChange={(e) => setAmount(e.target.value)}
+        inputRef={amountRef}
         type="number"
         className="bg-gray-100"
       />
@@ -44,42 +44,25 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
     <PayPalButtons
       style={{ layout: "horizontal", tagline: false }}
       createOrder={async () => {
-        if (!amountRef.current!.value) {
-          toast.error("Amount cannot be empty");
-          throw new Error("Amount cannot be empty");
+        const amount = amountRef.current?.value;
+        if (!amount || isNaN(+amount) || +amount <= 0) {
+          throw new Error("Invalid amount");
         }
 
-        if (+amountRef.current!.value < 0) {
-          toast.error("Amount must be greater than 0");
-          throw new Error("Amount must be greater than 0");
-        }
-        try {
-          const { data: depositData, errors } = await requestDeposit({
-            variables: {
-              amount: +amountRef.current!.value,
-              currency: Currency.SGD,
-            },
-          });
-
-          if (errors && errors.length > 0) {
-            toast.error("Error requesting deposit");
-            return "";
-          }
-
-          if (!depositData?.requestDeposit.paypalCheckoutId) {
-            toast.error("Error requesting deposit");
-            return "";
-          }
-
-          setPaypalCheckoutId(depositData?.requestDeposit.paypalCheckoutId);
-          toast.success("Successfully requested deposit");
-          console.log("hi");
-          console.log(depositData?.requestDeposit.paypalCheckoutId);
-          return depositData?.requestDeposit.paypalCheckoutId;
-        } catch (error) {
+        const { data: depositData, errors } = await requestDeposit({
+          variables: {
+            amount: +amount,
+            currency: Currency.SGD,
+          },
+        });
+        if (!depositData?.requestDeposit.paypalCheckoutId || errors?.length) {
           toast.error("Error requesting deposit");
-          return "";
+          throw new Error("Error requesting deposit");
         }
+
+        console.log(depositData?.requestDeposit.paypalCheckoutId);
+
+        return depositData?.requestDeposit.paypalCheckoutId;
       }}
       onApprove={async () => {
         // call confirmDeposit
@@ -89,6 +72,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
               paypalCheckoutId: paypalCheckoutId,
             },
           });
+          console.log(confirmDepositData, errors);
 
           if (errors && errors.length > 0) {
             toast.error("Error confirming deposit");
