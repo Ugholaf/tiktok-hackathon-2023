@@ -52,11 +52,10 @@ const Navbar = () => {
             {/* Desktop Menu tabs */}
             {tabs.map((tab) => (
               <li
-                className={`cursor-pointer font-bold ${
-                  tab === activeTab
-                    ? "underline decoration-red-500 underline-offset-4"
-                    : ""
-                }`}
+                className={`cursor-pointer font-bold ${tab === activeTab
+                  ? "underline decoration-red-500 underline-offset-4"
+                  : ""
+                  }`}
                 key={tab}
                 onClick={() => handleTabChange(tab)}
               >
@@ -68,14 +67,25 @@ const Navbar = () => {
             {" "}
             {/* Desktop personal and name/logout */}
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
-              <p className="bg-white text-red-600 py-2 ">Personal</p>
+              <div className="flex gap-3 items-center">
+                <img src="/src/assets/recentcontact/person.svg" alt="person" className="fill-red-600 w-4 h-4 " />
+                <p className="bg-white text-red-600 py-2 ">Personal</p>
+              </div>
             )}
             {meData?.me?.accountType === AccountType.BUSINESS && (
-              <p className="bg-white text-red-600 py-2">Business</p>
+              <div className="flex gap-3 items-center">
+                <img src="/src/assets/icons/localBank.svg" alt="person" className="text-red-600 w-4 h-4" />
+                <p className="bg-white text-red-600 py-2">Business</p>
+              </div>
             )}
             {!error && "|"}
+
+            {meData && (
+              <p>{meData.me.username}</p>  /*Added username*/
+            )}
+
             <button className="bg-white py-2" onClick={handleLogout}>
-              Logout
+              <img src="/src/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />  {/*Changed from logout to the signout sign*/}
             </button>
           </div>
         </div>
@@ -88,11 +98,10 @@ const Navbar = () => {
         <ul className="md:hidden flex flex-col gap-3 py-3 items-center">
           {tabs.map((tab) => (
             <li
-              className={`cursor-pointer font-bold ${
-                tab === activeTab
-                  ? "underline decoration-red-500 underline-offset-4"
-                  : ""
-              }`}
+              className={`cursor-pointer font-bold ${tab === activeTab
+                ? "underline decoration-red-500 underline-offset-4"
+                : ""
+                }`}
               key={tab}
               onClick={() => handleTabChange(tab)}
             >
@@ -103,12 +112,30 @@ const Navbar = () => {
           {/* Line to separate tabs and personal/logout */}
           <div className="flex flex-row gap-3 items-center justify-between self-stretch flex-1">
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
-              <p className="bg-white text-red-600 py-2 ">Personal</p>
+              <div className="flex gap-3 items-center">
+                <img src="/src/assets/recentcontact/person.svg" alt="person" className="fill-red-600 w-4 h-4 " />
+                <p className="bg-white text-red-600 py-2 ">Personal</p>
+              </div>
             )}
             {meData?.me?.accountType === AccountType.BUSINESS && (
-              <p className="bg-white text-red-600 py-2 ">Business</p>
+              <div className="flex gap-3 items-center">
+                <img src="/src/assets/icons/localBank.svg" alt="person" className="text-red-600 w-4 h-4" />
+                <p className="bg-white text-red-600 py-2">Business</p>
+              </div>
             )}
-            <button className="bg-white">Logout</button>
+
+            {!error}
+
+            <div className="flex gap-3 items-center">
+              {meData && (
+                <p>{meData.me.username}</p>  /*Added username*/
+              )}
+              <button className="bg-white">
+                <img src="/src/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />  {/*Changed from logout to the signout sign*/}
+              </button>
+            </div>
+
+
           </div>
         </ul>
       )}
