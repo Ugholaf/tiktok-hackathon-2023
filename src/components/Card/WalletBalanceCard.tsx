@@ -16,7 +16,7 @@ const WalletBalanceCard = () => {
   const [openScan, setOpenScan] = useState(false);
 
   const { data } = useMeQuery({
-    pollInterval: 5000,
+    pollInterval: 2000,
   });
   const balance = data?.me.balances.find(
     (balance) => balance.currency === "SGD"
