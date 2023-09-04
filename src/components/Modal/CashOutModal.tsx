@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import Modal from "./Modal";
 import { toast } from "react-hot-toast";
 import { Currency, useRequestWithdrawMutation } from "../../generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 
 
 interface CashOutModalProps {
@@ -17,6 +18,13 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
   const [email, setEmail] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
 
+  const { data } = useMeQuery({
+    pollInterval: 2000,
+  });
+
+  const balance = data?.me.balances.find(
+    (balance) => balance.currency === "SGD"
+  );
 
 
 
@@ -56,6 +64,16 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       toast.error("Amount must be greater than 0");
       return false;
     }
+
+    if (balance === undefined) {
+      toast.error("There is an error with the account");
+      return false;
+    } else if (balance.amount < 0) {
+      toast.error("Amount must be greater than 0");
+      return false;
+    }
+
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast.error("Invalid email format");
       return false;
@@ -111,19 +129,24 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
 
 
   const bodyContent = (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
 
       <div className="flex flex-col gap-2">
         <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">Amount</label>
-        <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
-          <input
-            id="amount"
-            onChange={handleChangeAmount}
-            type="number"
-            placeholder="eg 239.29"
-            className="bg-gray-100 pl-10 py-2 rounded-md w-full"
-          />
+        <div className="flex flex-col w-full">
+          <div className={`relative ${parseFloat(amount) > (balance?.amount || 0) ? 'border border-red-500 rounded-md w-full' : ''}`}>
+            <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
+            <input
+              id="amount"
+              onChange={handleChangeAmount}
+              type="number"
+              placeholder="eg 239.29"
+              className="bg-gray-100 pl-10 py-2 rounded-md w-full"
+            />
+          </div>
+          {parseFloat(amount) > (balance?.amount || 0) && (
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
+          )}
         </div>
       </div>
 
@@ -142,10 +165,10 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       </div>
 
       {/*This is for the selection of the buttons*/}
-      <div className="flex flex-col gap-5 ml-2">
+      <div className="flex flex-col gap-2 ml-2">
         <label htmlFor="amount" className="flex text-xl font-semibold justify-start">Choose Cashout Method</label>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
-          <div className="flex flex-row items-center gap-5 mb-4 justify-center">
+          <div className="flex flex-row items-center gap-5 mb-2 justify-center">
             <img src="/src/assets/icons/paypal.svg" alt="paypal icon" className="h-5 w-5" />
             <p className="text-lg">Paypal</p>
           </div>
@@ -156,12 +179,12 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               name="paypal"
               onChange={handleChangeOption}
               checked={selectedOption === "paypal"}
-              className="mb-4 scale-150 accent-red-500"
+              className="mb-2 scale-150 accent-red-500"
             />
           </div>
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
-          <div className="flex flex-row gap-5 mb-4 items-center justify-center">
+          <div className="flex flex-row gap-5 mb-2 items-center justify-center">
             <img src="/src/assets/icons/localBank.svg" alt="local bank icon" className="h-5 w-5" />
             <p className="text-lg">Local Bank (Future)</p>
           </div>
@@ -172,13 +195,13 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               name="localBank"
               onChange={handleChangeOption}
               checked={selectedOption === "localBank"}
-              className="mb-4 scale-150 accent-red-500"
+              className="mb-2 scale-150 accent-red-500"
               disabled
             />
           </div>
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
-          <div className="flex flex-row gap-5 mb-4 items-center justify-center">
+          <div className="flex flex-row gap-5 mb-2 items-center justify-center">
             <img src="/src/assets/icons/creditCard.svg" alt="credit card icon" className="h-5 w-5" />
             <p className="text-lg">Credit Card (Future)</p>
           </div>
@@ -189,13 +212,13 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               name="creditCard"
               onChange={handleChangeOption}
               checked={selectedOption === "creditCard"}
-              className="mb-4 scale-150 accent-red-500"
+              className="mb-2 scale-150 accent-red-500"
               disabled
             />
           </div>
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
-          <div className="flex flex-row gap-5 mb-4 items-center justify-center">
+          <div className="flex flex-row gap-5 mb-2 items-center justify-center">
             <img src="/src/assets/icons/7-11.svg" alt="Local Partners" className="h-5 w-5" />
             <p className="text-lg">7-11 (Future)</p>
           </div>
@@ -206,13 +229,13 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               name="creditCard"
               onChange={handleChangeOption}
               checked={selectedOption === "creditCard"}
-              className="mb-4 scale-150 accent-red-500"
+              className="mb-2 scale-150 accent-red-500"
               disabled
             />
           </div>
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
-          <div className="flex flex-row gap-5 mb-4 items-center justify-center">
+          <div className="flex flex-row gap-5 mb-2 items-center justify-center">
             <img src="/src/assets/icons/ministop.svg" alt="Local Partners" className="h-5 w-5" />
             <p className="text-lg">Convenience Shop (Future)</p>
           </div>
@@ -223,7 +246,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               name="creditCard"
               onChange={handleChangeOption}
               checked={selectedOption === "creditCard"}
-              className="mb-4 scale-150 accent-red-500"
+              className="mb-2 scale-150 accent-red-500"
               disabled
             />
           </div>
@@ -240,7 +263,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
 
   );
   const bodyContentAfter = (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
 
       <div className="flex flex-row gap-2 items-center">
         <label htmlFor="username" className="flex text-xl font-semibold justify-start">Amount: </label>
