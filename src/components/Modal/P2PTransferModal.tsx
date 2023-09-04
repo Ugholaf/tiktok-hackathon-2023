@@ -5,6 +5,7 @@ import {
   Currency,
   useMakeInternalTransferMutation,
 } from "../../generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 
 interface P2PTransferModalProps {
   open: boolean;
@@ -21,6 +22,14 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
   const [amount, setAmount] = useState("");
   const [username, setUsername] = useState("");
   const [notes, setNotes] = useState("");
+
+  const { data } = useMeQuery({
+    pollInterval: 2000,
+  });
+
+  const balance = data?.me.balances.find(
+    (balance) => balance.currency === "SGD"
+  );
 
   const handleClose = () => {
     setOpen(false);
@@ -55,6 +64,15 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
       toast.error("Amount must be greater than 0");
       return false;
     }
+
+    if (balance === undefined) {
+      toast.error("There is an error with the account");
+      return false;
+    } else if (balance.amount < 0) {
+      toast.error("Amount must be greater than 0");
+      return false;
+    }
+
     {
       /*setOpen(false);*/
     }
@@ -137,17 +155,23 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
         >
           Amount
         </label>
-        <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-3 flex items-center">
-            $
-          </span>
-          <input
-            id="amount"
-            onChange={handleChangeAmount}
-            type="number"
-            placeholder="eg 239.29"
-            className="bg-gray-100 pl-10 py-2 rounded-md w-full"
-          />
+        <div className="flex flex-col w-full">
+          <div className={`relative ${parseFloat(amount) > (balance?.amount || 0) ? 'border border-red-500 rounded-md w-full' : ''}`}>
+            <span className="absolute inset-y-0 left-0 px-3 flex items-center">
+              $
+            </span>
+            <input
+              id="amount"
+              onChange={handleChangeAmount}
+              type="number"
+              placeholder="eg 239.29"
+              className="bg-gray-100 pl-10 py-2 rounded-md w-full"
+            />
+
+          </div>
+          {parseFloat(amount) > (balance?.amount || 0) && (
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
+          )}
         </div>
       </div>
 
