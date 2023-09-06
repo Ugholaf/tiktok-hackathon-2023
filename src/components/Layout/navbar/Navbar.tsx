@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "./Logo";
 import { useIsLoggedIn } from "../../../hook/useIsLoggedIn";
 import { onLogout } from "../../../redux/slices/authSlice";
@@ -16,11 +16,35 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
+  {/*Due to some shit code and my suckishness i had to hardcode this ~ marcus*/ }
+  useEffect(() => {
+    // Get the pathname from the location object
+    const pathname = location.pathname;
+
+    // Determine the active tab based on the pathname
+    if (pathname === "/personal") {
+      setActiveTab("Home");
+    } else if (pathname === "/transaction") {
+      setActiveTab("Transaction");
+    } else {
+      setActiveTab(pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2));
+    }
+  }, [location]);
+
+
   const { data: meData, error } = useMeQuery();
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     setShowMenu(true);
+    if (tab === "Home") {
+      navigate("/personal");
+    }
+    else if (tab === "Transaction") {
+      setActiveTab("Transaction");
+      setShowMenu(true);
+      navigate("/transaction");
+    }
     {
       /*Set effect to auto close menu or not or not*/
     }

@@ -81,7 +81,7 @@ const RecentTransactionsCard = () => {
           {transactions?.transactionsIn?.slice(0, 3).map((transaction) => (
             <div key={transaction.id} className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2">
               <div className="flex flex-col justify-between items-start">
-                <p >{(new Date(transaction.createdAt).toISOString().split("T")[0])}</p>
+                <p >{(new Date(transaction.createdAt).toLocaleDateString('en-GB').split("T")[0])}</p>
                 <p >{(new Date(transaction.createdAt).toISOString().split("T")[1].slice(0, -5))}</p>
               </div>
               <div className="flex justify-center items-center">
