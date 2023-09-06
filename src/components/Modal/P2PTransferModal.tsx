@@ -134,7 +134,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
         </label>
         <div className="relative ">
           <img
-            src="/src/assets/recentcontact/person.svg"
+            src="/assets/recentcontact/person.svg"
             alt="person"
             className="absolute left-0 top-1/2 transform -translate-y-1/2 px-2 py-2 flex justify-center items-center w-8"
           />

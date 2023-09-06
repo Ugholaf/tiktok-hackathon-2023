@@ -1,0 +1,22 @@
+query TransactionFull($fromDate: DateTime!, $toDate: DateTime!, $currency: Currency!) {
+  transactions(fromDate: $fromDate, toDate: $toDate, currency: $currency) {
+    transactionsIn {
+      id
+      userId
+      currency
+      amount
+      type
+      updatedAt
+      createdAt
+    }
+    transactionsOut {
+      id
+      userId
+      currency
+      amount
+      type
+      updatedAt
+      createdAt
+    }
+  }
+}

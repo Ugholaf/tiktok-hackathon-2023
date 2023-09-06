@@ -6,25 +6,25 @@ const RecentContacts = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 self-stretch">
             <div className="col-span-1 flex flex-col items-center gap-2 justify-start">
-                <img src="/src/assets/recentcontact/person.svg" alt="person" />
+                <img src="/assets/recentcontact/person.svg" alt="person" />
                 <p className="text-base font-bold">Roy</p>
             </div>
             <div className="col-span-1 flex flex-col items-center gap-2 justify-start">
-                <img src="/src/assets/recentcontact/person.svg" alt="person" />
+                <img src="/assets/recentcontact/person.svg" alt="person" />
                 <p className="text-base font-bold">Andrew</p>
             </div>
             <div className="col-span-1 flex flex-col items-center gap-2 justify-start">
-                <img src="/src/assets/recentcontact/person.svg" alt="person" />
+                <img src="/assets/recentcontact/person.svg" alt="person" />
                 <p className="text-base font-bold">Chang Jun</p>
             </div>
             <div className="col-span-1 flex flex-col items-center gap-2 justify-start">
-                <img src="/src/assets/recentcontact/person.svg" alt="person" />
+                <img src="/assets/recentcontact/person.svg" alt="person" />
                 <p className="text-base font-bold">Darius</p>
             </div>
         </div>
 
         <div className="flex flex-row justify-center space-x-4">
-            <img src="/src/assets/recentcontact/viewmore.svg" alt="person" />
+            <img src="/assets/recentcontact/viewmore.svg" alt="person" />
             <p className="text-base font-bold ">View More</p>
         </div>
 

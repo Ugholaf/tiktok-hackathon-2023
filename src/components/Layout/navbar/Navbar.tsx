@@ -39,7 +39,7 @@ const Navbar = () => {
     <div className=" bg-white px-6 sm:px-27 md:px-32 py-4 sticky top-0 w-full z-10">
       {isLoggedIn ? (
         <div className="flex flex-row items-center justify-between gap-3">
-          <img src="/src/assets/logo.svg" alt="Logo" />
+          <img src="/assets/logo.svg" alt="Logo" />
           <div
             className="md:hidden flex items-center text-4xl"
             onClick={toggleMenu}
@@ -68,13 +68,13 @@ const Navbar = () => {
             {/* Desktop personal and name/logout */}
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
               <div className="flex gap-3 items-center">
-                <img src="/src/assets/recentcontact/person.svg" alt="person" className="fill-red-600 w-4 h-4 " />
+                <img src="/assets/recentcontact/person.svg" alt="person" className="fill-red-600 w-4 h-4 " />
                 <p className="bg-white text-red-600 py-2 ">Personal</p>
               </div>
             )}
             {meData?.me?.accountType === AccountType.BUSINESS && (
               <div className="flex gap-3 items-center">
-                <img src="/src/assets/icons/localBank.svg" alt="person" className="text-red-600 w-4 h-4" />
+                <img src="/assets/icons/localBank.svg" alt="person" className="text-red-600 w-4 h-4" />
                 <p className="bg-white text-red-600 py-2">Business</p>
               </div>
             )}
@@ -85,7 +85,7 @@ const Navbar = () => {
             )}
 
             <button className="bg-white py-2" onClick={handleLogout}>
-              <img src="/src/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />  {/*Changed from logout to the signout sign*/}
+              <img src="/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />  {/*Changed from logout to the signout sign*/}
             </button>
           </div>
         </div>
@@ -113,13 +113,13 @@ const Navbar = () => {
           <div className="flex flex-row gap-3 items-center justify-between self-stretch flex-1">
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
               <div className="flex gap-3 items-center">
-                <img src="/src/assets/recentcontact/person.svg" alt="person" className="fill-red-600 w-4 h-4 " />
+                <img src="/assets/recentcontact/person.svg" alt="person" className="fill-red-600 w-4 h-4 " />
                 <p className="bg-white text-red-600 py-2 ">Personal</p>
               </div>
             )}
             {meData?.me?.accountType === AccountType.BUSINESS && (
               <div className="flex gap-3 items-center">
-                <img src="/src/assets/icons/localBank.svg" alt="person" className="text-red-600 w-4 h-4" />
+                <img src="/assets/icons/localBank.svg" alt="person" className="text-red-600 w-4 h-4" />
                 <p className="bg-white text-red-600 py-2">Business</p>
               </div>
             )}
@@ -131,7 +131,7 @@ const Navbar = () => {
                 <p>{meData.me.username}</p>  /*Added username*/
               )}
               <button className="bg-white">
-                <img src="/src/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />  {/*Changed from logout to the signout sign*/}
+                <img src="/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />  {/*Changed from logout to the signout sign*/}
               </button>
             </div>
 
