@@ -55,14 +55,14 @@ const TransactionOverviewCard = () => {
           <div className="flex flex-col py-1 justify-center items-center">
             <div className="flex flex-row">
               <p className="text-base md:text-xl font-bold">Payments In</p>
-              <img src="/src/assets/payinUp.svg" alt="payment in" />
+              <img src="/assets/payinUp.svg" alt="payment in" />
             </div>
             <p className="text-base md:text-lg ">${data?.getTransactionSummary?.amountIn?.valueOf()} SGD</p>
           </div>
           <div className="flex flex-col py-1 justify-center items-center">
             <div className="flex flex-row">
               <p className="text-base md:text-xl font-bold">Payments Out</p>
-              <img src="/src/assets/payinOut.svg" alt="payment out" />
+              <img src="/assets/payinOut.svg" alt="payment out" />
             </div>
             <p className="text-base md:text-lg ">${data?.getTransactionSummary?.amountOut?.valueOf()} SGD</p>
           </div>
@@ -71,9 +71,9 @@ const TransactionOverviewCard = () => {
           <div className="flex flex-row">
             <p className="text-base md:text-2xl font-bold">Net Change in Balance</p>
             {parseFloat(sum) > 0 ? (
-              <img src="/src/assets/payinUp.svg" alt="payment in" />
+              <img src="/assets/payinUp.svg" alt="payment in" />
             ) : (
-              <img src="/src/assets/payinOut.svg" alt="payment out" />
+              <img src="/assets/payinOut.svg" alt="payment out" />
             )}
           </div>
           <p className="text-base md:text-xl">${sum} SGD</p>
@@ -81,6 +81,7 @@ const TransactionOverviewCard = () => {
         <div className="flex flex-row justify-end gap-2 w-full px-2">
           <button className="text-xs border-b border-black" onClick={handleRefreshClick}>Refresh</button>
           <button className=" text-xs border-b border-black ">View More</button>
+
         </div>
       </div>
     </div>

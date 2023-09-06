@@ -90,7 +90,7 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
 
   return (
     <form className="flex flex-wrap flex-col" onSubmit={onSubmit}>
-      <div className="flex flex-col py-10 px-12">
+      <div className="flex flex-col py-10 px-4 md:px-12">
         <div className="flex flex-wrap justify-center">
           <p className="text-2xl font-bold">Enter Your Personal Information </p>
         </div>

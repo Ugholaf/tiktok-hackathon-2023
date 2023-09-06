@@ -41,14 +41,14 @@ const WalletBalanceCard = () => {
               className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
               onClick={() => setOpenCashIn(true)}
             >
-              <img src="/src/assets/buttons/cashIn.svg" alt="cash in" />
+              <img src="/assets/buttons/cashIn.svg" alt="cash in" />
               Cash In
             </button>
             <button
               className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
               onClick={() => setOpenCashOut(true)}
             >
-              <img src="/src/assets/buttons/cashOut.svg" alt="cash out" />
+              <img src="/assets/buttons/cashOut.svg" alt="cash out" />
               Cash Out
             </button>
             <button
@@ -56,7 +56,7 @@ const WalletBalanceCard = () => {
               onClick={() => setOpenP2PTransfer(true)}
             >
               <img
-                src="/src/assets/buttons/p2pTransfer.svg"
+                src="/assets/buttons/p2pTransfer.svg"
                 alt="p2p transfer"
               />
               P2P Transfer
@@ -65,14 +65,14 @@ const WalletBalanceCard = () => {
               className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
               onClick={() => setOpenScan(true)}
             >
-              <img src="/src/assets/buttons/scan.svg" alt="scan" />
+              <img src="/assets/buttons/scan.svg" alt="scan" />
               Scan
             </button>
             <button
               className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
               onClick={() => setOpenQR(true)}
             >
-              <img src="/src/assets/buttons/qrcode.svg" alt="qrcode" />
+              <img src="/assets/buttons/qrcode.svg" alt="qrcode" />
               My QR
             </button>
           </div>

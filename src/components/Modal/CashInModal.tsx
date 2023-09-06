@@ -35,7 +35,7 @@ const CashInModal: React.FC<CashInModalProps> = ({
     <div className="flex flex-col gap-5">
       <div className="flex flex-row justify-between border-b-2 border-neutral-300">
         <div className="flex flex-row gap-5 mb-4">
-          <img src="/src/assets/icons/paypal.svg" alt="paypal icon" />
+          <img src="/assets/icons/paypal.svg" alt="paypal icon" />
           <p className="text-2xl">Paypal</p>
         </div>
         <div>
@@ -51,7 +51,7 @@ const CashInModal: React.FC<CashInModalProps> = ({
       </div>
       <div className="flex flex-row justify-between border-b-2 border-neutral-300">
         <div className="flex flex-row gap-5 mb-4">
-          <img src="/src/assets/icons/localBank.svg" alt="local bank icon" />
+          <img src="/assets/icons/localBank.svg" alt="local bank icon" />
           <p className="text-2xl">Local Bank</p>
         </div>
         <div>
@@ -67,7 +67,7 @@ const CashInModal: React.FC<CashInModalProps> = ({
       </div>
       <div className="flex flex-row justify-between border-b-2 border-neutral-300">
         <div className="flex flex-row gap-5 mb-4">
-          <img src="/src/assets/icons/creditCard.svg" alt="credit card icon" />
+          <img src="/assets/icons/creditCard.svg" alt="credit card icon" />
           <p className="text-2xl">Credit Card</p>
         </div>
         <div>

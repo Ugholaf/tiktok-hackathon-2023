@@ -136,7 +136,7 @@ const Modal: React.FC<ModalProps> = ({
                   "
                   onClick={handleClose}
                 >
-                  <img src="/src/assets/close.svg" alt="close" />
+                  <img src="/assets/close.svg" alt="close" />
                 </button>
                 <div className="text-2xl font-bold border-b-2 border-red-500">
                   {title}
