@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "./Modal";
-import OTPInput from "../Form/otpInput";
+import OTPInput from "../Form/OTPInput";
 import { AccountType, useLoginMutation } from "../../generated/graphql";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
