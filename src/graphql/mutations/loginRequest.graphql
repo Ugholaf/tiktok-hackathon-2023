@@ -1,0 +1,13 @@
+mutation LoginRequest(
+  $usernameOrEmail: String!
+  $password: String!
+  $accountType: AccountType!
+) {
+  loginRequest(
+    usernameOrEmail: $usernameOrEmail
+    password: $password
+    accountType: $accountType
+  ) {
+    loginToken
+  }
+}
