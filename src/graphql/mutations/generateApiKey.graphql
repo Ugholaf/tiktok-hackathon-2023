@@ -1,0 +1,5 @@
+mutation GenerateApiKey($label: String!, $type: ApiKeyType!) {
+  generateApiKey(label: $label, type: $type) {
+    apiKey
+  }
+}
