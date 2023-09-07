@@ -1,13 +1,5 @@
-mutation Login(
-  $usernameOrEmail: String!
-  $password: String!
-  $accountType: AccountType!
-) {
-  login(
-    usernameOrEmail: $usernameOrEmail
-    password: $password
-    accountType: $accountType
-  ) {
+mutation Login($loginToken: String!, $otp: String!) {
+  login(loginToken: $loginToken, otp: $otp) {
     accessToken
   }
 }
