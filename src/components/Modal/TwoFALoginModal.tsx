@@ -50,7 +50,7 @@ const TwoFALoginModal: React.FC<TwoFALoginModalProps> = ({
       }
 
       if (errors && errors.length > 0) {
-        toast.error("Error logging in");
+        toast.error(errors[0].message);
       }
     } catch (error) {
       toast.error("Error logging in");
@@ -71,12 +71,12 @@ const TwoFALoginModal: React.FC<TwoFALoginModalProps> = ({
         </div>
       </div>
 
-      <button
+      {/* <button
         className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full"
         onClick={() => handleSubmit()}
       >
         Next
-      </button>
+      </button> */}
     </div>
   );
 
@@ -87,6 +87,7 @@ const TwoFALoginModal: React.FC<TwoFALoginModalProps> = ({
       onSubmit={handleSubmit}
       title="2FA OTP"
       body={bodyContent}
+      actionLabel="Submit"
     />
   );
 };
