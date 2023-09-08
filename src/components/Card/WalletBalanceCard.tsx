@@ -23,7 +23,7 @@ const WalletBalanceCard = () => {
   );
   console.log(balance);
   return (
-    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
+    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center shadow-md w-full bg-white">
       <p className="text-2xl font-bold border-b-2 border-red-600 mb-6">
         Wallet Balance
       </p>
@@ -36,41 +36,47 @@ const WalletBalanceCard = () => {
         </div>
         <div className="flex flex-col items-start px-3 py-3 bg-gray-100 w-full rounded-b-lg">
           <p className="text-base mb-2">Perform Transactions</p>
-          <div className="flex flex-wrap justify-between items-center gap-3 self-stretch">
+          <div className="grid grid-cols-[1fr_1fr] justify-start items-center gap-3 self-stretch">
             <button
-              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
               onClick={() => setOpenCashIn(true)}
             >
               <img src="/assets/buttons/cashIn.svg" alt="cash in" />
               Cash In
             </button>
             <button
-              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
               onClick={() => setOpenCashOut(true)}
             >
               <img src="/assets/buttons/cashOut.svg" alt="cash out" />
               Cash Out
             </button>
             <button
-              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
               onClick={() => setOpenP2PTransfer(true)}
             >
               <img src="/assets/buttons/p2pTransfer.svg" alt="p2p transfer" />
               P2P Transfer
             </button>
             <button
-              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
               onClick={() => setOpenScan(true)}
             >
               <img src="/assets/buttons/scan.svg" alt="scan" />
-              Scan
+              Scan QR
             </button>
             <button
-              className="flex flex-row gap-1 bg-white py-2 px-3 justify-between shadow-md rounded-md"
+              className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
               onClick={() => setOpenQR(true)}
             >
               <img src="/assets/buttons/qrcode.svg" alt="qrcode" />
-              My QR
+              Display My QR
+            </button>
+            <button
+              className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
+            >
+              <img src="/assets/buttons/conversion.svg" alt="qrcode" />
+              Conversion
             </button>
           </div>
         </div>

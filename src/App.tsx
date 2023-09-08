@@ -5,6 +5,7 @@ import PersonalPage from "./pages/PersonalPage";
 import BusinessPage from "./pages/BusinessPage";
 import TransactionPage from "./pages/TransactionPage";
 import { useIsLoggedIn } from "./hook/useIsLoggedIn";
+import GoToMarketPage from "./pages/GoToMarketPage";
 
 const PrivateRoute = () => {
   const isLoggedIn = useIsLoggedIn();
@@ -27,6 +28,7 @@ function App() {
       <Route element={<PrivateRoute />}>
         <Route path="/personal" element={<PersonalPage />} />
         <Route path="/business" element={<BusinessPage />} />
+        <Route path="/Roadmap" element={<GoToMarketPage />} />
         <Route path="/transaction" element={<TransactionPage />} />
       </Route>
     </Routes>
