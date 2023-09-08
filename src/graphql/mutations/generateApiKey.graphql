@@ -1,0 +1,7 @@
+mutation GenerateApiKey(
+  $label: String!
+  $type: ApiKeyType!
+  $webhookUrl: String!
+) {
+  generateApiKey(label: $label, type: $type, webhookUrl: $webhookUrl)
+}

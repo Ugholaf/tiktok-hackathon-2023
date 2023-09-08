@@ -1,10 +1,7 @@
 import { useState } from "react";
 import Modal from "./Modal";
 import { useForm } from "react-hook-form";
-import {
-  ApiKeyType,
-  useMerchantRequestQrMutation,
-} from "../../generated/graphql";
+import { ApiKeyType, useGenerateApiKeyMutation } from "../../generated/graphql";
 import toast from "react-hot-toast";
 
 interface Props {
@@ -27,23 +24,25 @@ const ApiIntegrationModal: React.FC<Props> = ({ open, setOpen }) => {
 
   const disabled = webhook === "" || label === "" || generatedAPI !== "";
 
-  const [generateAPI, { error }] = useMerchantRequestQrMutation();
+  const [generateAPI] = useGenerateApiKeyMutation();
 
   const handleGenerateAPI = async () => {
     try {
-      const { data } = await generateAPI({
+      const { data, errors } = await generateAPI({
         variables: {
           type: ApiKeyType.CREATE_PAYMENT_QR,
           label: label,
+          webhookUrl: webhook,
         },
       });
 
-      if (error) {
-        toast.error((error as Error).message);
+      if (errors) {
+        toast.error(errors[0].message);
+        throw new Error(errors[0].message);
       }
 
-      if (data?.generateApiKey.apiKey) {
-        setGeneratedAPI(data.generateApiKey.apiKey);
+      if (data) {
+        setGeneratedAPI(data.generateApiKey);
       }
     } catch (e) {
       toast.error((e as Error).message);
