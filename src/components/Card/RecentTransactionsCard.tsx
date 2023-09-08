@@ -57,10 +57,7 @@ const RecentTransactionsCard = () => {
   {/* Inspect this export type TransactionFullQuery */ }
 
 
-  const transactionsIn = transactions?.transactionsIn || [];
-  const transactionsOut = transactions?.transactionsOut || [];
 
-  const combinedTransactions = [...transactionsIn, ...transactionsOut];
 
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
