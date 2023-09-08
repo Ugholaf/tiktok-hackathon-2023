@@ -223,6 +223,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
 
   const readerBody = (
     <QrScanner
+      onError={() => {
+        toast.error("Error scanning QR code");
+      }}
       onDecode={async (result) => {
         setQRString(result);
         // query to figure out is p2p or merch

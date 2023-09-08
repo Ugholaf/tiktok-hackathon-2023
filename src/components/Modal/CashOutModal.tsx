@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Modal from "./Modal";
 import { toast } from "react-hot-toast";
 import { Currency, useRequestWithdrawMutation } from "../../generated/graphql";
@@ -11,15 +11,13 @@ interface CashOutModalProps {
 
 const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
   const [requestWithdraw] = useRequestWithdrawMutation();
-  const checkoutRef = useRef("");
   const [modalNumber, setModalNumber] = useState(1);
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const selectedOption = "paypal";
+  console.log(email);
 
-  const { data } = useMeQuery({
-    pollInterval: 2000,
-  });
+  const { data } = useMeQuery();
 
   const balance = data?.me.balances.find((balance) => balance.currency === "SGD");
 
@@ -30,9 +28,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
-  const handleChangeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(e.target.value);
-  };
+
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -48,10 +44,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       toast.error("Email cannot be empty");
       return false;
     }
-    if (selectedOption == "") {
-      toast.error("Please select a cashout method");
-      return false;
-    }
+
     if (convertedAmount < 0) {
       toast.error("Amount must be greater than 0");
       return false;
@@ -70,17 +63,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       return false;
     }
 
-    {
-      /*setOpen(false);*/
-    }
-
     return true;
-  };
-
-  const pressback = () => {
-    setAmount("");
-    setSelectedOption("");
-    setEmail("");
   };
 
   const handleSubmit = async () => {
@@ -94,25 +77,30 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       return;
     }
 
-    if (selectedOption == "") {
-      toast.error("Please select a cashout method");
-      return;
-    }
+    try {
+      const { data: withdrawData, errors } = await requestWithdraw({
+        variables: {
+          amount: parseFloat(amount),
+          currency: Currency.SGD,
+          paypalEmail: email,
+        },
+      });
+      console.log(withdrawData, errors);
 
-    const { data: withdrawData, errors } = await requestWithdraw({
-      variables: {
-        amount: parseFloat(amount),
-        currency: Currency.SGD,
-        paypalEmail: email,
-      },
-    });
+      if (!withdrawData?.requestWithdraw.paypalPaymentId || errors?.length) {
+        toast.error("Error requesting withdraw");
+        throw new Error("Error requesting withdraw");
+      }
+      toast.success("Successfully requested withdraw");
 
-    if (!withdrawData?.requestWithdraw.paypalPaymentId || errors?.length) {
+      setModalNumber(1);
+      setOpen(false);
+      setAmount("");
+      setEmail("");
+    } catch (error) {
+      console.log(error);
       toast.error("Error requesting withdraw");
-      throw new Error("Error requesting withdraw");
     }
-    checkoutRef.current = withdrawData.requestWithdraw.paypalPaymentId;
-    toast.success("Successfully requested withdraw");
   };
 
   const bodyContent = (
@@ -131,6 +119,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
           >
             <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
             <input
+              value={amount}
               id="amount"
               onChange={handleChangeAmount}
               type="number"
@@ -151,6 +140,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         <div className="relative ">
           <span className="absolute inset-y-0 left-0 px-3 flex items-center">@</span>
           <input
+            value={email}
             id="email"
             onChange={handleChangeEmail}
             type="string"
@@ -175,8 +165,8 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               type="radio"
               value="paypal"
               name="paypal"
-              onChange={handleChangeOption}
-              checked={selectedOption === "paypal"}
+              checked
+              onChange={() => {}}
               className="mb-2 scale-150 accent-red-500"
             />
           </div>
@@ -191,8 +181,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               type="radio"
               value="localBank"
               name="localBank"
-              onChange={handleChangeOption}
-              checked={selectedOption === "localBank"}
               className="mb-2 scale-150 accent-red-500"
               disabled
             />
@@ -208,8 +196,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               type="radio"
               value="creditCard"
               name="creditCard"
-              onChange={handleChangeOption}
-              checked={selectedOption === "creditCard"}
               className="mb-2 scale-150 accent-red-500"
               disabled
             />
@@ -225,8 +211,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               type="radio"
               value="creditCard"
               name="creditCard"
-              onChange={handleChangeOption}
-              checked={selectedOption === "creditCard"}
               className="mb-2 scale-150 accent-red-500"
               disabled
             />
@@ -242,8 +226,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               type="radio"
               value="creditCard"
               name="creditCard"
-              onChange={handleChangeOption}
-              checked={selectedOption === "creditCard"}
               className="mb-2 scale-150 accent-red-500"
               disabled
             />
@@ -297,7 +279,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
           className="py-2 px-5 border-2 border-red-500 rounded-md text-red-500 font-bold hover:opacity-70 transition w-full"
           onClick={() => {
             setModalNumber(1);
-            pressback();
           }}
         >
           Back
@@ -306,9 +287,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
           className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
           onClick={() => {
             handleSubmit();
-            setModalNumber(1);
-            setOpen(false);
-            pressback();
           }}
         >
           Cash out now
@@ -321,7 +299,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
     <Modal
       isOpen={open}
       onClose={handleClose}
-      onSubmit={handleCheck} /*should be handle submit but this fuck shit throw me an error*/
+      onSubmit={handleCheck}
       title="Cash Out"
       body={modalNumber === 1 ? bodyContent : bodyContentAfter}
     />

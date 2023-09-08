@@ -43,7 +43,7 @@ const RecentTransactionsCard = () => {
               className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2"
             >
               <div className="flex flex-col justify-between items-start">
-                <p className="text-sm xl:text-base" >
+                <p className="text-sm xl:text-base">
                   {dayjs(transaction.createdAt).format("DD/MM/YYYY HH:mm:ss")}
                 </p>
               </div>

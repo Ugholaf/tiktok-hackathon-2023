@@ -4,7 +4,6 @@ const now = new Date();
 const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 const LoyaltyCard = () => {
   const { data } = useGetTransactionSummaryQuery({
-    pollInterval: 2000,
     variables: {
       fromDate: startOfMonth,
       currency: Currency.SGD,
