@@ -57,10 +57,12 @@ const RecentTransactionsCard = () => {
   {/* Inspect this export type TransactionFullQuery */ }
 
 
-
+  const mostRecentTrxn = [...(transactions?.transactionsIn.slice(0, 3) ?? []), ...(transactions?.transactionsOut.slice(0, 3) ?? [])].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  }).slice(0, 3)
 
   return (
-    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
+    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full shadow-md bg-white">
       <p className="text-2xl font-bold border-b-2 inline border-red-600 mb-6 ">
         Recent Transactions
       </p>
@@ -77,7 +79,7 @@ const RecentTransactionsCard = () => {
             <p className="font-bold">Amount</p>
 
           </div>
-          {transactions?.transactionsIn.slice(0, 3).map((transaction) => (
+          {mostRecentTrxn.map((transaction) => (
             <div key={transaction.id} className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2">
               <div className="flex flex-col justify-between items-start">
                 <p >{(new Date(transaction.createdAt).toLocaleDateString('en-GB').split("T")[0])}</p>

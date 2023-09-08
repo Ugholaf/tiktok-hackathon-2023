@@ -42,20 +42,18 @@
   color: #888;
 }
 
-
+/* 
 .MuiPaper-root.MuiPaper-elevation {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Centers the card horizontally */
   justify-content: center;
-  /* Centers the card vertically */
 
   @media (min-width: 1000px) {
     flex-direction: row;
     width: 80%;
   }
-}
+} */
 
 .desktopImage {
   display: none;

@@ -43,7 +43,7 @@ const TransactionOverviewCard = () => {
 
 
   return (
-    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
+    <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch shadow-md items-center w-full bg-white">
       <p className="text-2xl font-bold border-b-2 inline border-red-600 mb-6 ">
         MTD Transaction Overview
       </p>
