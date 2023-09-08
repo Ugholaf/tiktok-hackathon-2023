@@ -67,14 +67,14 @@ const RecentTransactionsCard = () => {
         Recent Transactions
       </p>
       <div className="flex flex-col self-stretch w-full items-end">
-        <div className="flex flex-col justify-between items-center self-stretch px-11 py-3 bg-gray-200 w-full rounded-lg">
+        <div className="flex flex-col justify-between items-center self-stretch px-4 xl:px-11 py-3 bg-gray-200 w-full rounded-lg">
           <div className="flex flex-row justify-between items-center self-stretch border-b border-black mb-2">
             {/* {columns.map((column) => (
               <p key={column.label} className="font-bold">
                 {column.label}
               </p>
             ))} */}
-            <p className="font-bold min-w-[70px] text-left">Date</p>
+            <p className="font-bold min-w-[78px] lg:min-w-[86px] text-left">Date</p>
             <p className="font-bold">Type</p>
             <p className="font-bold">Amount</p>
 
@@ -82,14 +82,14 @@ const RecentTransactionsCard = () => {
           {mostRecentTrxn.map((transaction) => (
             <div key={transaction.id} className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2">
               <div className="flex flex-col justify-between items-start">
-                <p >{(new Date(transaction.createdAt).toLocaleDateString('en-GB').split("T")[0])}</p>
-                <p >{(new Date(transaction.createdAt).toISOString().split("T")[1].slice(0, -5))}</p>
+                <p className="text-sm xl:text-base">{(new Date(transaction.createdAt).toLocaleDateString('en-GB').split("T")[0])}</p>
+                <p className="text-sm xl:text-base">{(new Date(transaction.createdAt).toISOString().split("T")[1].slice(0, -5))}</p>
               </div>
               <div className="flex justify-center items-center">
-                <p className="flex">{transaction.type.toLowerCase().replace(/_/g, " ")}</p>
+                <p className="text-sm xl:text-base">{transaction.type.toLowerCase().replace(/_/g, " ")}</p>
               </div>
-              <div className="flex justify-center items-center">
-                <p >{transaction.amount.toFixed(2)} {transaction.currency} </p>
+              <div className="flex justify-center items-right">
+                <p className="text-sm xl:text-base text-right">{transaction.amount.toFixed(2)} {transaction.currency} </p>
               </div>
             </div>
 
