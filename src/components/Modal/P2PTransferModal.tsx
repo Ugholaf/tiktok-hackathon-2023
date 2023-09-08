@@ -23,6 +23,10 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
 
   const handleClose = () => {
     setOpen(false);
+    setAmount("");
+    setUsername("");
+    setNotes("");
+    setModalNumber(1);
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,12 +70,6 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
     return true;
   };
 
-  const pressback = () => {
-    setNotes("");
-    setAmount("");
-    setUsername("");
-  };
-
   const handleSubmit = async () => {
     const convertedAmount = Number(amount);
     if (!convertedAmount) {
@@ -95,6 +93,9 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
 
       if (data?.makeInternalTransfer) {
         toast.success("Successfully Sent money");
+        setModalNumber(1);
+        setOpen(false);
+
         return;
       }
 
@@ -122,6 +123,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
             className="absolute left-0 top-1/2 transform -translate-y-1/2 px-2 py-2 flex justify-center items-center w-8"
           />
           <input
+            value={username}
             id="username"
             onChange={handleChangeUsername}
             type="text"
@@ -145,6 +147,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
           >
             <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
             <input
+              value={amount}
               id="amount"
               onChange={handleChangeAmount}
               type="number"
@@ -165,6 +168,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
         <div className="relative ">
           <span className="absolute inset-y-0 left-0 px-2 flex items-center">&#128221;</span>
           <input
+            value={notes}
             id="notes"
             onChange={handleChangeNotes}
             type="text"
@@ -208,19 +212,13 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
           className="py-2 px-5 border-2 border-red-500 rounded-md text-red-500 font-bold hover:opacity-70 transition w-full"
           onClick={() => {
             setModalNumber(1);
-            pressback();
           }}
         >
           Back
         </button>
         <button
           className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
-          onClick={() => {
-            handleSubmit();
-            setModalNumber(1);
-            setOpen(false);
-            pressback();
-          }}
+          onClick={handleSubmit}
         >
           Pay
         </button>

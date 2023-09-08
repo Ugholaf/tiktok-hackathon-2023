@@ -23,6 +23,9 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
 
   const handleClose = () => {
     setOpen(false);
+    setAmount("");
+    setEmail("");
+    setModalNumber(1);
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,10 +88,8 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
           paypalEmail: email,
         },
       });
-      console.log(withdrawData, errors);
 
       if (!withdrawData?.requestWithdraw.paypalPaymentId || errors?.length) {
-        toast.error("Error requesting withdraw");
         throw new Error("Error requesting withdraw");
       }
       toast.success("Successfully requested withdraw");

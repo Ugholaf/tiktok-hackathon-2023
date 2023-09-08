@@ -32,7 +32,7 @@ const RecentTransactionsCard = () => {
       </p>
       <div className="flex flex-col self-stretch w-full items-end">
         <div className="flex flex-col justify-between items-center self-stretch px-4 xl:px-11 py-3 bg-gray-200 w-full rounded-lg">
-          <div className="flex flex-row justify-between items-center self-stretch border-b border-black mb-2">
+          <div className="grid grid-cols-[1fr_1fr_1fr] justify-between items-center self-stretch border-b border-black mb-2">
             <p className="font-bold min-w-[78px] lg:min-w-[86px] text-left">Date</p>
             <p className="font-bold">Type</p>
             <p className="font-bold">Amount</p>
@@ -40,7 +40,7 @@ const RecentTransactionsCard = () => {
           {mostRecentTrxn.map((transaction) => (
             <div
               key={transaction.id}
-              className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2"
+              className="grid grid-cols-[1fr_1fr_1fr] text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2"
             >
               <div className="flex flex-col justify-between items-start">
                 <p className="text-sm xl:text-base">
