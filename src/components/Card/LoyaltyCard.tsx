@@ -21,7 +21,7 @@ const LoyaltyCard = () => {
 
 
     return (
-        <div className="flex flex-col rounded-xl py-6 px-6 md:px-11  my-6 space-y-2 self-stretch items-center w-full shadow-md bg-white">
+        <div className="flex flex-col rounded-xl py-6 px-6 md:px-11  my-6  self-stretch items-center w-full shadow-md bg-white">
 
             <p className="flex flex-row text-2xl font-bold border-b-2 border-red-500 mb-6">
                 <img src="/assets/buttons/Tpoints.svg" alt="person" />  &nbsp;  TPlus-Points
@@ -37,8 +37,8 @@ const LoyaltyCard = () => {
                         <p className="text-base text-gray-500">TPlus points available</p>
                     </div>
                 </div>
-                <div className="flex flex-col justify-center items-left px-3 py-3 bg-gray-100 w-full rounded-b-lg">
-                    <p className="text-sm text-left px-3 "> - T-Points is our T-Money's flagship loyalty program!</p>
+                <div className="flex flex-col justify-center items-left px-1 py-3 mb-3 bg-gray-100 w-full rounded-b-lg">
+                    <p className="text-sm text-left px-3 ">- T-Points is our T-Money's flagship loyalty program!</p>
                     <p className="text-sm text-left px-3 ">- Earn 2.5 TPlus Point for every Dollar you spend to save up for great rewards to be used at our partners!</p>
                 </div>
             </div>
