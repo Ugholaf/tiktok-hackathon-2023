@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { AccountType, useMeQuery } from "../../../generated/graphql";
 
-const tabs: string[] = ["Home", "Transaction", "About"];
+const tabs: string[] = ["Home", "Transaction", "Roadmap"];
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -28,6 +28,8 @@ const Navbar = () => {
       setActiveTab("Home");
     } else if (pathname === "/transaction") {
       setActiveTab("Transaction");
+    } else if (pathname === "/Roadmap") {
+      setActiveTab("Roadmap");
     } else {
       setActiveTab(
         pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2)
@@ -46,6 +48,10 @@ const Navbar = () => {
       setActiveTab("Transaction");
       setShowMenu(true);
       navigate("/transaction");
+    } else if (tab === "Roadmap") {
+      setActiveTab("Roadmap");
+      setShowMenu(true);
+      navigate("/Roadmap");
     }
     {
       /*Set effect to auto close menu or not or not*/
@@ -78,11 +84,10 @@ const Navbar = () => {
             {/* Desktop Menu tabs */}
             {tabs.map((tab) => (
               <li
-                className={`cursor-pointer font-bold ${
-                  tab === activeTab
-                    ? "underline decoration-red-500 underline-offset-4"
-                    : ""
-                }`}
+                className={`cursor-pointer font-bold ${tab === activeTab
+                  ? "underline decoration-red-500 underline-offset-4"
+                  : ""
+                  }`}
                 key={tab}
                 onClick={() => handleTabChange(tab)}
               >
@@ -134,11 +139,10 @@ const Navbar = () => {
         <ul className="md:hidden flex flex-col gap-3 py-3 items-center">
           {tabs.map((tab) => (
             <li
-              className={`cursor-pointer font-bold ${
-                tab === activeTab
-                  ? "underline decoration-red-500 underline-offset-4"
-                  : ""
-              }`}
+              className={`cursor-pointer font-bold ${tab === activeTab
+                ? "underline decoration-red-500 underline-offset-4"
+                : ""
+                }`}
               key={tab}
               onClick={() => handleTabChange(tab)}
             >
