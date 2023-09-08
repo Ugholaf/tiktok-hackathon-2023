@@ -1,11 +1,11 @@
 import { Currency, useGetTransactionSummaryQuery, SortOrder } from "../../generated/graphql";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 
 
 const RecentContacts = () => {
 
 
-    const [now, setNow] = useState(new Date());
+    const now = new Date();
     const startOfMonth = useMemo(() => new Date(now.getFullYear(), now.getMonth(), 1), [now]);
 
     const { data } = useGetTransactionSummaryQuery({
