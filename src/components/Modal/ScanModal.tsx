@@ -7,6 +7,7 @@ import {
   Currency,
   useMakeInternalTransferMutation,
   useMerchantGetQrDetailsLazyQuery,
+  useMerchantPayQrMutation,
 } from "../../generated/graphql";
 
 interface ScanModalProps {
@@ -27,8 +28,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [amount, setAmount] = useState<number | undefined>(undefined);
 
-  const [fetchMerchantPaymentData, { error }] =
-    useMerchantGetQrDetailsLazyQuery();
+  const [fetchMerchantPaymentData] = useMerchantGetQrDetailsLazyQuery();
+
+  const [merchantPayQR] = useMerchantPayQrMutation();
 
   const [makeInternalTransfer] = useMakeInternalTransferMutation();
 
@@ -64,22 +66,6 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       setModal(ModalType.P2P);
       return;
     }
-
-    const merchantPaymentData = await fetchMerchantPaymentData({
-      variables: {
-        merchantGetQrDetailsId: QRString,
-      },
-    });
-
-    if (error) {
-      toast.error("Error fetching merchant payment data");
-      return;
-    }
-    if (merchantPaymentData.data?.merchantGetQRDetails) {
-      setUsername(merchantPaymentData.data?.merchantGetQRDetails.merchantId);
-    }
-    setAmount(merchantPaymentData.data?.merchantGetQRDetails.amount);
-    setModal(ModalType.CONFIRM);
   };
 
   const handleScan = () => {
@@ -125,6 +111,24 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
           toast.error("Error Sending money to user (Username not found)");
           throw new Error("Error Sending money");
         }
+      } catch (e) {
+        toast.error((e as Error).message);
+      }
+    } else {
+      try {
+        const { data: merchantPayQrData, errors: merchantPayQRError } =
+          await merchantPayQR({
+            variables: {
+              merchantPayQrId: QRString,
+            },
+          });
+
+        if (merchantPayQRError?.length || !merchantPayQrData?.merchantPayQR) {
+          toast.error("Error paying merchant");
+          throw new Error("Error paying merchant");
+        }
+
+        toast.success("Payment successful");
       } catch (e) {
         toast.error((e as Error).message);
       }
@@ -242,20 +246,32 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
           return;
         }
 
-        const merchantPaymentData = await fetchMerchantPaymentData({
-          variables: {
-            merchantGetQrDetailsId: result,
-          },
-        });
+        try {
+          const {
+            data: merchantPaymentData,
+            error: fetchMerchantPaymentError,
+          } = await fetchMerchantPaymentData({
+            variables: {
+              merchantGetQrDetailsId: result,
+            },
+          });
 
-        if (error) {
-          toast.error("Error fetching merchant payment data");
-          return;
+          if (fetchMerchantPaymentError) {
+            toast.error("Error fetching merchant payment data");
+            return;
+          }
+
+          if (merchantPaymentData?.merchantGetQRDetails) {
+            setUsername(
+              merchantPaymentData?.merchantGetQRDetails.merchant.username
+            );
+            setAmount(merchantPaymentData?.merchantGetQRDetails.amount);
+            setModal(ModalType.CONFIRM);
+            return;
+          }
+        } catch (e) {
+          toast.error((e as Error).message);
         }
-
-        setUsername(merchantPaymentData.data?.merchantGetQRDetails.merchantId);
-        setAmount(merchantPaymentData.data?.merchantGetQRDetails.amount);
-        setModal(ModalType.CONFIRM);
       }}
       onError={(error) => console.log(error?.message)}
     />

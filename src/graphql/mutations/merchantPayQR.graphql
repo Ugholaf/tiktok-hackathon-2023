@@ -1,0 +1,8 @@
+mutation MerchantPayQR($merchantPayQrId: String!) {
+  merchantPayQR(id: $merchantPayQrId) {
+    merchant {
+      username
+    }
+    amount
+  }
+}

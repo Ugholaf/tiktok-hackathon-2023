@@ -1,0 +1,9 @@
+query GetApiKeyList {
+  getApiKeyList {
+    webhookUrl
+    type
+    prefix
+    merchantId
+    label
+  }
+}
