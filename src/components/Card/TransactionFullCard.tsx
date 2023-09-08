@@ -1,4 +1,4 @@
-import { useTransactionFullQuery, Currency } from "../../generated/graphql";
+import { useTransactionFullQuery, Currency, SortOrder } from "../../generated/graphql";
 import { useState, useMemo } from "react";
 
 
@@ -16,7 +16,7 @@ const TransactionFullCard = () => {
         variables: {
             fromDate: startOfMonth,
             currency: Currency.SGD,
-            toDate: now,
+            sortOrder: SortOrder.DESC,
         },
 
     });
