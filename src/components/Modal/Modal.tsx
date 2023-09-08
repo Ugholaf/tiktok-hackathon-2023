@@ -138,9 +138,7 @@ const Modal: React.FC<ModalProps> = ({
                 >
                   <img src="/assets/close.svg" alt="close" />
                 </button>
-                <div className="text-2xl font-bold border-b-2 border-red-500">
-                  {title}
-                </div>
+                <div className="text-2xl font-bold border-b-2 border-red-500">{title}</div>
               </div>
               {/*body*/}
               <div className="relative p-6 flex-auto">{body}</div>

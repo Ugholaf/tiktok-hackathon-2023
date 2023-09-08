@@ -222,43 +222,43 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   );
 
   const readerBody = (
-    <QrScanner
-      onError={() => {
-        toast.error("Error scanning QR code");
-      }}
-      onDecode={async (result) => {
-        setQRString(result);
-        // query to figure out is p2p or merch
-        if (result.startsWith(p2pTransactionPrefix)) {
-          setUsername(result.split("-")[1]);
-          setModal(ModalType.P2P);
-          return;
-        }
-
-        try {
-          const { data: merchantPaymentData, error: fetchMerchantPaymentError } =
-            await fetchMerchantPaymentData({
-              variables: {
-                merchantGetQrDetailsId: result,
-              },
-            });
-
-          if (fetchMerchantPaymentError) {
-            toast.error("Error fetching merchant payment data");
+    <div className="max-w-[400px] m-auto">
+      <QrScanner
+        onError={() => {}}
+        onDecode={async (result) => {
+          setQRString(result);
+          // query to figure out is p2p or merch
+          if (result.startsWith(p2pTransactionPrefix)) {
+            setUsername(result.split("-")[1]);
+            setModal(ModalType.P2P);
             return;
           }
 
-          if (merchantPaymentData?.merchantGetQRDetails) {
-            setUsername(merchantPaymentData?.merchantGetQRDetails.merchant.username);
-            setAmount(merchantPaymentData?.merchantGetQRDetails.amount);
-            setModal(ModalType.CONFIRM);
-            return;
+          try {
+            const { data: merchantPaymentData, error: fetchMerchantPaymentError } =
+              await fetchMerchantPaymentData({
+                variables: {
+                  merchantGetQrDetailsId: result,
+                },
+              });
+
+            if (fetchMerchantPaymentError) {
+              toast.error("Error fetching merchant payment data");
+              return;
+            }
+
+            if (merchantPaymentData?.merchantGetQRDetails) {
+              setUsername(merchantPaymentData?.merchantGetQRDetails.merchant.username);
+              setAmount(merchantPaymentData?.merchantGetQRDetails.amount);
+              setModal(ModalType.CONFIRM);
+              return;
+            }
+          } catch (e) {
+            toast.error((e as Error).message);
           }
-        } catch (e) {
-          toast.error((e as Error).message);
-        }
-      }}
-    />
+        }}
+      />
+    </div>
   );
 
   const p2pBody = (
