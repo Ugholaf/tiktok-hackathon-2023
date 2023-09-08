@@ -2,7 +2,7 @@ import { Currency, useGetTransactionSummaryQuery, SortOrder } from "../../genera
 import { useMemo } from "react";
 
 
-const RecentContacts = () => {
+const LoyaltyCard = () => {
 
 
     const now = new Date();
@@ -38,8 +38,8 @@ const RecentContacts = () => {
                     </div>
                 </div>
                 <div className="flex flex-col justify-center items-left px-3 py-3 bg-gray-100 w-full rounded-b-lg">
-                    <p className="text-base text-gray-500 text-left px-3 ">T-Points is our T-Money's flagship loyalty program!</p>
-                    <p className="text-base text-gray-500 text-left px-3 ">Earn 2.5 TPlus Point for every Dollar you spend to save up for great rewards to be used at our partners!</p>
+                    <p className="text-sm text-left px-3 "> - T-Points is our T-Money's flagship loyalty program!</p>
+                    <p className="text-sm text-left px-3 ">- Earn 2.5 TPlus Point for every Dollar you spend to save up for great rewards to be used at our partners!</p>
                 </div>
             </div>
             <div className="flex flex-row justify-center space-x-4">
@@ -50,4 +50,4 @@ const RecentContacts = () => {
         </div >
     )
 }
-export default RecentContacts
+export default LoyaltyCard
