@@ -76,7 +76,7 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
       if (registerData?.registerIndividual) {
         const accessToken = registerData.registerIndividual.accessToken;
         dispatch(onLogin({ accessToken }));
-        navigate("/personal");
+        navigate("/");
         toast.success("Successfully registered!");
       }
 

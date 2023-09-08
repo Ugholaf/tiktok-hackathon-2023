@@ -23,15 +23,17 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
   const [username, setUsername] = useState("");
   const [notes, setNotes] = useState("");
 
-  const { data } = useMeQuery({
-    pollInterval: 2000,
-  });
+  const { data } = useMeQuery();
 
   const balance = data?.me.balances.find(
     (balance) => balance.currency === "SGD"
   );
 
   const handleClose = () => {
+    setAmount("");
+    setUsername("");
+    setNotes("");
+    setModalNumber(1);
     setOpen(false);
   };
 
@@ -73,14 +75,6 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
       return false;
     }
 
-    {
-      /*setOpen(false);*/
-    }
-
-    {
-      /*setOpen(false);*/
-    }
-
     return true;
   };
 
@@ -102,25 +96,23 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
       return;
     }
 
-    const { data: transferData, errors } = await makeInternalTransfer({
-      variables: {
-        amount: convertedAmount,
-        currency: Currency.SGD,
-        toUsername: username,
-        note: notes,
-      },
-    });
-    if (!transferData?.makeInternalTransfer.receiverId || errors?.length) {
-      toast.error("Error Sending money to user (Username not found)");
-      throw new Error("Error Sending money");
-    }
+    try {
+      const { data: transferData } = await makeInternalTransfer({
+        variables: {
+          amount: convertedAmount,
+          currency: Currency.SGD,
+          toUsername: username,
+          note: notes,
+        },
+      });
+      if (!transferData?.makeInternalTransfer.receiverId) {
+        throw new Error("Error Sending money to user (Username not found)");
+      }
 
-    checkoutRef.current = transferData.makeInternalTransfer.receiverId;
-    console.log(checkoutRef.current);
-    toast.success("Successfully Sent money");
-
-    {
-      /*setOpen(false);*/
+      checkoutRef.current = transferData.makeInternalTransfer.receiverId;
+      toast.success("Successfully Sent money");
+    } catch (err) {
+      toast.error((err as Error).message);
     }
   };
   const bodyContent = (
@@ -156,7 +148,13 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
           Amount
         </label>
         <div className="flex flex-col w-full">
-          <div className={`relative ${parseFloat(amount) > (balance?.amount || 0) ? 'border border-red-500 rounded-md w-full' : ''}`}>
+          <div
+            className={`relative ${
+              parseFloat(amount) > (balance?.amount || 0)
+                ? "border border-red-500 rounded-md w-full"
+                : ""
+            }`}
+          >
             <span className="absolute inset-y-0 left-0 px-3 flex items-center">
               $
             </span>
@@ -167,10 +165,11 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
               placeholder="eg 239.29"
               className="bg-gray-100 pl-10 py-2 rounded-md w-full"
             />
-
           </div>
           {parseFloat(amount) > (balance?.amount || 0) && (
-            <p className="text-red-500">Error: Amount is greater than the balance.</p>
+            <p className="text-red-500">
+              Error: Amount is greater than the balance.
+            </p>
           )}
         </div>
       </div>
@@ -263,8 +262,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
     <Modal
       isOpen={open}
       onClose={handleClose}
-      onSubmit={handleSubmit}
-      title="Confirm the transfer"
+      title={modalNumber === 1 ? "P2P transfer" : "Confirm the transfer"}
       body={modalNumber === 1 ? bodyContent : bodyContentAfter}
     />
   );

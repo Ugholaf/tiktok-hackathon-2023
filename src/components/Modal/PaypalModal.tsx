@@ -32,7 +32,6 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
         }}
-        // onChange={(e) => setAmount(e.target.value)}
         inputRef={amountRef}
         type="number"
         className="bg-gray-100"
@@ -71,7 +70,6 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
               paypalCheckoutId: checkoutRef.current,
             },
           });
-          console.log(confirmDepositData, errors);
 
           if (errors && errors.length > 0) {
             toast.error("Error confirming deposit");
@@ -86,7 +84,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
           toast.success("Successfully confirmed deposit");
           return;
         } catch (error) {
-          toast.error("Error confirming deposit");
+          toast.error((error as Error).message);
           return;
         }
       }}

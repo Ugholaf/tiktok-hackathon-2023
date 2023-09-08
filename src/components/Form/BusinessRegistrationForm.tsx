@@ -66,7 +66,7 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
       if (registerData?.registerBusiness) {
         const accessToken = registerData.registerBusiness.accessToken;
         dispatch(onLogin({ accessToken }));
-        navigate("/business");
+        navigate("/");
         toast.success("Successfully registered!");
       }
 

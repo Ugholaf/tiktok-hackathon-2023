@@ -30,7 +30,7 @@ const WalletBalanceCard = () => {
       <div className="flex flex-col items-start self-stretch w-full">
         <div className="flex flex-col items-start px-3 py-1 bg-gray-200 w-full rounded-t-lg">
           <p className="text-3xl">
-            ${balance?.amount.toFixed(2)} {balance?.currency}
+            ${balance?.amount.toFixed(2) ?? 0} {balance?.currency}
           </p>
           <p className="text-base text-gray-500">Available</p>
         </div>
@@ -72,9 +72,7 @@ const WalletBalanceCard = () => {
               <img src="/assets/buttons/qrcode.svg" alt="qrcode" />
               Display QR
             </button>
-            <button
-              className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
-            >
+            <button className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base">
               <img src="/assets/buttons/conversion.svg" alt="qrcode" />
               Conversion
             </button>

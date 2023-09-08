@@ -4,7 +4,6 @@ import { toast } from "react-hot-toast";
 import { Currency, useRequestWithdrawMutation } from "../../generated/graphql";
 import { useMeQuery } from "../../generated/graphql";
 
-
 interface CashOutModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -13,10 +12,10 @@ interface CashOutModalProps {
 const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
   const [requestWithdraw] = useRequestWithdrawMutation();
   const checkoutRef = useRef("");
-  const [modalNumber, setModalNumber] = useState(1)
+  const [modalNumber, setModalNumber] = useState(1);
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("paypal");
 
   const { data } = useMeQuery({
     pollInterval: 2000,
@@ -25,8 +24,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
   const balance = data?.me.balances.find(
     (balance) => balance.currency === "SGD"
   );
-
-
 
   const handleClose = () => {
     setOpen(false);
@@ -42,9 +39,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
     setEmail(e.target.value);
   };
 
-
-
-
   const handleCheck = () => {
     const convertedAmount = Number(amount);
 
@@ -58,7 +52,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
     }
     if (selectedOption == "") {
       toast.error("Please select a cashout method");
-      return false
+      return false;
     }
     if (convertedAmount < 0) {
       toast.error("Amount must be greater than 0");
@@ -73,26 +67,22 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       return false;
     }
 
-
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       toast.error("Invalid email format");
       return false;
     }
 
-
-    {/*setOpen(false);*/ }
-
-    return true
+    return true;
   };
 
   const pressback = () => {
-    setAmount("")
-    setSelectedOption("")
-    setEmail("")
+    setAmount("");
+    setSelectedOption("paypal");
+    setEmail("");
   };
 
   const handleSubmit = async () => {
-    console.log(Number(amount), selectedOption)
+    console.log(Number(amount), selectedOption);
     if (!Number(amount)) {
       toast.error("Amount cannot be empty");
       return;
@@ -107,35 +97,44 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       toast.error("Please select a cashout method");
       return;
     }
+    try {
+      const { data: withdrawData, errors } = await requestWithdraw({
+        variables: {
+          amount: parseFloat(amount),
+          currency: Currency.SGD,
+          paypalEmail: email,
+        },
+      });
 
-
-    console.log(amount)
-    const { data: withdrawData, errors } = await requestWithdraw({
-      variables: {
-        amount: parseFloat(amount),
-        currency: Currency.SGD,
-        paypalEmail: email
-      },
-    });
-    console.log(withdrawData)
-    if (!withdrawData?.requestWithdraw.paypalPaymentId || errors?.length) {
+      if (!withdrawData?.requestWithdraw.paypalPaymentId || errors?.length) {
+        throw new Error("Error requesting withdraw");
+      }
+      checkoutRef.current = withdrawData.requestWithdraw.paypalPaymentId;
+      toast.success("Successfully requested withdraw");
+    } catch (err) {
       toast.error("Error requesting withdraw");
-      throw new Error("Error requesting withdraw");
     }
-    checkoutRef.current = withdrawData.requestWithdraw.paypalPaymentId;
-    toast.success("Successfully requested withdraw");
-
   };
-
-
   const bodyContent = (
     <div className="flex flex-col gap-4">
-
       <div className="flex flex-col gap-2">
-        <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">Amount</label>
+        <label
+          htmlFor="amount"
+          className="flex text-xl ml-2 font-semibold justify-start"
+        >
+          Amount
+        </label>
         <div className="flex flex-col w-full">
-          <div className={`relative ${parseFloat(amount) > (balance?.amount || 0) ? 'border border-red-500 rounded-md w-full' : ''}`}>
-            <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
+          <div
+            className={`relative ${
+              parseFloat(amount) > (balance?.amount || 0)
+                ? "border border-red-500 rounded-md w-full"
+                : ""
+            }`}
+          >
+            <span className="absolute inset-y-0 left-0 px-3 flex items-center">
+              $
+            </span>
             <input
               id="amount"
               onChange={handleChangeAmount}
@@ -145,15 +144,24 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
             />
           </div>
           {parseFloat(amount) > (balance?.amount || 0) && (
-            <p className="text-red-500">Error: Amount is greater than the balance.</p>
+            <p className="text-red-500">
+              Error: Amount is greater than the balance.
+            </p>
           )}
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">Paypal Email</label>
+        <label
+          htmlFor="amount"
+          className="flex text-xl ml-2 font-semibold justify-start"
+        >
+          Paypal Email
+        </label>
         <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-3 flex items-center">@</span>
+          <span className="absolute inset-y-0 left-0 px-3 flex items-center">
+            @
+          </span>
           <input
             id="email"
             onChange={handleChangeEmail}
@@ -166,10 +174,19 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
 
       {/*This is for the selection of the buttons*/}
       <div className="flex flex-col gap-2 ml-2">
-        <label htmlFor="amount" className="flex text-xl font-semibold justify-start">Choose Cashout Method</label>
+        <label
+          htmlFor="amount"
+          className="flex text-xl font-semibold justify-start"
+        >
+          Choose Cashout Method
+        </label>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row items-center gap-5 mb-2 justify-center">
-            <img src="/assets/icons/paypal.svg" alt="paypal icon" className="h-5 w-5" />
+            <img
+              src="/assets/icons/paypal.svg"
+              alt="paypal icon"
+              className="h-5 w-5"
+            />
             <p className="text-lg">Paypal</p>
           </div>
           <div>
@@ -185,7 +202,11 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img src="/assets/icons/localBank.svg" alt="local bank icon" className="h-5 w-5" />
+            <img
+              src="/assets/icons/localBank.svg"
+              alt="local bank icon"
+              className="h-5 w-5"
+            />
             <p className="text-lg">Local Bank (Future)</p>
           </div>
           <div>
@@ -202,7 +223,11 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img src="/assets/icons/creditCard.svg" alt="credit card icon" className="h-5 w-5" />
+            <img
+              src="/assets/icons/creditCard.svg"
+              alt="credit card icon"
+              className="h-5 w-5"
+            />
             <p className="text-lg">Credit Card (Future)</p>
           </div>
           <div>
@@ -219,7 +244,11 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img src="/assets/icons/7-11.svg" alt="Local Partners" className="h-5 w-5" />
+            <img
+              src="/assets/icons/7-11.svg"
+              alt="Local Partners"
+              className="h-5 w-5"
+            />
             <p className="text-lg">7-11 (Future)</p>
           </div>
           <div>
@@ -236,7 +265,11 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img src="/assets/icons/ministop.svg" alt="Local Partners" className="h-5 w-5" />
+            <img
+              src="/assets/icons/ministop.svg"
+              alt="Local Partners"
+              className="h-5 w-5"
+            />
             <p className="text-lg">Convenience Shop (Future)</p>
           </div>
           <div>
@@ -253,68 +286,92 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
       </div>
 
-
-
-      <button className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full" onClick={() => {
-        handleCheck() &&
-          setModalNumber(2);
-      }}>Next</button>
+      <button
+        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full"
+        onClick={() => {
+          handleCheck() && setModalNumber(2);
+        }}
+      >
+        Next
+      </button>
     </div>
-
   );
   const bodyContentAfter = (
     <div className="flex flex-col gap-4">
-
       <div className="flex flex-row gap-2 items-center">
-        <label htmlFor="username" className="flex text-xl font-semibold justify-start">Amount: </label>
-        <p className="text-bold text-xl" >${amount}</p>
+        <label
+          htmlFor="username"
+          className="flex text-xl font-semibold justify-start"
+        >
+          Amount:{" "}
+        </label>
+        <p className="text-bold text-xl">${amount}</p>
       </div>
 
       {selectedOption === "paypal" && (
         <div className="flex flex-col gap-5 items-start">
           <div className="flex flex-row gap-2 items-center">
-            <label htmlFor="Cashout" className="flex text-xl font-semibold items-center">Cash out via: </label>
+            <label
+              htmlFor="Cashout"
+              className="flex text-xl font-semibold items-center"
+            >
+              Cash out via:{" "}
+            </label>
             <div className="flex flex-row gap-2 items-center">
-              <img src="/assets/icons/paypal.svg" alt="paypal icon" className="h-5 w-5" />
+              <img
+                src="/assets/icons/paypal.svg"
+                alt="paypal icon"
+                className="h-5 w-5"
+              />
               <p className="text-lg">PayPal</p>
             </div>
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <label htmlFor="Cashout" className="flex text-xl font-semibold items-center">Paypal Email: </label>
+            <label
+              htmlFor="Cashout"
+              className="flex text-xl font-semibold items-center"
+            >
+              Paypal Email:{" "}
+            </label>
             <div className="flex flex-row gap-2 items-center">
               <p className="text-lg">{email}</p>
             </div>
           </div>
         </div>
-
-
-
       )}
 
       <div className="flex flex-col gap-3 mt-3">
-        <button className="py-2 px-5 border-2 border-red-500 rounded-md text-red-500 font-bold hover:opacity-70 transition w-full"
-          onClick={() => { setModalNumber(1); pressback(); }}>Back</button>
-        <button className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
+        <button
+          className="py-2 px-5 border-2 border-red-500 rounded-md text-red-500 font-bold hover:opacity-70 transition w-full"
+          onClick={() => {
+            setModalNumber(1);
+            pressback();
+          }}
+        >
+          Back
+        </button>
+        <button
+          className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
           onClick={() => {
             handleSubmit();
             setModalNumber(1);
             setOpen(false);
             pressback();
-          }}>Cash out now</button>
+          }}
+        >
+          Cash out now
+        </button>
       </div>
-
-
     </div>
-
   );
-
-
 
   return (
     <Modal
       isOpen={open}
       onClose={handleClose}
-      onSubmit={handleCheck} /*should be handle submit but this fuck shit throw me an error*/
+      onSubmit={
+        handleCheck
+      } /*should be handle submit but this fuck shit throw me an error*/
       title="Cash Out"
       body={modalNumber === 1 ? bodyContent : bodyContentAfter}
     />

@@ -24,7 +24,7 @@ const Navbar = () => {
     const pathname = location.pathname;
 
     // Determine the active tab based on the pathname
-    if (pathname === "/personal") {
+    if (pathname === "/") {
       setActiveTab("Home");
     } else if (pathname === "/transaction") {
       setActiveTab("Transaction");
@@ -43,7 +43,7 @@ const Navbar = () => {
     setActiveTab(tab);
     setShowMenu(true);
     if (tab === "Home") {
-      navigate("/personal");
+      navigate("/");
     } else if (tab === "Transaction") {
       setActiveTab("Transaction");
       setShowMenu(true);
@@ -84,10 +84,11 @@ const Navbar = () => {
             {/* Desktop Menu tabs */}
             {tabs.map((tab) => (
               <li
-                className={`cursor-pointer font-bold ${tab === activeTab
-                  ? "underline decoration-red-500 underline-offset-4"
-                  : ""
-                  }`}
+                className={`cursor-pointer font-bold ${
+                  tab === activeTab
+                    ? "underline decoration-red-500 underline-offset-4"
+                    : ""
+                }`}
                 key={tab}
                 onClick={() => handleTabChange(tab)}
               >
@@ -139,10 +140,11 @@ const Navbar = () => {
         <ul className="md:hidden flex flex-col gap-3 py-3 items-center">
           {tabs.map((tab) => (
             <li
-              className={`cursor-pointer font-bold ${tab === activeTab
-                ? "underline decoration-red-500 underline-offset-4"
-                : ""
-                }`}
+              className={`cursor-pointer font-bold ${
+                tab === activeTab
+                  ? "underline decoration-red-500 underline-offset-4"
+                  : ""
+              }`}
               key={tab}
               onClick={() => handleTabChange(tab)}
             >
