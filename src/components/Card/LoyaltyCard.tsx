@@ -28,13 +28,13 @@ const LoyaltyCard = () => {
             </p>
             <div className="flex flex-col self-stretch w-full items-end"> {/*flex flex-col items-start px-3 py-1 bg-gray-200 w-full rounded-t-lg"*/}
 
-                <div className="grid-cols-1 xl:flex justify-between items-center self-stretch px-3 py-3 bg-gray-200 w-full rounded-t-lg">
+                <div className="flex xl:flex justify-between items-center self-stretch px-3 py-3 bg-gray-200 w-full rounded-t-lg">
                     <img src="/assets/buttons/Tpointslarge.svg" alt="person" />
                     <div className="flex flex-col items-start px-3 py-1 bg-gray-200 w-full rounded-t-lg">
-                        <p className="text-3xl">
+                        <p className="text-xl xl:text-2xl">
                             {-points}
                         </p>
-                        <p className="text-base text-gray-500">TPlus points available</p>
+                        <p className="text-sm xl:text-base text-gray-500">TPlus points available</p>
                     </div>
                 </div>
                 <div className="flex flex-col justify-center items-left px-1 py-3 mb-3 bg-gray-100 w-full rounded-b-lg">
