@@ -94,20 +94,16 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       }
 
       try {
-        const { data: internalTransferData, errors } =
-          await makeInternalTransfer({
-            variables: {
-              amount: amount,
-              currency: Currency.SGD,
-              toUsername: username,
-              note: "",
-            },
-          });
+        const { data: internalTransferData, errors } = await makeInternalTransfer({
+          variables: {
+            amount: amount,
+            currency: Currency.SGD,
+            toUsername: username,
+            note: "",
+          },
+        });
 
-        if (
-          !internalTransferData?.makeInternalTransfer.receiverId ||
-          errors?.length
-        ) {
+        if (!internalTransferData?.makeInternalTransfer.receiverId || errors?.length) {
           toast.error("Error Sending money to user (Username not found)");
           throw new Error("Error Sending money");
         }
@@ -116,12 +112,11 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       }
     } else {
       try {
-        const { data: merchantPayQrData, errors: merchantPayQRError } =
-          await merchantPayQR({
-            variables: {
-              merchantPayQrId: QRString,
-            },
-          });
+        const { data: merchantPayQrData, errors: merchantPayQRError } = await merchantPayQR({
+          variables: {
+            merchantPayQrId: QRString,
+          },
+        });
 
         if (merchantPayQRError?.length || !merchantPayQrData?.merchantPayQR) {
           toast.error("Error paying merchant");
@@ -157,10 +152,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const scanBody = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="amount"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="amount" className="flex text-xl font-semibold justify-start">
           Paste QR String
         </label>
         <div className="relative ">
@@ -200,19 +192,13 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const confirmBody = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           To:
         </label>
         <p className="text-bold text-xl">{username}</p>
       </div>
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           Amount:{" "}
         </label>
         <p className="text-bold text-xl">$ {amount === 0 ? "" : amount}</p>
@@ -247,14 +233,12 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
         }
 
         try {
-          const {
-            data: merchantPaymentData,
-            error: fetchMerchantPaymentError,
-          } = await fetchMerchantPaymentData({
-            variables: {
-              merchantGetQrDetailsId: result,
-            },
-          });
+          const { data: merchantPaymentData, error: fetchMerchantPaymentError } =
+            await fetchMerchantPaymentData({
+              variables: {
+                merchantGetQrDetailsId: result,
+              },
+            });
 
           if (fetchMerchantPaymentError) {
             toast.error("Error fetching merchant payment data");
@@ -262,9 +246,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
           }
 
           if (merchantPaymentData?.merchantGetQRDetails) {
-            setUsername(
-              merchantPaymentData?.merchantGetQRDetails.merchant.username
-            );
+            setUsername(merchantPaymentData?.merchantGetQRDetails.merchant.username);
             setAmount(merchantPaymentData?.merchantGetQRDetails.amount);
             setModal(ModalType.CONFIRM);
             return;
@@ -273,17 +255,13 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
           toast.error((e as Error).message);
         }
       }}
-      onError={(error) => console.log(error?.message)}
     />
   );
 
   const p2pBody = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="username"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl ml-2 font-semibold justify-start">
           Username
         </label>
         <div className="relative ">
@@ -304,16 +282,11 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="amount"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">
           Amount
         </label>
         <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-3 flex items-center">
-            $
-          </span>
+          <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
           <input
             id="amount"
             onChange={handleChangeAmount}

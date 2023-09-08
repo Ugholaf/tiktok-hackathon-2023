@@ -11,7 +11,7 @@ import { store } from "../redux/store";
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path }) =>
-      console.log(
+      console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       )
     );

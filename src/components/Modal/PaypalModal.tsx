@@ -71,7 +71,6 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
               paypalCheckoutId: checkoutRef.current,
             },
           });
-          console.log(confirmDepositData, errors);
 
           if (errors && errors.length > 0) {
             toast.error("Error confirming deposit");
