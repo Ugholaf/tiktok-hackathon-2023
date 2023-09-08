@@ -1,5 +1,5 @@
-query TransactionFull($fromDate: DateTime!, $toDate: DateTime!, $currency: Currency!) {
-  transactions(fromDate: $fromDate, toDate: $toDate, currency: $currency) {
+query TransactionFull($currency: Currency!, $fromDate: DateTime, $sortOrder: SortOrder!) {
+  transactions(currency: $currency, fromDate: $fromDate, sortOrder: $sortOrder) {
     transactionsIn {
       id
       userId

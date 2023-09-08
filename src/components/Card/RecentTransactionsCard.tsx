@@ -1,4 +1,4 @@
-import { useTransactionFullQuery, Currency } from "../../generated/graphql";
+import { useTransactionFullQuery, Currency, SortOrder } from "../../generated/graphql";
 import { useState, useMemo } from "react";
 
 
@@ -48,7 +48,7 @@ const RecentTransactionsCard = () => {
     variables: {
       fromDate: startOfMonth,
       currency: Currency.SGD,
-      toDate: now,
+      sortOrder: SortOrder.DESC,
     },
 
   });
@@ -57,8 +57,10 @@ const RecentTransactionsCard = () => {
   {/* Inspect this export type TransactionFullQuery */ }
 
 
+  const transactionsIn = transactions?.transactionsIn || [];
+  const transactionsOut = transactions?.transactionsOut || [];
 
-
+  const combinedTransactions = [...transactionsIn, ...transactionsOut];
 
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center w-full bg-white">
@@ -78,7 +80,7 @@ const RecentTransactionsCard = () => {
             <p className="font-bold">Amount</p>
 
           </div>
-          {transactions?.transactionsIn?.slice(0, 3).map((transaction) => (
+          {transactions?.transactionsIn.slice(0, 3).map((transaction) => (
             <div key={transaction.id} className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2">
               <div className="flex flex-col justify-between items-start">
                 <p >{(new Date(transaction.createdAt).toLocaleDateString('en-GB').split("T")[0])}</p>

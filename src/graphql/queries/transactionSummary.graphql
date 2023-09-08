@@ -1,5 +1,5 @@
-query GetTransactionSummary($fromDate: DateTime!, $currency: Currency!, $toDate: DateTime!) {
-  getTransactionSummary(fromDate: $fromDate, currency: $currency, toDate: $toDate) {
+query GetTransactionSummary($currency: Currency!, $sortOrder: SortOrder!, $fromDate: DateTime) {
+  getTransactionSummary(currency: $currency, sortOrder: $sortOrder, fromDate: $fromDate) {
     amountIn
     amountOut
   }
