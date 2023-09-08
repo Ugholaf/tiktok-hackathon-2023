@@ -1,0 +1,5 @@
+mutation MerchantRequestQR($type: ApiKeyType!, $label: String!) {
+  generateApiKey(type: $type, label: $label) {
+    apiKey
+  }
+}

@@ -4,10 +4,6 @@ export interface AuthState {
   accessToken: string;
 }
 
-interface LoginResponse {
-  accessToken: string;
-}
-
 const initialState: AuthState = {
   accessToken: "",
 };
@@ -16,7 +12,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    onLogin: (state: AuthState, action: PayloadAction<LoginResponse>) => {
+    onLogin: (state: AuthState, action: PayloadAction<AuthState>) => {
       state.accessToken = action.payload.accessToken;
     },
     onLogout: (state: AuthState) => {

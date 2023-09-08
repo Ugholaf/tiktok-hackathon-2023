@@ -3,7 +3,11 @@ import Modal from "./Modal";
 import { toast } from "react-hot-toast";
 import { QrScanner } from "@yudiel/react-qr-scanner";
 import { p2pTransactionPrefix } from "./QRCodeModal";
-import { useMerchantGetQrDetailsLazyQuery } from "../../generated/graphql";
+import {
+  Currency,
+  useMakeInternalTransferMutation,
+  useMerchantGetQrDetailsLazyQuery,
+} from "../../generated/graphql";
 
 interface ScanModalProps {
   open: boolean;
@@ -19,12 +23,14 @@ enum ModalType {
 
 const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const [modal, setModal] = useState(ModalType.SCAN);
-  const [QRString, setQRString] = useState<string | null>(null);
+  const [QRString, setQRString] = useState<string>("");
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [amount, setAmount] = useState<number | undefined>(undefined);
 
   const [fetchMerchantPaymentData, { error }] =
     useMerchantGetQrDetailsLazyQuery();
+
+  const [makeInternalTransfer] = useMakeInternalTransferMutation();
 
   const handleChangeQrCode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQRString(e.target.value);
@@ -35,7 +41,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   };
 
   const handleClose = () => {
-    setQRString(null);
+    setQRString("");
     setOpen(false);
     setModal(ModalType.SCAN);
   };
@@ -43,7 +49,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const handleBack = () => {
     setAmount(undefined);
     setUsername(undefined);
-    setQRString(null);
+    setQRString("");
     setModal(ModalType.SCAN);
   };
 
@@ -69,8 +75,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       toast.error("Error fetching merchant payment data");
       return;
     }
-
-    setUsername(merchantPaymentData.data?.merchantGetQRDetails.merchantId);
+    if (merchantPaymentData.data?.merchantGetQRDetails) {
+      setUsername(merchantPaymentData.data?.merchantGetQRDetails.merchantId);
+    }
     setAmount(merchantPaymentData.data?.merchantGetQRDetails.amount);
     setModal(ModalType.CONFIRM);
   };
@@ -81,6 +88,47 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
 
   const handleChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
+  };
+
+  const handlePay = async () => {
+    if (!amount) {
+      toast.error("Amount cannot be empty");
+      return;
+    }
+
+    if (amount < 0) {
+      toast.error("Amount must be greater than 0");
+      return;
+    }
+
+    if (QRString.startsWith(p2pTransactionPrefix)) {
+      if (!username) {
+        toast.error("Username cannot be empty");
+        return;
+      }
+
+      try {
+        const { data: internalTransferData, errors } =
+          await makeInternalTransfer({
+            variables: {
+              amount: amount,
+              currency: Currency.SGD,
+              toUsername: username,
+              note: "",
+            },
+          });
+
+        if (
+          !internalTransferData?.makeInternalTransfer.receiverId ||
+          errors?.length
+        ) {
+          toast.error("Error Sending money to user (Username not found)");
+          throw new Error("Error Sending money");
+        }
+      } catch (e) {
+        toast.error((e as Error).message);
+      }
+    }
   };
 
   const handleNext = () => {
@@ -175,11 +223,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
         </button>
         <button
           className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
-          onClick={() => {
-            console.log("Cash out");
-          }}
+          onClick={handlePay}
         >
-          Click to Pay
+          Pay
         </button>
       </div>
     </div>

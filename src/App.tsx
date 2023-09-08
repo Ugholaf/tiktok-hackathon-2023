@@ -3,7 +3,6 @@ import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import PersonalPage from "./pages/PersonalPage";
 import BusinessPage from "./pages/BusinessPage";
-import APIIntegration from "./pages/APIIntegration";
 import TransactionPage from "./pages/TransactionPage";
 import { useIsLoggedIn } from "./hook/useIsLoggedIn";
 import GoToMarketPage from "./pages/GoToMarketPage";
@@ -31,7 +30,6 @@ function App() {
         <Route path="/business" element={<BusinessPage />} />
         <Route path="/Roadmap" element={<GoToMarketPage />} />
         <Route path="/transaction" element={<TransactionPage />} />
-        <Route path="/api_integration" element={<APIIntegration />} />
       </Route>
     </Routes>
   );

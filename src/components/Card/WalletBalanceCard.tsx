@@ -55,10 +55,7 @@ const WalletBalanceCard = () => {
               className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md"
               onClick={() => setOpenP2PTransfer(true)}
             >
-              <img
-                src="/assets/buttons/p2pTransfer.svg"
-                alt="p2p transfer"
-              />
+              <img src="/assets/buttons/p2pTransfer.svg" alt="p2p transfer" />
               P2P Transfer
             </button>
             <button
