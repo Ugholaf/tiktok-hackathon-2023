@@ -28,18 +28,13 @@ const ApiIntegrationModal: React.FC<Props> = ({ open, setOpen }) => {
 
   const handleGenerateAPI = async () => {
     try {
-      const { data, errors } = await generateAPI({
+      const { data } = await generateAPI({
         variables: {
           type: ApiKeyType.CREATE_PAYMENT_QR,
           label: label,
           webhookUrl: webhook,
         },
       });
-
-      if (errors) {
-        toast.error(errors[0].message);
-        throw new Error(errors[0].message);
-      }
 
       if (data) {
         setGeneratedAPI(data.generateApiKey);

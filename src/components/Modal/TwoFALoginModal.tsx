@@ -18,7 +18,6 @@ const TwoFALoginModal: React.FC<TwoFALoginModalProps> = ({
   open,
   setOpen,
   loginToken,
-  accountType,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -42,11 +41,7 @@ const TwoFALoginModal: React.FC<TwoFALoginModalProps> = ({
         const accessToken = loginData.login.accessToken;
         dispatch(onLogin({ accessToken }));
         setOpen(false);
-        if (accountType === AccountType.BUSINESS) {
-          navigate("/business");
-        } else {
-          navigate("/personal");
-        }
+        navigate("/");
       }
 
       if (errors && errors.length > 0) {

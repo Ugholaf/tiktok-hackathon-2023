@@ -4,8 +4,12 @@ import FutureImprovementsCard from "../components/Card/FutureImprovementsCard";
 import RecentTransactionsCard from "../components/Card/RecentTransactionsCard";
 import Layout from "../components/Layout/Layout";
 import LoyaltyCard from "../components/Card/LoyaltyCard";
+import { AccountType, useMeQuery } from "../generated/graphql";
+import BusinessToolsCard from "../components/Card/BusinessToolsCard";
 
-const PersonalPage = () => {
+const Homepage = () => {
+  const { data: meData } = useMeQuery();
+
   return (
     <Layout>
       <div className="flex flex-col items-center gap-4 w-screen px-6 sm:12 md:px-32 py-9">
@@ -17,7 +21,11 @@ const PersonalPage = () => {
           <div className="grid grid-cols-1 place-items-center justify-center w-full lg:grid-cols-2 gap-4 ">
             <RecentTransactionsCard />
             {/* replace this with contact card */}
-            <LoyaltyCard />
+            {meData?.me.accountType === AccountType.BUSINESS ? (
+              <BusinessToolsCard />
+            ) : (
+              <LoyaltyCard />
+            )}
           </div>
           <div className="flex justify-center items-center gap-3 self-stretch">
             <FutureImprovementsCard />
@@ -28,4 +36,4 @@ const PersonalPage = () => {
   );
 };
 
-export default PersonalPage;
+export default Homepage;
