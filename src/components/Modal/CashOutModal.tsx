@@ -233,7 +233,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
 
       <button
         className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full disabled:bg-red-300 disabled:cursor-not-allowed"
-        disabled={!amount || !email || invaliAmount}
+        disabled={!amount || !email || invalidAmount}
         onClick={() => {
           handleCheck() && setModalNumber(2);
         }}
