@@ -59,10 +59,10 @@ Backend repo: https://github.com/Royleong31/T-Money-api
 
 ## Future improvements
 
-- Localisation: Allow users to set their preferred language setting. This improves their experience and allowing more people to use our application.
+- **Localisation**: Allow users to set their preferred language setting. This improves their experience and allowing more people to use our application.
 
-- Currency: Allow users to convert their currencies from one to another. This helps to facilitate global transactions in our application.
+- **Currency**: Allow users to convert their currencies from one to another. This helps to facilitate global transactions in our application.
 
-- Enhanced KYC (Know Your Customers): Allow users to upload their identity document to prove their identity. This provides an extra layer of verification, ensures a higher level of security and trust within our ecosystem.
+- **Enhanced KYC (Know Your Customers)**: Allow users to upload their identity document to prove their identity. This provides an extra layer of verification, ensures a higher level of security and trust within our ecosystem.
 
-- Govenment Integration : Integrate with government identication such as Singpass (for Singapore) and ePhilld (for Phillipine). This makes it more convenient and easier for users to use our application
+- **Government Integration**: Integrate with government identification such as Singpass (for Singapore) and ePhilld (for Philippines). This makes it more convenient and easier for users to use our application
