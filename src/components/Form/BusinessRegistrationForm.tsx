@@ -36,7 +36,11 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
 
   const [registerBusiness] = useRegisterBusinessMutation();
 
-  const { handleSubmit, control } = useForm<FormValues>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormValues>({
     defaultValues: {
       businessName: "",
       uen: "",
@@ -91,30 +95,71 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
         </div>
         <div className="grid grid-col-1 gap-4 md:grid-cols-2 my-10">
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">Business Name</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Business Name *
+            </p>
             <Controller
               control={control}
               name="businessName"
+              rules={{
+                required: "Business Name is required",
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="Business Name" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Business Name"
+                  fullWidth
+                />
               )}
             />
+            {errors.businessName && (
+              <p className=" flex text-red-500">
+                {errors.businessName.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">Business UEN</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Business UEN *
+            </p>
             <Controller
               control={control}
               name="uen"
+              rules={{
+                required: "UEN is required",
+                minLength: {
+                  value: 9,
+                  message: "UEN must be at least 9 characters",
+                },
+                maxLength: {
+                  value: 10,
+                  message: "UEN must be at most 10 characters",
+                },
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="UEN" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="UEN"
+                  fullWidth
+                />
               )}
             />
+            {errors.uen && (
+              <p className=" flex text-red-500">{errors.uen.message}</p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">Country</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Country *
+            </p>
             <Controller
               control={control}
               name="businessCountry"
+              rules={{
+                required: "Country is required",
+              }}
               render={({ field: { onChange, value } }) => (
                 <Select
                   className="text-left"
@@ -139,24 +184,61 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
                 </Select>
               )}
             />
+            {errors.businessCountry && (
+              <p className=" flex text-red-500">
+                {errors.businessCountry.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">Postal Code</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Postal Code *
+            </p>
             <Controller
               control={control}
               name="businessPostcode"
+              rules={{
+                required: "Postal Code is required",
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="Postal Code" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Postal Code"
+                  fullWidth
+                />
               )}
             />
+            {errors.businessPostcode && (
+              <p className=" flex text-red-500">
+                {errors.businessPostcode.message}
+              </p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">Business Address</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Business Address *
+            </p>
             <Controller
               control={control}
               name="businessAddress"
-              render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
+              rules={{
+                required: "Business Address is required",
+              }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  fullWidth
+                  placeholder="Business Address"
+                />
+              )}
             />
+            {errors.businessAddress && (
+              <p className=" flex text-red-500">
+                {errors.businessAddress.message}
+              </p>
+            )}
           </div>
           <button
             className=" bg-red-500 hover:bg-red-600 text-white p-4 rounded md:col-span-2"

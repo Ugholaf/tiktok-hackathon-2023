@@ -40,7 +40,11 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
 
   const [registerIndividual] = useRegisterIndividualMutation();
 
-  const { handleSubmit, control } = useForm<IndividualFormValues>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<IndividualFormValues>({
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -101,30 +105,73 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
         </div>
         <div className="grid grid-col-1 gap-4 md:grid-cols-2 my-10">
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">First Name</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              First Name *
+            </p>
             <Controller
               control={control}
               name="firstName"
+              rules={{
+                required: "First Name is required",
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="First Name" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="First Name"
+                  fullWidth
+                />
               )}
             />
+            {errors.firstName && (
+              <p className=" flex text-red-500">{errors.firstName.message}</p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">Last Name</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Last Name *
+            </p>
             <Controller
               control={control}
               name="lastName"
+              rules={{
+                required: "Last Name is required",
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="Last Name" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Last Name"
+                  fullWidth
+                />
               )}
             />
+            {errors.lastName && (
+              <p className=" flex text-red-500">{errors.lastName.message}</p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">Date of Birth</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Date of Birth *
+            </p>
             <Controller
               control={control}
               name="dateOfBirth"
+              rules={{
+                validate: (value) => {
+                  if (!value) {
+                    return "Date of Birth is required";
+                  }
+
+                  const date = dayjs(value).format("DD-MM-YYYY");
+                  const [day, month, year] = date.split("-");
+                  if (!day || !month || !year) {
+                    return "Please enter a valid date of birth";
+                  }
+
+                  return true;
+                },
+              }}
               render={({ field }) => (
                 <DatePicker
                   {...field}
@@ -134,15 +181,24 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
                 />
               )}
             />
+            {errors.dateOfBirth && (
+              <p className=" flex text-red-500">{errors.dateOfBirth.message}</p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">Country</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Country *
+            </p>
             <Controller
               control={control}
               name="country"
+              rules={{
+                required: "Country is required",
+              }}
               render={({ field: { onChange, value } }) => (
                 <Select
                   className="text-left"
+                  defaultValue=""
                   value={value}
                   onChange={onChange}
                   renderValue={
@@ -164,32 +220,61 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
                 </Select>
               )}
             />
+            {errors.country && (
+              <p className=" flex text-red-500">{errors.country.message}</p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">Postal Code</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Postal Code *
+            </p>
             <Controller
               control={control}
               name="postcode"
+              rules={{
+                required: "Postal Code is required",
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="Postal Code" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Postal Code"
+                  fullWidth
+                />
               )}
             />
+            {errors.postcode && (
+              <p className=" flex text-red-500">{errors.postcode.message}</p>
+            )}
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">Occupation</p>
+            <p className="flex flex-start text-sm font-semibold mb-2">
+              Occupation *
+            </p>
             <Controller
               control={control}
               name="occupation"
+              rules={{
+                required: "Occupation is required",
+              }}
               render={({ field }) => (
-                <TextField {...field} variant="outlined" placeholder="Occupation" fullWidth />
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Occupation"
+                  fullWidth
+                />
               )}
             />
+            {errors.occupation && (
+              <p className=" flex text-red-500">{errors.occupation.message}</p>
+            )}
           </div>
           <button
             className=" bg-red-500 hover:bg-red-600 text-white p-4 rounded md:col-span-2"
             type="submit"
           >
-            Submit
+            {AccountType.BUSINESS ? "Next" : "Submit"}
           </button>
         </div>
       </div>

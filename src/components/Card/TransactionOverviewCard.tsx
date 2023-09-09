@@ -1,4 +1,8 @@
-import { Currency, useGetTransactionSummaryQuery, SortOrder } from "../../generated/graphql";
+import {
+  Currency,
+  useGetTransactionSummaryQuery,
+  SortOrder,
+} from "../../generated/graphql";
 import { useNavigate } from "react-router";
 
 const now = new Date();
@@ -15,7 +19,8 @@ const TransactionOverviewCard = () => {
   });
 
   const amountIn = data?.getTransactionSummary?.amountIn?.valueOf() || 0;
-  const amountOut = -1 * (data?.getTransactionSummary?.amountOut?.valueOf() || 0);
+  const amountOut =
+    -1 * (data?.getTransactionSummary?.amountOut?.valueOf() || 0);
 
   const sum = amountIn - amountOut;
   const navigate = useNavigate();
@@ -58,7 +63,9 @@ const TransactionOverviewCard = () => {
         </div>
         <div className="flex flex-col justify-center items-center px-3 py-3 bg-gray-100 w-full rounded-b-lg">
           <div className="flex flex-row">
-            <p className="text-base md:text-2xl font-bold">Net Change in Balance</p>
+            <p className="text-base md:text-2xl font-bold">
+              Net Change in Balance
+            </p>
             {sum > 0 ? (
               <img src="/assets/payinUp.svg" alt="payment in" />
             ) : (
@@ -75,10 +82,16 @@ const TransactionOverviewCard = () => {
           </p>
         </div>
         <div className="flex flex-row justify-end gap-2 w-full px-2">
-          <button className="text-xs border-b border-black" onClick={() => refetch()}>
+          <button
+            className="text-xs border-b border-black"
+            onClick={() => refetch()}
+          >
             Refresh
           </button>
-          <button onClick={()=> navigate('/transaction')} className=" text-xs border-b border-black ">
+          <button
+            onClick={() => navigate("/transaction")}
+            className=" text-xs border-b border-black "
+          >
             View More
           </button>
         </div>

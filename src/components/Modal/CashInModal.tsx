@@ -6,7 +6,11 @@ interface CashInModalProps {
   setOpenPaypal: (open: boolean) => void;
 }
 
-const CashInModal: React.FC<CashInModalProps> = ({ open, setOpen, setOpenPaypal }) => {
+const CashInModal: React.FC<CashInModalProps> = ({
+  open,
+  setOpen,
+  setOpenPaypal,
+}) => {
   // hardcoded for now as we only have paypal
   const selectedOption = "paypal";
 

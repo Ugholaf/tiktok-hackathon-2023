@@ -28,7 +28,9 @@ const Navbar = () => {
     } else if (pathname === "/roadmap") {
       setActiveTab("Roadmap");
     } else {
-      setActiveTab(pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2));
+      setActiveTab(
+        pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2)
+      );
     }
   }, []);
 
@@ -64,8 +66,16 @@ const Navbar = () => {
     <div className=" bg-white px-6 sm:px-27 md:px-32 py-4 sticky top-0 w-full z-10">
       {isLoggedIn ? (
         <div className="flex flex-row items-center justify-between gap-3">
-          <img src="/assets/logo.svg" alt="Logo" onClick={() => navigate("/")} className="hover:cursor-pointer" />
-          <div className="md:hidden flex items-center text-4xl" onClick={toggleMenu}>
+          <img
+            src="/assets/logo.svg"
+            alt="Logo"
+            onClick={() => navigate("/")}
+            className="hover:cursor-pointer"
+          />
+          <div
+            className="md:hidden flex items-center text-4xl"
+            onClick={toggleMenu}
+          >
             &#9776;
           </div>{" "}
           {/* Hamburger Menu */}
@@ -75,7 +85,9 @@ const Navbar = () => {
             {tabs.map((tab) => (
               <li
                 className={`cursor-pointer font-bold ${
-                  tab === activeTab ? "underline decoration-red-500 underline-offset-4" : ""
+                  tab === activeTab
+                    ? "underline decoration-red-500 underline-offset-4"
+                    : ""
                 }`}
                 key={tab}
                 onClick={() => handleTabChange(tab)}
@@ -110,7 +122,11 @@ const Navbar = () => {
             {!error && "|"}
             {meData && <p>{meData.me.username}</p> /*Added username*/}
             <button className="bg-white py-2" onClick={handleLogout}>
-              <img src="/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />{" "}
+              <img
+                src="/assets/icons/signout.svg"
+                alt="signout"
+                className=" w-4 h-4"
+              />{" "}
               {/*Changed from logout to the signout sign*/}
             </button>
           </div>
@@ -125,7 +141,9 @@ const Navbar = () => {
           {tabs.map((tab) => (
             <li
               className={`cursor-pointer font-bold ${
-                tab === activeTab ? "underline decoration-red-500 underline-offset-4" : ""
+                tab === activeTab
+                  ? "underline decoration-red-500 underline-offset-4"
+                  : ""
               }`}
               key={tab}
               onClick={() => handleTabChange(tab)}
@@ -162,7 +180,11 @@ const Navbar = () => {
             <div className="flex gap-3 items-center">
               {meData && <p>{meData.me.username}</p> /*Added username*/}
               <button className="bg-white" onClick={handleLogout}>
-                <img src="/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />{" "}
+                <img
+                  src="/assets/icons/signout.svg"
+                  alt="signout"
+                  className=" w-4 h-4"
+                />{" "}
                 {/*Changed from logout to the signout sign*/}
               </button>
             </div>

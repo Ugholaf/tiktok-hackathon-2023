@@ -9,7 +9,9 @@ const BusinessToolsCard = () => {
   return (
     <>
       <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 gap-8 self-stretch items-center w-full shadow-md bg-white">
-        <p className="text-2xl font-bold border-b-2 border-red-500">Business Tools</p>
+        <p className="text-2xl font-bold border-b-2 border-red-500">
+          Business Tools
+        </p>
 
         <div className="flex justify-center items-center content-center gap-y-1 space-x-10 lg:space-x-5 xl:justify-between xl:px-5 self-stretch flex-wrap">
           <button
@@ -35,7 +37,10 @@ const BusinessToolsCard = () => {
           </button>
         </div>
       </div>
-      <ApiIntegrationModal open={openApiIntegration} setOpen={setOpenApiIntegration} />
+      <ApiIntegrationModal
+        open={openApiIntegration}
+        setOpen={setOpenApiIntegration}
+      />
       <ApiKeysListModal open={openApiKeysList} setOpen={setOpenApiKeysList} />
     </>
   );

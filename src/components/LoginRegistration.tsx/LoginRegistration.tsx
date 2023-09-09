@@ -21,10 +21,11 @@ const LoginRegistration: React.FC<LoginRegistrationProps> = ({
         {tabs.map((tab) => (
           <div
             key={tab}
-            className={`${activeTab === tab
-              ? "border-b-2 border-red-500 py-2"
-              : "border-b-2 border-gray-500 py-2"
-              } cursor-pointer`}
+            className={`${
+              activeTab === tab
+                ? "border-b-2 border-red-500 py-2"
+                : "border-b-2 border-gray-500 py-2"
+            } cursor-pointer`}
             onClick={() => setActiveTab(tab)}
           >
             {tab}

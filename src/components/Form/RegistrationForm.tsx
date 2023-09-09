@@ -8,12 +8,14 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { AccountType } from "../../generated/graphql";
 import { FormNames } from "../../pages/LoginPage";
+import { useState } from "react";
 
 export interface RegisterFormValues {
   username: string;
   email: string;
   password: string;
   accountType: AccountType | undefined;
+  termsCondition: boolean;
 }
 
 interface RegistrationFormProps {
@@ -25,7 +27,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
   setForm,
   setFormData,
 }) => {
-  const { handleSubmit, control } = useForm<RegisterFormValues>({
+  const [visibility, setVisibility] = useState(false);
+  const [submitPressed, setSubmitPressed] = useState(false);
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
     defaultValues: {
       username: "",
       email: "",
@@ -45,86 +54,153 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
       onSubmit={handleSubmit((data) => onSubmit(data))}
     >
       <div className="flex flex-wrap justify-between py-10">
-        <label className="text-base font-medium mb-2">Username *</label>
-        <Controller
-          control={control}
-          name="username"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              variant="outlined"
-              placeholder="Username"
-              fullWidth
+        <div className="flex flex-col w-full items-start">
+          <label className="text-base font-medium mb-2">Username *</label>
+          <Controller
+            control={control}
+            name="username"
+            rules={{
+              required: "Username is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                variant="outlined"
+                placeholder="Username"
+                fullWidth
+              />
+            )}
+          />
+          {errors.username && submitPressed && (
+            <p className=" flex text-red-500">{errors.username.message}</p>
+          )}
+        </div>
+        <div className="flex flex-col w-full items-start">
+          <label className="text-base font-medium py-2">Email *</label>
+          <Controller
+            control={control}
+            name="email"
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email format",
+              },
+            }}
+            shouldUnregister={false}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                variant="outlined"
+                placeholder="Email"
+                fullWidth
+              />
+            )}
+          />
+          {errors.email && submitPressed && (
+            <p className=" flex text-red-500">{errors.email.message}</p>
+          )}
+        </div>
+        <div className="flex flex-col w-full items-start">
+          <label className="text-base font-medium py-2">Password *</label>
+          <Controller
+            control={control}
+            name="password"
+            rules={{
+              required: "Password is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                type={visibility ? "text" : "password"}
+                variant="outlined"
+                placeholder="Password"
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <button onClick={() => setVisibility(!visibility)}>
+                      {visibility ? (
+                        <img
+                          src="/assets/visibilityOn.svg"
+                          alt="showPassword"
+                        />
+                      ) : (
+                        <img
+                          src="/assets/visibilityOff.svg"
+                          alt="hidePassword"
+                        />
+                      )}
+                    </button>
+                  ),
+                }}
+              />
+            )}
+          />
+          {errors.password && submitPressed && (
+            <p className=" flex text-red-500">{errors.password.message}</p>
+          )}
+        </div>
+        <div className="flex flex-col w-full items-start">
+          <label className="text-base font-medium py-2">Account Type *</label>
+          <Controller
+            control={control}
+            name="accountType"
+            rules={{
+              required: "Account Type is required",
+            }}
+            render={({ field: { onChange, value } }) => (
+              <Select
+                className="w-full text-left"
+                defaultValue="none"
+                onChange={onChange}
+                value={value}
+                renderValue={
+                  value !== undefined
+                    ? undefined
+                    : () => (
+                        <label className="text-zinc-400">
+                          Individual/Business
+                        </label>
+                      )
+                }
+              >
+                {Object.values(AccountType).map((accountType) => (
+                  <MenuItem key={accountType} value={accountType}>
+                    {accountType}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          {errors.accountType && submitPressed && (
+            <p className=" flex text-red-500">{errors.accountType.message}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col w-full items-start">
+          <div className="flex flex-row pt-4">
+            <Checkbox
+              {...register("termsCondition", {
+                required: "Please accept the terms and conditions to continue",
+              })}
             />
+            <Typography className="py-2">
+              I agree to the{" "}
+              <span className="underline font-bold">Terms & Condition</span> and{" "}
+              <span className="underline font-bold">Privacy Policy</span>
+            </Typography>
+          </div>
+          {errors.termsCondition && submitPressed && (
+            <p className=" flex text-red-500">
+              {errors.termsCondition.message}
+            </p>
           )}
-        />
-        <label className="text-base font-medium py-2">Email *</label>
-        <Controller
-          control={control}
-          name="email"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              variant="outlined"
-              placeholder="Email"
-              fullWidth
-            />
-          )}
-        />
-        <label className="text-base font-medium py-2">Password *</label>
-        <Controller
-          control={control}
-          name="password"
-          render={({ field }) => (
-            <TextField
-              {...field}
-              type="password"
-              variant="outlined"
-              placeholder="Password"
-              fullWidth
-            />
-          )}
-        />
-        <label className="text-base font-medium py-2">Account Type *</label>
-        <Controller
-          control={control}
-          name="accountType"
-          render={({ field: { onChange, value } }) => (
-            <Select
-              className="w-full text-left"
-              defaultValue="none"
-              onChange={onChange}
-              value={value}
-              renderValue={
-                value !== undefined
-                  ? undefined
-                  : () => (
-                      <label className="text-zinc-400">
-                        Individual/Business
-                      </label>
-                    )
-              }
-            >
-              {Object.values(AccountType).map((accountType) => (
-                <MenuItem key={accountType} value={accountType}>
-                  {accountType}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
-        />
-        <div className="flex flex-row pt-4">
-          <Checkbox />
-          <Typography className="py-2">
-            I agree to the{" "}
-            <span className="underline font-bold">Terms & Condition</span> and{" "}
-            <span className="underline font-bold">Privacy Policy</span>
-          </Typography>
         </div>
       </div>
       <button
         className="bg-red-500 hover:bg-red-600 text-white p-4 rounded"
         type="submit"
+        onClick={() => setSubmitPressed(true)}
       >
         Register
       </button>
