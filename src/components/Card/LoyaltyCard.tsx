@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   Currency,
   useGetTransactionSummaryQuery,
@@ -7,6 +8,7 @@ import {
 const now = new Date();
 const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 const LoyaltyCard = () => {
+  const navigate = useNavigate();
   const { data } = useGetTransactionSummaryQuery({
     variables: {
       fromDate: startOfMonth,
@@ -53,7 +55,12 @@ const LoyaltyCard = () => {
       </div>
       <div className="flex flex-row justify-center space-x-4">
         <img src="/assets/recentcontact/viewmore.svg" alt="person" />
-        <p className="text-base font-bold ">Learn More!</p>
+        <button
+          className="text-base font-bold "
+          onClick={() => navigate("/roadmap")}
+        >
+          Learn More!
+        </button>
       </div>
     </div>
   );
