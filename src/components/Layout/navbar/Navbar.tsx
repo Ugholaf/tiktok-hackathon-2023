@@ -64,7 +64,7 @@ const Navbar = () => {
     <div className=" bg-white px-6 sm:px-27 md:px-32 py-4 sticky top-0 w-full z-10">
       {isLoggedIn ? (
         <div className="flex flex-row items-center justify-between gap-3">
-          <img src="/assets/logo.svg" alt="Logo" />
+          <img src="/assets/logo.svg" alt="Logo" onClick={() => navigate("/")} className="hover:cursor-pointer" />
           <div className="md:hidden flex items-center text-4xl" onClick={toggleMenu}>
             &#9776;
           </div>{" "}

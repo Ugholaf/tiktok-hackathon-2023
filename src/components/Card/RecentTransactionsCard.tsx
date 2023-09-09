@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { useTransactionFullQuery, Currency, SortOrder } from "../../generated/graphql";
+import { useNavigate } from "react-router-dom";
 
 const now = new Date();
 const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -13,6 +14,8 @@ const RecentTransactionsCard = () => {
       sortOrder: SortOrder.DESC,
     },
   });
+
+  const navigate = useNavigate();
 
   const transactions = data?.transactions;
 
@@ -73,7 +76,12 @@ const RecentTransactionsCard = () => {
           <button className=" text-xs border-b border-black " onClick={() => refetch()}>
             Refresh
           </button>
-          <button className=" text-xs border-b border-black ">View More</button>
+          <button
+            className=" text-xs border-b border-black"
+            onClick={() => navigate("/transaction")}
+          >
+            View More
+          </button>
         </div>
       </div>
     </div>

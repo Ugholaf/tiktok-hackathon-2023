@@ -14,7 +14,14 @@ const TransactionFullCard = () => {
     fetchPolicy: "cache-and-network",
   });
 
-  const transactions = data?.transactions;
+  const transactions = [
+    ...(data?.transactions.transactionsIn ?? []),
+    ...(data?.transactions.transactionsOut ?? []),
+  ]
+    .sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    })
+    .slice(0, 20);
 
   return (
     <div className="flex flex-col rounded-xl py-3 px-3 md:px-11 my-6 self-stretch items-center w-full bg-white">
@@ -28,7 +35,7 @@ const TransactionFullCard = () => {
             <p className="font-bold">Type</p>
             <p className="font-bold lg:min-w-[160px] text-right">Amount</p>
           </div>
-          {transactions?.transactionsIn?.slice(0).map((transaction) => (
+          {transactions.map((transaction) => (
             <div
               key={transaction.id}
               className="flex text-ellipsis justify-between gap-2 items-center self-stretch border-b border-neutral-300 mb-2"
