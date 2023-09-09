@@ -12,14 +12,12 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
+  const pathname = location.pathname;
 
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
   useEffect(() => {
-    // Get the pathname from the location object
-    const pathname = location.pathname;
-
     // Determine the active tab based on the pathname
     if (pathname === "/") {
       setActiveTab("Home");
@@ -32,7 +30,7 @@ const Navbar = () => {
         pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2)
       );
     }
-  }, []);
+  }, [pathname]);
 
   const { data: meData, error } = useMeQuery();
 
@@ -132,7 +130,17 @@ const Navbar = () => {
           </div>
         </div>
       ) : (
-        <Logo />
+        <div className="flex flex-row justify-between">
+          <Logo />
+          {pathname === "/roadmapWithoutLogin" && (
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white px-4 rounded"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
+        </div>
       )}
 
       {/* Mobile Menu Put here to that it is below the Nav bar*/}
