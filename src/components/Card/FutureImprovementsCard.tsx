@@ -18,7 +18,7 @@ const FutureImprovementsCard = () => {
           <p className="text-base font-bold">Top up</p>
         </div>
         <div className="col-span-1 flex flex-col items-center gap-2 justify-center">
-          <img src="/assets/future/fcart.svg" alt="partners" />
+          <img src="/assets/future/cart.svg" alt="partners" />
           <p className="text-base font-bold">Partners</p>
         </div>
         <div className="col-span-1 flex flex-col items-center gap-2 justify-center">
