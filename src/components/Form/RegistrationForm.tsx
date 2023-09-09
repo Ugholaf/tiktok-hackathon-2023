@@ -202,7 +202,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         type="submit"
         onClick={() => setSubmitPressed(true)}
       >
-        Register
+        Next
       </button>
     </form>
   );
