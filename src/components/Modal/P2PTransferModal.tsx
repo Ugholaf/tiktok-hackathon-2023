@@ -114,6 +114,9 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
       console.log(error);
     }
   };
+
+  const disabledNext = parseFloat(amount) > (balance?.amount || 0);
+
   const bodyContent = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
@@ -143,11 +146,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
         </label>
         <div className="flex flex-col w-full">
           <div
-            className={`relative ${
-              parseFloat(amount) > (balance?.amount || 0)
-                ? "border border-red-500 rounded-md w-full"
-                : ""
-            }`}
+            className={`relative ${disabledNext ? "border border-red-500 rounded-md w-full" : ""}`}
           >
             <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
             <input
@@ -159,10 +158,8 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
               className="bg-gray-100 pl-10 py-2 rounded-md w-full"
             />
           </div>
-          {parseFloat(amount) > (balance?.amount || 0) && (
-            <p className="text-red-500">
-              Error: Amount is greater than the balance.
-            </p>
+          {disabledNext && (
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
           )}
         </div>
       </div>
@@ -184,10 +181,11 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
         </div>
       </div>
       <button
-        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full"
+        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full disabled:bg-red-300 disabled:cursor-not-allowed"
         onClick={() => {
           handleCheck() && setModalNumber(2);
         }}
+        disabled={!username || !amount || disabledNext}
       >
         Next
       </button>

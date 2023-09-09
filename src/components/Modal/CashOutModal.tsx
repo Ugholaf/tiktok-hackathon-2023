@@ -15,7 +15,6 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
   const selectedOption = "paypal";
-  console.log(email);
 
   const { data } = useMeQuery();
 
@@ -129,9 +128,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
             />
           </div>
           {parseFloat(amount) > (balance?.amount || 0) && (
-            <p className="text-red-500">
-              Error: Amount is greater than the balance.
-            </p>
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
           )}
         </div>
       </div>
@@ -141,9 +138,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
           Paypal Email
         </label>
         <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-3 flex items-center">
-            @
-          </span>
+          <span className="absolute inset-y-0 left-0 px-3 flex items-center">@</span>
           <input
             value={email}
             id="email"
@@ -162,11 +157,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </label>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row items-center gap-5 mb-2 justify-center">
-            <img
-              src="/assets/icons/paypal.svg"
-              alt="paypal icon"
-              className="h-5 w-5"
-            />
+            <img src="/assets/icons/paypal.svg" alt="paypal icon" className="h-5 w-5" />
             <p className="text-lg">Paypal</p>
           </div>
           <div>
@@ -182,11 +173,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img
-              src="/assets/icons/localBank.svg"
-              alt="local bank icon"
-              className="h-5 w-5"
-            />
+            <img src="/assets/icons/localBank.svg" alt="local bank icon" className="h-5 w-5" />
             <p className="text-lg">Local Bank (Future)</p>
           </div>
           <div>
@@ -201,11 +188,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img
-              src="/assets/icons/creditCard.svg"
-              alt="credit card icon"
-              className="h-5 w-5"
-            />
+            <img src="/assets/icons/creditCard.svg" alt="credit card icon" className="h-5 w-5" />
             <p className="text-lg">Credit Card (Future)</p>
           </div>
           <div>
@@ -220,11 +203,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img
-              src="/assets/icons/7-11.svg"
-              alt="Local Partners"
-              className="h-5 w-5"
-            />
+            <img src="/assets/icons/7-11.svg" alt="Local Partners" className="h-5 w-5" />
             <p className="text-lg">7-11 (Future)</p>
           </div>
           <div>
@@ -239,11 +218,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b-2 border-neutral-300">
           <div className="flex flex-row gap-5 mb-2 items-center justify-center">
-            <img
-              src="/assets/icons/ministop.svg"
-              alt="Local Partners"
-              className="h-5 w-5"
-            />
+            <img src="/assets/icons/ministop.svg" alt="Local Partners" className="h-5 w-5" />
             <p className="text-lg">Convenience Shop (Future)</p>
           </div>
           <div>
@@ -284,11 +259,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               Cash out via:{" "}
             </label>
             <div className="flex flex-row gap-2 items-center">
-              <img
-                src="/assets/icons/paypal.svg"
-                alt="paypal icon"
-                className="h-5 w-5"
-              />
+              <img src="/assets/icons/paypal.svg" alt="paypal icon" className="h-5 w-5" />
               <p className="text-lg">PayPal</p>
             </div>
           </div>
@@ -314,9 +285,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </button>
         <button
           className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
-          onClick={() => {
-            handleSubmit();
-          }}
+          onClick={handleSubmit}
         >
           Cash out now
         </button>

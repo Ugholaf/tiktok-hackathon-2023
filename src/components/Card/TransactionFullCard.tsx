@@ -1,21 +1,17 @@
 import { useTransactionFullQuery, Currency, SortOrder } from "../../generated/graphql";
-import { useState, useMemo } from "react";
+
+const now = new Date();
+const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
 const TransactionFullCard = () => {
-  const [now, setNow] = useState(new Date());
-  const startOfMonth = useMemo(() => new Date(now.getFullYear(), now.getMonth(), 1), [now]);
-
-  const handleRefreshClick = () => {
-    setNow(new Date());
-  };
-
-  const { data } = useTransactionFullQuery({
+  const { data, refetch } = useTransactionFullQuery({
     pollInterval: 2000,
     variables: {
       fromDate: startOfMonth,
       currency: Currency.SGD,
       sortOrder: SortOrder.DESC,
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const transactions = data?.transactions;
@@ -59,7 +55,7 @@ const TransactionFullCard = () => {
           ))}
         </div>
         <div className="flex flex-row gap-2">
-          <button className=" text-xs border-b border-black " onClick={handleRefreshClick}>
+          <button className=" text-xs border-b border-black " onClick={() => refetch()}>
             Refresh
           </button>
         </div>

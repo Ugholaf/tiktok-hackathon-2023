@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Modal from "./Modal";
 import { InputAdornment, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
@@ -17,6 +17,7 @@ interface PaypalModalProps {
 const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
   const checkoutRef = useRef("");
   const amountRef = useRef<HTMLInputElement>(null);
+  const [, setAmount] = useState("");
   const handleClose = () => {
     setOpen(false);
   };
@@ -34,6 +35,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
         }}
         inputRef={amountRef}
         type="number"
+        onChange={(e) => setAmount(e.target.value)}
         className="bg-gray-100"
       />
     </div>
@@ -41,6 +43,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
 
   const paypalButton = (
     <PayPalButtons
+      disabled={parseFloat(amountRef.current?.value || "0") <= 0}
       style={{ layout: "horizontal", tagline: false }}
       createOrder={async () => {
         const amount = amountRef.current?.value;
@@ -82,7 +85,7 @@ const PaypalModal: React.FC<PaypalModalProps> = ({ open, setOpen }) => {
           }
 
           toast.success("Successfully confirmed deposit");
-          return;
+          handleClose();
         } catch (error) {
           toast.error((error as Error).message);
           return;

@@ -31,7 +31,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({ open, setOpen }) => {
       <hr className="border-1 border-black" />
       <div className="flex flex-col gap-2">
         <p className="flex flex-start text-lg md:text-2xl font-bold">Instructions</p>
-        <p className="flex flex-start">Send your QR to any TMoney user to receive payment</p>
+        <p className="flex flex-start">Send your QR to any TMoney user</p>
       </div>
     </div>
   );

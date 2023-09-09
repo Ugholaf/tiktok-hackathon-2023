@@ -25,7 +25,7 @@ const Navbar = () => {
       setActiveTab("Home");
     } else if (pathname === "/transaction") {
       setActiveTab("Transaction");
-    } else if (pathname === "/Roadmap") {
+    } else if (pathname === "/roadmap") {
       setActiveTab("Roadmap");
     } else {
       setActiveTab(pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2));
@@ -46,7 +46,7 @@ const Navbar = () => {
     } else if (tab === "Roadmap") {
       setActiveTab("Roadmap");
       setShowMenu(true);
-      navigate("/Roadmap");
+      navigate("/roadmap");
     }
   };
 

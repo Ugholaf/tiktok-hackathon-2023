@@ -26,7 +26,7 @@ function App() {
       </Route>
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Homepage />} />
-        <Route path="/Roadmap" element={<GoToMarketPage />} />
+        <Route path="/roadmap" element={<GoToMarketPage />} />
         <Route path="/transaction" element={<TransactionPage />} />
       </Route>
     </Routes>

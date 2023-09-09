@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Modal from "./Modal";
 
 interface CashInModalProps {
@@ -7,20 +6,12 @@ interface CashInModalProps {
   setOpenPaypal: (open: boolean) => void;
 }
 
-const CashInModal: React.FC<CashInModalProps> = ({
-  open,
-  setOpen,
-  setOpenPaypal,
-}) => {
-  const [selectedOption, setSelectedOption] = useState("paypal");
+const CashInModal: React.FC<CashInModalProps> = ({ open, setOpen, setOpenPaypal }) => {
+  // hardcoded for now as we only have paypal
+  const selectedOption = "paypal";
 
   const handleClose = () => {
-    setSelectedOption("paypal");
     setOpen(false);
-  };
-
-  const handleChangeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(e.target.value);
   };
 
   const handleSubmit = () => {
@@ -28,7 +19,6 @@ const CashInModal: React.FC<CashInModalProps> = ({
     if (selectedOption === "paypal") {
       setOpenPaypal(true);
     }
-    setSelectedOption("");
   };
 
   const bodyContent = (
@@ -43,8 +33,8 @@ const CashInModal: React.FC<CashInModalProps> = ({
             type="radio"
             value="paypal"
             name="paypal"
-            onChange={handleChangeOption}
             checked={selectedOption === "paypal"}
+            onChange={() => {}}
             className="mb-4 scale-150 accent-red-500"
           />
         </div>
@@ -56,11 +46,11 @@ const CashInModal: React.FC<CashInModalProps> = ({
         </div>
         <div>
           <input
+            disabled
             type="radio"
             value="localBank"
             name="localBank"
-            onChange={handleChangeOption}
-            checked={selectedOption === "localBank"}
+            onChange={() => {}}
             className="mb-4 scale-150 accent-red-500"
           />
         </div>
@@ -72,11 +62,11 @@ const CashInModal: React.FC<CashInModalProps> = ({
         </div>
         <div>
           <input
+            disabled
             type="radio"
             value="creditCard"
             name="creditCard"
-            onChange={handleChangeOption}
-            checked={selectedOption === "creditCard"}
+            onChange={() => {}}
             className="mb-4 scale-150 accent-red-500"
           />
         </div>
