@@ -96,7 +96,7 @@ const LoginForm = () => {
                     ? undefined
                     : () => (
                         <label className="text-zinc-400">
-                          Personal/Business
+                          Individual/Business
                         </label>
                       )
                 }

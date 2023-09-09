@@ -22,6 +22,10 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
   const balance = data?.me.balances.find((balance) => balance.currency === "SGD");
 
   const handleClose = () => {
+    setAmount("");
+    setUsername("");
+    setNotes("");
+    setModalNumber(1);
     setOpen(false);
     setAmount("");
     setUsername("");
@@ -156,7 +160,9 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
             />
           </div>
           {parseFloat(amount) > (balance?.amount || 0) && (
-            <p className="text-red-500">Error: Amount is greater than the balance.</p>
+            <p className="text-red-500">
+              Error: Amount is greater than the balance.
+            </p>
           )}
         </div>
       </div>
@@ -230,8 +236,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) =>
     <Modal
       isOpen={open}
       onClose={handleClose}
-      onSubmit={handleSubmit}
-      title="Confirm the transfer"
+      title={modalNumber === 1 ? "P2P transfer" : "Confirm the transfer"}
       body={modalNumber === 1 ? bodyContent : bodyContentAfter}
     />
   );

@@ -6,6 +6,7 @@ import { p2pTransactionPrefix } from "./QRCodeModal";
 import {
   Currency,
   useMakeInternalTransferMutation,
+  useMeQuery,
   useMerchantGetQrDetailsLazyQuery,
   useMerchantPayQrMutation,
 } from "../../generated/graphql";
@@ -24,9 +25,13 @@ enum ModalType {
 
 const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const [modal, setModal] = useState(ModalType.SCAN);
-  const [QRString, setQRString] = useState("");
-  const [username, setUsername] = useState("");
-  const [amount, setAmount] = useState("");
+  const [QRString, setQRString] = useState<string>("");
+  const [username, setUsername] = useState<string | undefined>(undefined);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+
+  const { data } = useMeQuery();
+
+  const balance = data?.me.balances.find((balance) => balance.currency === "SGD");
 
   const [fetchMerchantPaymentData] = useMerchantGetQrDetailsLazyQuery();
 
@@ -66,6 +71,8 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       setModal(ModalType.P2P);
       return;
     }
+
+    toast.error("Invalid QR code");
   };
 
   const handleScan = () => {
@@ -107,6 +114,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
           toast.error("Error Sending money to user (Username not found)");
           throw new Error("Error Sending money");
         }
+        toast.success("Payment successful");
+        setOpen(false);
+        setModal(ModalType.SCAN);
       } catch (e) {
         toast.error((e as Error).message);
       }
@@ -118,12 +128,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
           },
         });
 
-        if (merchantPayQRError?.length || !merchantPayQrData?.merchantPayQR) {
-          toast.error("Error paying merchant");
-          throw new Error("Error paying merchant");
-        }
-
         toast.success("Payment successful");
+        setOpen(false);
+        setModal(ModalType.SCAN);
       } catch (e) {
         toast.error((e as Error).message);
       }
@@ -157,9 +164,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
         </label>
         <div className="relative ">
           <input
-            id="amount"
+            id="qrString"
             onChange={handleChangeQrCode}
-            type="number"
+            type="text"
             placeholder="eg UXJSADU#!*&EFBNDSCDS(I@"
             className="bg-gray-100 pl-4 py-2 rounded-md w-full"
           />
@@ -288,15 +295,24 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
         <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">
           Amount
         </label>
-        <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
-          <input
-            id="amount"
-            onChange={handleChangeAmount}
-            type="number"
-            placeholder="eg 239.29"
-            className="bg-gray-100 pl-10 py-2 rounded-md w-full"
-          />
+        <div className="flex flex-col w-full">
+          <div
+            className={`relative ${
+              amount ?? 0 > (balance?.amount || 0) ? "border border-red-500 rounded-md w-full" : ""
+            }`}
+          >
+            <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
+            <input
+              id="amount"
+              onChange={handleChangeAmount}
+              type="number"
+              placeholder="eg 239.29"
+              className="bg-gray-100 pl-10 py-2 rounded-md w-full"
+            />
+          </div>
+          {(amount ?? 0) > (balance?.amount || 0) && (
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
+          )}
         </div>
       </div>
       <button

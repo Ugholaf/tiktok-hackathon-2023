@@ -21,7 +21,7 @@ const Navbar = () => {
     const pathname = location.pathname;
 
     // Determine the active tab based on the pathname
-    if (pathname === "/personal") {
+    if (pathname === "/") {
       setActiveTab("Home");
     } else if (pathname === "/transaction") {
       setActiveTab("Transaction");
@@ -38,7 +38,7 @@ const Navbar = () => {
     setActiveTab(tab);
     setShowMenu(true);
     if (tab === "Home") {
-      navigate("/personal");
+      navigate("/");
     } else if (tab === "Transaction") {
       setActiveTab("Transaction");
       setShowMenu(true);
@@ -47,9 +47,6 @@ const Navbar = () => {
       setActiveTab("Roadmap");
       setShowMenu(true);
       navigate("/Roadmap");
-    }
-    {
-      /*Set effect to auto close menu or not or not*/
     }
   };
 
