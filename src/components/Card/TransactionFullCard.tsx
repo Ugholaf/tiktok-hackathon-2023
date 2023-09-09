@@ -50,7 +50,11 @@ const TransactionFullCard = () => {
               </div>
               <div className="flex justify-center items-center">
                 <p className="text-sm lg:text-base">
-                  {transaction.type.toLowerCase().replace(/_/g, " ")}
+                  {transaction.type
+                    .replace(/_/g, " ")
+                    .split(" ")
+                    .map((s) => s.charAt(0).toUpperCase() + s.substring(1).toLocaleLowerCase())
+                    .join(" ")}
                 </p>
               </div>
               <div className="flex justify-end max-w-[62px] lg:min-w-[160px]">

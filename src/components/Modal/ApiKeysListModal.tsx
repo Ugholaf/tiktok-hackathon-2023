@@ -1,8 +1,8 @@
-import { useState } from "react";
 import Modal from "./Modal";
-import { useForm } from "react-hook-form";
-import { ApiKeyType, useGenerateApiKeyMutation } from "../../generated/graphql";
-import toast from "react-hot-toast";
+import { useGetApiKeyListQuery, useRevokeApiKeyMutation } from "../../generated/graphql";
+import { toast } from "react-hot-toast";
+
+import { useEffect } from "react";
 
 interface Props {
   open: boolean;
@@ -10,100 +10,57 @@ interface Props {
 }
 
 const ApiKeysListModal: React.FC<Props> = ({ open, setOpen }) => {
-  const [generatedAPI, setGeneratedAPI] = useState("");
+  const [revokeApiKey] = useRevokeApiKeyMutation();
+  const { data: apiKeyList, refetch } = useGetApiKeyListQuery({ fetchPolicy: "cache-and-network" });
 
-  const { register, watch } = useForm({
-    defaultValues: {
-      webhook: "",
-      label: "",
-    },
-  });
+  useEffect(() => {
+    if (open) refetch();
+  }, [open, refetch]);
 
-  const webhook = watch("webhook");
-  const label = watch("label");
-
-  const disabled = webhook === "" || label === "" || generatedAPI !== "";
-
-  const [generateAPI] = useGenerateApiKeyMutation({ fetchPolicy: "no-cache" });
-
-  const handleGenerateAPI = async () => {
+  const revokeApiKeyHandler = async (prefix: string) => {
     try {
-      const { data } = await generateAPI({
-        variables: {
-          type: ApiKeyType.CREATE_PAYMENT_QR,
-          label: label,
-          webhookUrl: webhook,
-        },
-      });
-
-      if (data) {
-        setGeneratedAPI(data.generateApiKey);
+      const { data, errors } = await revokeApiKey({ variables: { prefix } });
+      if (!data?.revokeApiKey || errors?.length) {
+        throw new Error("Error revoking API key");
       }
-    } catch (e) {
-      toast.error((e as Error).message);
+      await refetch();
+      toast.success("Successfully deleted API key!");
+    } catch (error) {
+      console.log(error);
+      toast.error("Revoking access token failed");
     }
-  };
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText(generatedAPI);
   };
 
   const body = (
     <>
       {/*Paragraph Text Class items-start means align to left*/}
-      <p className="text-base font-bold text-left">Get started with TMoney APIs</p>
-      <p className="text-base text-left">
-        TMoney APIs use REST, authenticate with OAuth 2.0 access tokens, and return HTTP response
-        codes and responses encoded in JSON.{" "}
-      </p>
-
-      <div className="flex flex-col items-start gap-4 self-stretch">
-        {" "}
-        {/*Paragraph Text Class items-start means align to left*/}
-        <div>
-          <p className="text-base font-bold text-left">Generate SECRET API</p>
-          <p className="text-base text-left">
-            Do not share this API with anyone, it is tied to your business account.{" "}
-          </p>
-        </div>
-        <form className="grid grid-cols-2 w-full gap-4">
-          <div className="col-span-2 md:col-span-1">
-            <p className="text-base font-bold text-left">Webhook:</p>
-            <input
-              {...register("webhook")}
-              type="text"
-              className="w-full h-3/4 border-2 border-black rounded-md"
-            />
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            <p className="text-base font-bold text-left">Label:</p>
-            <input
-              {...register("label")}
-              type="text"
-              className="w-full h-3/4 border-2 border-black rounded-md"
-            />
-          </div>
-        </form>
-        <div className="flex flex-col md:flex-row items-start gap-4 my-4 self-stretch">
-          <button
-            disabled={disabled}
-            onClick={handleGenerateAPI}
-            className="bg-red-600 text-white py-2 px-3 rounded flex justify-center items-center disabled:bg-slate-500 disabled:cursor-not-allowed"
-          >
-            Generate API
-          </button>
-          <div className="w-full md:w-auto bg-gray-100 p-4 py-2 rounded flex-grow flex  items-center justify-between">
-            <input
-              type="text"
-              value={generatedAPI}
-              readOnly
-              className="flex-grow w-full bg-transparent border-none"
-            />
-            <span onClick={handleCopyClick} className="text-gray-600 cursor-pointer">
-              &#128203;
-            </span>
-          </div>
-        </div>
-      </div>
+      <p className="font-bold text-left mb-4 text-lg">List of API Keys generated</p>
+      <table className="w-full ">
+        <thead>
+          <tr>
+            <th>Label</th>
+            <th>Prefix</th>
+            <th>Webhook Url</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {apiKeyList?.getApiKeyList.map((apiKey) => (
+            <tr className="mx-2 text-sm">
+              <td>{apiKey.label}</td>
+              <td>{apiKey.prefix.slice(0, 4)}</td>
+              <td>{apiKey.webhookUrl}</td>
+              <button
+                className=" bg-red-500 hover:bg-red-600 text-white p-2 rounded md:col-span-2 mb-2"
+                type="submit"
+                onClick={() => revokeApiKeyHandler(apiKey.prefix)}
+              >
+                Delete
+              </button>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
   );
   return <Modal isOpen={open} onClose={() => setOpen(false)} body={body} title="Manage API Keys" />;

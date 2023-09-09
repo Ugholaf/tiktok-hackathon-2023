@@ -1,0 +1,3 @@
+mutation RevokeApiKey($prefix: String!) {
+  revokeApiKey(prefix: $prefix)
+}
