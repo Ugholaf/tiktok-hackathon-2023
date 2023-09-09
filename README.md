@@ -1,6 +1,6 @@
 # TMoney Frontend
 
-Website: tiktok-hackathon-2023.vercel.app
+Website: https://tiktok-hackathon-2023.vercel.app
 
 Backend repo: https://github.com/Royleong31/T-Money-api
 
