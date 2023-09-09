@@ -14,7 +14,7 @@ Backend repo: https://github.com/Royleong31/T-Money-api
 - Login
 
   - Login authentication using email/username and password.
-  - OTP will be sent to the registered email for 2 factor authentication.
+  - OTP will be sent to the registered email for 2 factor authentication. (Please check your spam/junk for OTP)
 
 - Cash In
 
