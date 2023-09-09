@@ -11,22 +11,22 @@ const GoToMarketCard = () => {
 
       <div className="flex flex-col items-center justify-start gap-0">
         <img
-          src="public/assets/business/GTM_6_months.png"
+          src="/assets/business/GTM_6_months.png"
           alt="roadmap"
           className="py-0 xl:w-[80%] 2xl:w-[60%]"
         ></img>
         <img
-          src="public/assets/business/GTM_1_year.png"
+          src="/assets/business/GTM_1_year.png"
           alt="roadmap"
           className="py-0 xl:w-[80%] 2xl:w-[60%]"
         ></img>
         <img
-          src="public/assets/business/GTM_1.5_year.png"
+          src="/assets/business/GTM_1.5_year.png"
           alt="roadmap"
           className="py-0 xl:w-[80%] 2xl:w-[60%]"
         ></img>
         <img
-          src="public/assets/business/GTM_2_year.png"
+          src="/assets/business/GTM_2_year.png"
           alt="roadmap"
           className="py-0 xl:w-[80%] 2xl:w-[60%]"
         ></img>

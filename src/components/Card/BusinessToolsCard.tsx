@@ -20,7 +20,7 @@ const BusinessToolsCard = () => {
               setOpenApiIntegration(true);
             }}
           >
-            <img src="public/assets/recentcontact/person.svg" alt="person" />
+            <img src="/assets/recentcontact/person.svg" alt="person" />
             <p className="text-base font-bold">Generate API Key</p>
           </button>
 
@@ -31,7 +31,7 @@ const BusinessToolsCard = () => {
             }}
           >
             <div className="col-span-1 flex flex-col items-center gap-2 justify-start">
-              <img src="public/assets/recentcontact/person.svg" alt="person" />
+              <img src="/assets/recentcontact/person.svg" alt="person" />
               <p className="text-base font-bold">Manage API Keys</p>
             </div>
           </button>

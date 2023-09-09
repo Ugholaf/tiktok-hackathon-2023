@@ -45,14 +45,14 @@ const WalletBalanceCard = () => {
               className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
               onClick={() => setOpenCashIn(true)}
             >
-              <img src="public/assets/buttons/cashIn.svg" alt="cash in" />
+              <img src="/assets/buttons/cashIn.svg" alt="cash in" />
               Cash In
             </button>
             <button
               className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
               onClick={() => setOpenCashOut(true)}
             >
-              <img src="public/assets/buttons/cashOut.svg" alt="cash out" />
+              <img src="/assets/buttons/cashOut.svg" alt="cash out" />
               Cash Out
             </button>
             <button
@@ -60,7 +60,7 @@ const WalletBalanceCard = () => {
               onClick={() => setOpenP2PTransfer(true)}
             >
               <img
-                src="public/assets/buttons/p2pTransfer.svg"
+                src="/assets/buttons/p2pTransfer.svg"
                 alt="p2p transfer"
               />
               P2P Transfer
@@ -69,18 +69,18 @@ const WalletBalanceCard = () => {
               className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
               onClick={() => setOpenScan(true)}
             >
-              <img src="public/assets/buttons/scan.svg" alt="scan" />
+              <img src="/assets/buttons/scan.svg" alt="scan" />
               Scan QR
             </button>
             <button
               className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
               onClick={() => setOpenQR(true)}
             >
-              <img src="public/assets/buttons/qrcode.svg" alt="qrcode" />
+              <img src="/assets/buttons/qrcode.svg" alt="qrcode" />
               Display QR
             </button>
             <div className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base">
-              <img src="public/assets/buttons/conversion.svg" alt="qrcode" />
+              <img src="/assets/buttons/conversion.svg" alt="qrcode" />
               Conversion
             </div>
           </div>

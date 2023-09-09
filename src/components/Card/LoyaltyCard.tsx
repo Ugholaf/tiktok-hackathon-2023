@@ -22,13 +22,13 @@ const LoyaltyCard = () => {
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11  my-6  self-stretch items-center w-full shadow-md bg-white">
       <p className="flex flex-row text-2xl font-bold border-b-2 border-red-500 mb-6">
-        <img src="public/assets/buttons/Tpoints.svg" alt="person" /> &nbsp;
+        <img src="/assets/buttons/Tpoints.svg" alt="person" /> &nbsp;
         TPlus-Points
       </p>
       <div className="flex flex-col self-stretch w-full items-end">
         {" "}
         <div className="flex xl:flex justify-between items-center self-stretch px-3 py-3 bg-gray-200 w-full rounded-t-lg">
-          <img src="public/assets/buttons/Tpointslarge.svg" alt="person" />
+          <img src="/assets/buttons/Tpointslarge.svg" alt="person" />
           <div className="flex flex-col items-start px-3 py-1 bg-gray-200 w-full rounded-t-lg">
             <p className="text-xl xl:text-2xl">
               {points.toLocaleString("en-SG", {
@@ -52,7 +52,7 @@ const LoyaltyCard = () => {
         </div>
       </div>
       <div className="flex flex-row justify-center space-x-4">
-        <img src="public/assets/recentcontact/viewmore.svg" alt="person" />
+        <img src="/assets/recentcontact/viewmore.svg" alt="person" />
         <p className="text-base font-bold ">Learn More!</p>
       </div>
     </div>

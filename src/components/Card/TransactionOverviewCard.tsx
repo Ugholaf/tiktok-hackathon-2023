@@ -35,7 +35,7 @@ const TransactionOverviewCard = () => {
           <div className="flex flex-col py-1 justify-center items-center">
             <div className="flex flex-row">
               <p className="text-base md:text-xl font-bold">Payments In</p>
-              <img src="public/assets/payinUp.svg" alt="payment in" />
+              <img src="/assets/payinUp.svg" alt="payment in" />
             </div>
             <p className="text-base md:text-lg ">
               $
@@ -49,7 +49,7 @@ const TransactionOverviewCard = () => {
           <div className="flex flex-col py-1 justify-center items-center">
             <div className="flex flex-row">
               <p className="text-base md:text-xl font-bold">Payments Out</p>
-              <img src="public/assets/payinOut.svg" alt="payment out" />
+              <img src="/assets/payinOut.svg" alt="payment out" />
             </div>
             <p className="text-base md:text-lg ">
               $
@@ -67,9 +67,9 @@ const TransactionOverviewCard = () => {
               Net Change in Balance
             </p>
             {sum > 0 ? (
-              <img src="public/assets/payinUp.svg" alt="payment in" />
+              <img src="/assets/payinUp.svg" alt="payment in" />
             ) : (
-              <img src="public/assets/payinOut.svg" alt="payment out" />
+              <img src="/assets/payinOut.svg" alt="payment out" />
             )}
           </div>
           <p className="text-base md:text-xl">

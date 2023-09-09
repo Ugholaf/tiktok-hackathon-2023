@@ -67,7 +67,7 @@ const Navbar = () => {
       {isLoggedIn ? (
         <div className="flex flex-row items-center justify-between gap-3">
           <img
-            src="public/assets/logo.svg"
+            src="/assets/logo.svg"
             alt="Logo"
             onClick={() => navigate("/")}
             className="hover:cursor-pointer"
@@ -102,7 +102,7 @@ const Navbar = () => {
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
               <div className="flex gap-3 items-center">
                 <img
-                  src="public/assets/recentcontact/person.svg"
+                  src="/assets/recentcontact/person.svg"
                   alt="person"
                   className="fill-red-600 w-4 h-4 "
                 />
@@ -112,7 +112,7 @@ const Navbar = () => {
             {meData?.me?.accountType === AccountType.BUSINESS && (
               <div className="flex gap-3 items-center">
                 <img
-                  src="public/assets/icons/localBank.svg"
+                  src="/assets/icons/localBank.svg"
                   alt="person"
                   className="text-red-600 w-4 h-4"
                 />
@@ -123,7 +123,7 @@ const Navbar = () => {
             {meData && <p>{meData.me.username}</p> /*Added username*/}
             <button className="bg-white py-2" onClick={handleLogout}>
               <img
-                src="public/assets/icons/signout.svg"
+                src="/assets/icons/signout.svg"
                 alt="signout"
                 className=" w-4 h-4"
               />{" "}
@@ -157,7 +157,7 @@ const Navbar = () => {
             {meData?.me?.accountType === AccountType.INDIVIDUAL && (
               <div className="flex gap-3 items-center">
                 <img
-                  src="public/assets/recentcontact/person.svg"
+                  src="/assets/recentcontact/person.svg"
                   alt="person"
                   className="fill-red-600 w-4 h-4 "
                 />
@@ -167,7 +167,7 @@ const Navbar = () => {
             {meData?.me?.accountType === AccountType.BUSINESS && (
               <div className="flex gap-3 items-center">
                 <img
-                  src="public/assets/icons/localBank.svg"
+                  src="/assets/icons/localBank.svg"
                   alt="person"
                   className="text-red-600 w-4 h-4"
                 />
@@ -181,7 +181,7 @@ const Navbar = () => {
               {meData && <p>{meData.me.username}</p> /*Added username*/}
               <button className="bg-white" onClick={handleLogout}>
                 <img
-                  src="public/assets/icons/signout.svg"
+                  src="/assets/icons/signout.svg"
                   alt="signout"
                   className=" w-4 h-4"
                 />{" "}

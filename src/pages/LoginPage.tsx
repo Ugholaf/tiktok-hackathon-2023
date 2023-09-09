@@ -73,7 +73,7 @@ const LoginPage = () => {
         <div className="flex flex-wrap ">
           <div className="flex flex-row rounded-xl bg-white lg:mx-30 xl:mx-30 2xl:mx-60 overflow-hidden  min-h-[700px]">
             <img
-              src="public/assets/loginImage.svg"
+              src="/assets/loginImage.svg"
               className="desktopImage h-full"
             ></img>
             <div className="flex flex-col items-center">

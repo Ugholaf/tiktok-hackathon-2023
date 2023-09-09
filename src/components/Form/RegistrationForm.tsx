@@ -121,12 +121,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     <button onClick={() => setVisibility(!visibility)}>
                       {visibility ? (
                         <img
-                          src="/public/assets/visibilityOn.svg"
+                          src="/assets/visibilityOn.svg"
                           alt="showPassword"
                         />
                       ) : (
                         <img
-                          src="/public/assets/visibilityOff.svg"
+                          src="/assets/visibilityOff.svg"
                           alt="hidePassword"
                         />
                       )}
