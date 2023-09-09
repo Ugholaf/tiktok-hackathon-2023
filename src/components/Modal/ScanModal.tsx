@@ -25,15 +25,13 @@ enum ModalType {
 
 const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const [modal, setModal] = useState(ModalType.SCAN);
-  const [QRString, setQRString] = useState<string>("");
-  const [username, setUsername] = useState<string | undefined>(undefined);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [QRString, setQRString] = useState("");
+  const [username, setUsername] = useState("");
+  const [amount, setAmount] = useState("");
 
   const { data } = useMeQuery();
 
-  const balance = data?.me.balances.find(
-    (balance) => balance.currency === "SGD"
-  );
+  const balance = data?.me.balances.find((balance) => balance.currency === "SGD");
 
   const [fetchMerchantPaymentData] = useMerchantGetQrDetailsLazyQuery();
 
@@ -46,7 +44,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(e.target.value));
+    setAmount(e.target.value);
   };
 
   const handleClose = () => {
@@ -56,8 +54,8 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   };
 
   const handleBack = () => {
-    setAmount(undefined);
-    setUsername(undefined);
+    setAmount("");
+    setUsername("");
     setQRString("");
     setModal(ModalType.SCAN);
   };
@@ -91,7 +89,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       return;
     }
 
-    if (amount < 0) {
+    if (+amount < 0) {
       toast.error("Amount must be greater than 0");
       return;
     }
@@ -103,15 +101,19 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       }
 
       try {
-        await makeInternalTransfer({
+        const { data: internalTransferData, errors } = await makeInternalTransfer({
           variables: {
-            amount: amount,
+            amount: Number(amount),
             currency: Currency.SGD,
             toUsername: username,
             note: "",
           },
         });
 
+        if (!internalTransferData?.makeInternalTransfer.receiverId || errors?.length) {
+          toast.error("Error Sending money to user (Username not found)");
+          throw new Error("Error Sending money");
+        }
         toast.success("Payment successful");
         setOpen(false);
         setModal(ModalType.SCAN);
@@ -120,11 +122,15 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       }
     } else {
       try {
-        await merchantPayQR({
+        const { data: merchantPayQrData, errors: merchantPayQRError } = await merchantPayQR({
           variables: {
             merchantPayQrId: QRString,
           },
         });
+
+        if (!merchantPayQrData?.merchantPayQR || merchantPayQRError?.length) {
+          throw new Error("Error paying merchant");
+        }
 
         toast.success("Payment successful");
         setOpen(false);
@@ -146,7 +152,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       return;
     }
 
-    if (amount <= 0) {
+    if (+amount <= 0) {
       toast.error("Amount must be greater than 0");
       return;
     }
@@ -157,10 +163,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const scanBody = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="amount"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="amount" className="flex text-xl font-semibold justify-start">
           Paste QR String
         </label>
         <div className="relative ">
@@ -200,22 +203,16 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const confirmBody = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           To:
         </label>
         <p className="text-bold text-xl">{username}</p>
       </div>
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           Amount:{" "}
         </label>
-        <p className="text-bold text-xl">$ {amount === 0 ? "" : amount}</p>
+        <p className="text-bold text-xl">$ {+amount === 0 ? "" : amount}</p>
       </div>
 
       <div className="flex flex-col gap-3 mt-3">
@@ -236,53 +233,51 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   );
 
   const readerBody = (
-    <QrScanner
-      onDecode={async (result) => {
-        setQRString(result);
-        // query to figure out is p2p or merch
-        if (result.startsWith(p2pTransactionPrefix)) {
-          setUsername(result.split("-")[1]);
-          setModal(ModalType.P2P);
-          return;
-        }
-
-        try {
-          const {
-            data: merchantPaymentData,
-            error: fetchMerchantPaymentError,
-          } = await fetchMerchantPaymentData({
-            variables: {
-              merchantGetQrDetailsId: result,
-            },
-          });
-
-          if (fetchMerchantPaymentError) {
-            throw new Error("Error fetching merchant payment data");
-          }
-
-          if (merchantPaymentData?.merchantGetQRDetails) {
-            setUsername(
-              merchantPaymentData?.merchantGetQRDetails.merchant.username
-            );
-            setAmount(merchantPaymentData?.merchantGetQRDetails.amount);
-            setModal(ModalType.CONFIRM);
+    <div className="max-w-[400px] m-auto">
+      <QrScanner
+        onError={() => {}}
+        onDecode={async (result) => {
+          setQRString(result);
+          // query to figure out is p2p or merch
+          if (result.startsWith(p2pTransactionPrefix)) {
+            setUsername(result.split("-")[1]);
+            setModal(ModalType.P2P);
             return;
           }
-        } catch (e) {
-          toast.error((e as Error).message);
-        }
-      }}
-      onError={(error) => console.log(error?.message)}
-    />
+
+          try {
+            const { data: merchantPaymentData, error: fetchMerchantPaymentError } =
+              await fetchMerchantPaymentData({
+                variables: {
+                  merchantGetQrDetailsId: result,
+                },
+              });
+
+            if (fetchMerchantPaymentError) {
+              toast.error("Error fetching merchant payment data");
+              return;
+            }
+
+            if (merchantPaymentData?.merchantGetQRDetails) {
+              setUsername(merchantPaymentData?.merchantGetQRDetails.merchant.username);
+              setAmount(merchantPaymentData?.merchantGetQRDetails.amount.toString());
+              setModal(ModalType.CONFIRM);
+              return;
+            }
+          } catch (e) {
+            toast.error((e as Error).message);
+          }
+        }}
+      />
+    </div>
   );
+
+  const invalidAmount = (+amount ?? 0) > (balance?.amount || 0);
 
   const p2pBody = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="username"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl ml-2 font-semibold justify-start">
           Username
         </label>
         <div className="relative ">
@@ -303,23 +298,14 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="amount"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">
           Amount
         </label>
         <div className="flex flex-col w-full">
           <div
-            className={`relative ${
-              amount ?? 0 > (balance?.amount || 0)
-                ? "border border-red-500 rounded-md w-full"
-                : ""
-            }`}
+            className={`relative ${invalidAmount ? "border border-red-500 rounded-md w-full" : ""}`}
           >
-            <span className="absolute inset-y-0 left-0 px-3 flex items-center">
-              $
-            </span>
+            <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
             <input
               id="amount"
               onChange={handleChangeAmount}
@@ -328,16 +314,15 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
               className="bg-gray-100 pl-10 py-2 rounded-md w-full"
             />
           </div>
-          {(amount ?? 0) > (balance?.amount || 0) && (
-            <p className="text-red-500">
-              Error: Amount is greater than the balance.
-            </p>
+          {invalidAmount && (
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
           )}
         </div>
       </div>
       <button
-        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full"
+        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full disabled:bg-red-300 disabled:cursor-not-allowed"
         onClick={handleNext}
+        disabled={!username || !amount || invalidAmount}
       >
         Next
       </button>

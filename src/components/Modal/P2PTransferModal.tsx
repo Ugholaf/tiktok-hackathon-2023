@@ -1,10 +1,7 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Modal from "./Modal";
 import { toast } from "react-hot-toast";
-import {
-  Currency,
-  useMakeInternalTransferMutation,
-} from "../../generated/graphql";
+import { Currency, useMakeInternalTransferMutation } from "../../generated/graphql";
 import { useMeQuery } from "../../generated/graphql";
 
 interface P2PTransferModalProps {
@@ -12,12 +9,9 @@ interface P2PTransferModalProps {
   setOpen: (open: boolean) => void;
 }
 
-const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
-  open,
-  setOpen,
-}) => {
+// TODO: Add input validation
+const P2PTransferModal: React.FC<P2PTransferModalProps> = ({ open, setOpen }) => {
   const [makeInternalTransfer] = useMakeInternalTransferMutation();
-  const checkoutRef = useRef("");
   const [modalNumber, setModalNumber] = useState(1);
   const [amount, setAmount] = useState("");
   const [username, setUsername] = useState("");
@@ -25,9 +19,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
 
   const { data } = useMeQuery();
 
-  const balance = data?.me.balances.find(
-    (balance) => balance.currency === "SGD"
-  );
+  const balance = data?.me.balances.find((balance) => balance.currency === "SGD");
 
   const handleClose = () => {
     setAmount("");
@@ -35,6 +27,10 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
     setNotes("");
     setModalNumber(1);
     setOpen(false);
+    setAmount("");
+    setUsername("");
+    setNotes("");
+    setModalNumber(1);
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,12 +74,6 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
     return true;
   };
 
-  const pressback = () => {
-    setNotes("");
-    setAmount("");
-    setUsername("");
-  };
-
   const handleSubmit = async () => {
     const convertedAmount = Number(amount);
     if (!convertedAmount) {
@@ -95,9 +85,8 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
       toast.error("Amount must be greater than 0");
       return;
     }
-
     try {
-      const { data: transferData } = await makeInternalTransfer({
+      const { data } = await makeInternalTransfer({
         variables: {
           amount: convertedAmount,
           currency: Currency.SGD,
@@ -105,23 +94,33 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
           note: notes,
         },
       });
-      if (!transferData?.makeInternalTransfer.receiverId) {
-        throw new Error("Error Sending money to user (Username not found)");
+
+      if (data?.makeInternalTransfer) {
+        toast.success("Successfully Sent money");
+        setModalNumber(1);
+        setOpen(false);
+
+        return;
       }
 
-      checkoutRef.current = transferData.makeInternalTransfer.receiverId;
-      toast.success("Successfully Sent money");
-    } catch (err) {
-      toast.error((err as Error).message);
+      throw new Error("Error Sending money to user");
+    } catch (error: unknown) {
+      if ((error as Error)?.message.includes("Receiver not found")) {
+        toast.error("Error Sending money to user (Username not found)");
+      } else {
+        toast.error("Error Sending money to user");
+      }
+
+      console.log(error);
     }
   };
+
+  const disabledNext = parseFloat(amount) > (balance?.amount || 0);
+
   const bodyContent = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="username"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl ml-2 font-semibold justify-start">
           Username
         </label>
         <div className="relative ">
@@ -131,6 +130,7 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
             className="absolute left-0 top-1/2 transform -translate-y-1/2 px-2 py-2 flex justify-center items-center w-8"
           />
           <input
+            value={username}
             id="username"
             onChange={handleChangeUsername}
             type="text"
@@ -141,24 +141,16 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="amount"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="amount" className="flex text-xl ml-2 font-semibold justify-start">
           Amount
         </label>
         <div className="flex flex-col w-full">
           <div
-            className={`relative ${
-              parseFloat(amount) > (balance?.amount || 0)
-                ? "border border-red-500 rounded-md w-full"
-                : ""
-            }`}
+            className={`relative ${disabledNext ? "border border-red-500 rounded-md w-full" : ""}`}
           >
-            <span className="absolute inset-y-0 left-0 px-3 flex items-center">
-              $
-            </span>
+            <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
             <input
+              value={amount}
               id="amount"
               onChange={handleChangeAmount}
               type="number"
@@ -166,26 +158,20 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
               className="bg-gray-100 pl-10 py-2 rounded-md w-full"
             />
           </div>
-          {parseFloat(amount) > (balance?.amount || 0) && (
-            <p className="text-red-500">
-              Error: Amount is greater than the balance.
-            </p>
+          {disabledNext && (
+            <p className="text-red-500">Error: Amount is greater than the balance.</p>
           )}
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor="notes"
-          className="flex text-xl ml-2 font-semibold justify-start"
-        >
+        <label htmlFor="notes" className="flex text-xl ml-2 font-semibold justify-start">
           Notes
         </label>
         <div className="relative ">
-          <span className="absolute inset-y-0 left-0 px-2 flex items-center">
-            &#128221;
-          </span>
+          <span className="absolute inset-y-0 left-0 px-2 flex items-center">&#128221;</span>
           <input
+            value={notes}
             id="notes"
             onChange={handleChangeNotes}
             type="text"
@@ -195,10 +181,11 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
         </div>
       </div>
       <button
-        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full"
+        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full disabled:bg-red-300 disabled:cursor-not-allowed"
         onClick={() => {
           handleCheck() && setModalNumber(2);
         }}
+        disabled={!username || !amount || disabledNext}
       >
         Next
       </button>
@@ -207,28 +194,19 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
   const bodyContentAfter = (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           Username:
         </label>
         <p className="text-bold text-xl">{username}</p>
       </div>
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           Amount:{" "}
         </label>
         <p className="text-bold text-xl">${amount}</p>
       </div>
       <div className="flex flex-row gap-2 items-center">
-        <label
-          htmlFor="username"
-          className="flex text-xl font-semibold justify-start"
-        >
+        <label htmlFor="username" className="flex text-xl font-semibold justify-start">
           Notes:
         </label>
         <p className="text-bold text-xl">{notes}</p>
@@ -238,19 +216,13 @@ const P2PTransferModal: React.FC<P2PTransferModalProps> = ({
           className="py-2 px-5 border-2 border-red-500 rounded-md text-red-500 font-bold hover:opacity-70 transition w-full"
           onClick={() => {
             setModalNumber(1);
-            pressback();
           }}
         >
           Back
         </button>
         <button
           className="py-2 px-5 border-2 border-red-500 bg-red-500 rounded-md text-white font-bold hover:opacity-70 transition w-full"
-          onClick={() => {
-            handleSubmit();
-            setModalNumber(1);
-            setOpen(false);
-            pressback();
-          }}
+          onClick={handleSubmit}
         >
           Pay
         </button>

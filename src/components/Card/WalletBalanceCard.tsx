@@ -18,24 +18,24 @@ const WalletBalanceCard = () => {
   const { data } = useMeQuery({
     pollInterval: 2000,
   });
-  const balance = data?.me.balances.find(
-    (balance) => balance.currency === "SGD"
-  );
-  console.log(balance);
+  const balance = data?.me.balances.find((balance) => balance.currency === "SGD");
+
   return (
     <div className="flex flex-col rounded-xl py-6 px-6 md:px-11 my-6 self-stretch items-center shadow-md w-full bg-white">
-      <p className="text-2xl font-bold border-b-2 border-red-600 mb-6">
-        Wallet Balance
-      </p>
+      <p className="text-2xl font-bold border-b-2 border-red-600 mb-6">Wallet Balance</p>
       <div className="flex flex-col items-start self-stretch w-full">
         <div className="flex flex-col items-start px-3 py-1 bg-gray-200 w-full rounded-t-lg">
           <p className="text-3xl">
-            ${balance?.amount.toFixed(2) ?? 0} {balance?.currency}
+            $
+            {balance?.amount.toLocaleString("en-SG", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{" "}
+            {balance?.currency}
           </p>
           <p className="text-base text-gray-500">Available</p>
         </div>
         <div className="flex flex-col items-start px-3 py-3 bg-gray-100 w-full rounded-b-lg">
-          <p className="text-sm md:text-base mb-2">Perform Transactions</p>
           <div className="grid grid-cols-[1fr_1fr] justify-start items-center gap-3 self-stretch">
             <button
               className="flex flex-row gap-2 bg-white py-2 px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
@@ -83,11 +83,7 @@ const WalletBalanceCard = () => {
 
       <P2PTransferModal open={openP2PTransfer} setOpen={setOpenP2PTransfer} />
       <CashOutModal open={OpenCashOut} setOpen={setOpenCashOut} />
-      <CashInModal
-        open={openCashIn}
-        setOpen={setOpenCashIn}
-        setOpenPaypal={setOpenPaypal}
-      />
+      <CashInModal open={openCashIn} setOpen={setOpenCashIn} setOpenPaypal={setOpenPaypal} />
       <PaypalModal open={openPaypal} setOpen={setOpenPaypal} />
 
       <QRCodeModal open={openQR} setOpen={setOpenQR} />
