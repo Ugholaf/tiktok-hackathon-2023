@@ -19,7 +19,8 @@ const TransactionOverviewCard = () => {
   });
 
   const amountIn = data?.getTransactionSummary?.amountIn?.valueOf() || 0;
-  const amountOut = data?.getTransactionSummary?.amountOut?.valueOf() || 0;
+  const amountOut =
+    -1 * (data?.getTransactionSummary?.amountOut?.valueOf() || 0);
 
   const sum = amountIn - amountOut;
   const navigate = useNavigate();
@@ -52,10 +53,12 @@ const TransactionOverviewCard = () => {
             </div>
             <p className="text-base md:text-lg ">
               $
-              {amountOut.toLocaleString("en-SG", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}{" "}
+              {amountOut < 0
+                ? (-1 * amountOut).toLocaleString("en-SG", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                : "0.00"}{" "}
               SGD
             </p>
           </div>
