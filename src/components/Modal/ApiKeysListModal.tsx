@@ -9,10 +9,10 @@ interface Props {
   setOpen: (open: boolean) => void;
 }
 
-const ApiIntegrationModal: React.FC<Props> = ({ open, setOpen }) => {
+const ApiKeysListModal: React.FC<Props> = ({ open, setOpen }) => {
   const [generatedAPI, setGeneratedAPI] = useState("");
 
-  const { register, watch, reset } = useForm({
+  const { register, watch } = useForm({
     defaultValues: {
       webhook: "",
       label: "",
@@ -50,22 +50,24 @@ const ApiIntegrationModal: React.FC<Props> = ({ open, setOpen }) => {
   const body = (
     <>
       {/*Paragraph Text Class items-start means align to left*/}
-      <p className="text-base font-bold text-left">
-        Generate an API key to enable checkout on your site.
+      <p className="text-base font-bold text-left">Get started with TMoney APIs</p>
+      <p className="text-base text-left">
+        TMoney APIs use REST, authenticate with OAuth 2.0 access tokens, and return HTTP response
+        codes and responses encoded in JSON.{" "}
       </p>
 
       <div className="flex flex-col items-start gap-4 self-stretch">
         {" "}
         {/*Paragraph Text Class items-start means align to left*/}
         <div>
+          <p className="text-base font-bold text-left">Generate SECRET API</p>
           <p className="text-base text-left">
-            Do not share this API with anyone, it is tied to your business account. Once an API key
-            is generated, it cannot be retrieved again.
+            Do not share this API with anyone, it is tied to your business account.{" "}
           </p>
         </div>
         <form className="grid grid-cols-2 w-full gap-4">
           <div className="col-span-2 md:col-span-1">
-            <p className="text-base font-bold text-left">Webhook URL:</p>
+            <p className="text-base font-bold text-left">Webhook:</p>
             <input
               {...register("webhook")}
               type="text"
@@ -94,7 +96,7 @@ const ApiIntegrationModal: React.FC<Props> = ({ open, setOpen }) => {
               type="text"
               value={generatedAPI}
               readOnly
-              className="flex-grow w-full bg-transparent border-none outline-none"
+              className="flex-grow w-full bg-transparent border-none"
             />
             <span onClick={handleCopyClick} className="text-gray-600 cursor-pointer">
               &#128203;
@@ -102,32 +104,9 @@ const ApiIntegrationModal: React.FC<Props> = ({ open, setOpen }) => {
           </div>
         </div>
       </div>
-
-      <div className="flex flex-col items-start gap-1/8 self-stretch">
-        {" "}
-        {/*Paragraph Text Class items-start means align to left*/}
-        <p className="text-base font-bold text-left">How to use the API</p>
-        <p className="text-base text-left">
-          Step 1: Add API Key to Authorization header in the format 'Bearer [apiKey]'
-        </p>
-        <p className="text-base text-left">Step 2: Add payment amount, checkout ID and currency</p>
-        <p className="text-base text-left">Step 3: Send request to generate payment QR details</p>
-        <p className="text-base text-left">Step 4: Display QR code for users to scan</p>
-      </div>
     </>
   );
-  return (
-    <Modal
-      isOpen={open}
-      onClose={() => {
-        setOpen(false);
-        setGeneratedAPI("");
-        reset();
-      }}
-      body={body}
-      title="Generate API Key"
-    />
-  );
+  return <Modal isOpen={open} onClose={() => setOpen(false)} body={body} title="Manage API Keys" />;
 };
 
-export default ApiIntegrationModal;
+export default ApiKeysListModal;

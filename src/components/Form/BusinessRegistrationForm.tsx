@@ -179,7 +179,6 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
                 <TextField
                   {...field}
                   variant="outlined"
-                  placeholder="Occupation"
                   fullWidth
                 />
               )}
