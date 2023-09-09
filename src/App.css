@@ -42,23 +42,8 @@
   color: #888;
 }
 
-/* 
-.MuiPaper-root.MuiPaper-elevation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  @media (min-width: 1000px) {
-    flex-direction: row;
-    width: 80%;
-  }
-} */
-
 .desktopImage {
   display: none;
-
-
 
   @media (min-width: 1000px) {
     display: flex;

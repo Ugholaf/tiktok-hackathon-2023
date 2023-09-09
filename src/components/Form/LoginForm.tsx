@@ -19,7 +19,11 @@ const LoginForm = () => {
     undefined
   );
 
-  const { handleSubmit, control } = useForm<FormValues>({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormValues>({
     defaultValues: {
       usernameOrEmail: "",
       password: "",
@@ -54,61 +58,91 @@ const LoginForm = () => {
     <>
       <form className="flex flex-wrap flex-col" onSubmit={onSubmit}>
         <div className="flex flex-wrap justify-between py-10">
-          <label className="text-base font-medium mb-2">Email *</label>
-          <Controller
-            control={control}
-            name="usernameOrEmail"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                variant="outlined"
-                placeholder="Username/Email"
-                fullWidth
-              />
+          <div className="flex flex-col w-full items-start">
+            <label className="text-base font-medium mb-2">
+              Username/Email *
+            </label>
+            <Controller
+              control={control}
+              name="usernameOrEmail"
+              rules={{
+                required: "Username or Email is required",
+              }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  variant="outlined"
+                  placeholder="Username/Email"
+                  fullWidth
+                />
+              )}
+            />
+            {errors.usernameOrEmail && (
+              <p className=" flex text-red-500">
+                {errors.usernameOrEmail.message}
+              </p>
             )}
-          />
-          <label className="text-base font-medium py-2">Password *</label>
-          <Controller
-            control={control}
-            name="password"
-            render={({ field }) => (
-              <TextField
-                {...field}
-                type="password"
-                variant="outlined"
-                placeholder="Password"
-                fullWidth
-              />
+          </div>
+
+          <div className="flex flex-col w-full items-start">
+            <label className="text-base font-medium py-2">Password *</label>
+            <Controller
+              control={control}
+              name="password"
+              rules={{
+                required: "Password is required",
+              }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type="password"
+                  variant="outlined"
+                  placeholder="Password"
+                  fullWidth
+                />
+              )}
+            />
+            {errors.password && (
+              <p className=" flex text-red-500">{errors.password.message}</p>
             )}
-          />
-          <label className="text-base font-medium py-2">Account Type *</label>
-          <Controller
-            control={control}
-            name="accountType"
-            render={({ field: { onChange, value } }) => (
-              <Select
-                className="w-full text-left"
-                defaultValue="none"
-                onChange={onChange}
-                value={value}
-                renderValue={
-                  value !== undefined
-                    ? undefined
-                    : () => (
-                        <label className="text-zinc-400">
-                          Individual/Business
-                        </label>
-                      )
-                }
-              >
-                {Object.values(AccountType).map((accountType) => (
-                  <MenuItem key={accountType} value={accountType}>
-                    {accountType}
-                  </MenuItem>
-                ))}
-              </Select>
+          </div>
+
+          <div className="flex flex-col w-full items-start">
+            <label className="text-base font-medium py-2">Account Type *</label>
+            <Controller
+              control={control}
+              name="accountType"
+              rules={{
+                required: "Account Type is required",
+              }}
+              render={({ field: { onChange, value } }) => (
+                <Select
+                  className="w-full text-left"
+                  defaultValue="none"
+                  onChange={onChange}
+                  value={value}
+                  renderValue={
+                    value !== undefined
+                      ? undefined
+                      : () => (
+                          <label className="text-zinc-400">
+                            Individual/Business
+                          </label>
+                        )
+                  }
+                >
+                  {Object.values(AccountType).map((accountType) => (
+                    <MenuItem key={accountType} value={accountType}>
+                      {accountType}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+            {errors.accountType && (
+              <p className=" flex text-red-500">{errors.accountType.message}</p>
             )}
-          />
+          </div>
         </div>
         <button
           className="bg-red-500 hover:bg-red-600 text-white p-4 rounded"
