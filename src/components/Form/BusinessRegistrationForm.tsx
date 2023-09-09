@@ -71,10 +71,15 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
       }
 
       if (errors && errors.length > 0) {
-        toast.error("Error registering!");
+        throw new Error(errors[0].message);
       }
-    } catch (error) {
-      toast.error("Error registering!");
+    } catch (error: unknown) {
+      console.log(error);
+      if ((error as Error).message.includes("duplicate")) {
+        toast.error("Email or username already exists!");
+        return;
+      }
+      toast.error((error as Error)?.message ?? "Error registering!");
     }
   });
 
@@ -86,43 +91,27 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
         </div>
         <div className="grid grid-col-1 gap-4 md:grid-cols-2 my-10">
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Business Name
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Business Name</p>
             <Controller
               control={control}
               name="businessName"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="Business Name"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="Business Name" fullWidth />
               )}
             />
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Business UEN
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Business UEN</p>
             <Controller
               control={control}
               name="uen"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="UEN"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="UEN" fullWidth />
               )}
             />
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Country
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Country</p>
             <Controller
               control={control}
               name="businessCountry"
@@ -152,36 +141,21 @@ const BusinessRegistrationForm: React.FC<BusinessRegistrationFormProps> = ({
             />
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Postal Code
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Postal Code</p>
             <Controller
               control={control}
               name="businessPostcode"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="Postal Code"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="Postal Code" fullWidth />
               )}
             />
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Business Address
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Business Address</p>
             <Controller
               control={control}
               name="businessAddress"
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  fullWidth
-                />
-              )}
+              render={({ field }) => <TextField {...field} variant="outlined" fullWidth />}
             />
           </div>
           <button

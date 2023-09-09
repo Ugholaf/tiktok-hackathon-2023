@@ -81,10 +81,15 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
       }
 
       if (errors && errors.length > 0) {
-        toast.error("Error registering!");
+        throw new Error(errors[0].message);
       }
-    } catch (error) {
-      toast.error("Error registering!");
+    } catch (error: unknown) {
+      console.log(error);
+      if ((error as Error).message.includes("duplicate")) {
+        toast.error("Email or username already exists!");
+        return;
+      }
+      toast.error((error as Error)?.message ?? "Error registering!");
     }
   });
 
@@ -96,43 +101,27 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
         </div>
         <div className="grid grid-col-1 gap-4 md:grid-cols-2 my-10">
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              First Name
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">First Name</p>
             <Controller
               control={control}
               name="firstName"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="First Name"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="First Name" fullWidth />
               )}
             />
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Last Name
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Last Name</p>
             <Controller
               control={control}
               name="lastName"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="Last Name"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="Last Name" fullWidth />
               )}
             />
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Date of Birth
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Date of Birth</p>
             <Controller
               control={control}
               name="dateOfBirth"
@@ -147,9 +136,7 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
             />
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Country
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Country</p>
             <Controller
               control={control}
               name="country"
@@ -179,36 +166,22 @@ const IndividualRegistrationForm: React.FC<IndividualRegistrationFormProps> = ({
             />
           </div>
           <div className="flex flex-col md:col-span-1">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Postal Code
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Postal Code</p>
             <Controller
               control={control}
               name="postcode"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="Postal Code"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="Postal Code" fullWidth />
               )}
             />
           </div>
           <div className="flex flex-col md:col-span-2">
-            <p className="flex flex-start text-sm font-semibold mb-2">
-              Occupation
-            </p>
+            <p className="flex flex-start text-sm font-semibold mb-2">Occupation</p>
             <Controller
               control={control}
               name="occupation"
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  variant="outlined"
-                  placeholder="Occupation"
-                  fullWidth
-                />
+                <TextField {...field} variant="outlined" placeholder="Occupation" fullWidth />
               )}
             />
           </div>
