@@ -24,9 +24,9 @@ enum ModalType {
 
 const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   const [modal, setModal] = useState(ModalType.SCAN);
-  const [QRString, setQRString] = useState<string>("");
-  const [username, setUsername] = useState<string | undefined>(undefined);
-  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [QRString, setQRString] = useState("");
+  const [username, setUsername] = useState("");
+  const [amount, setAmount] = useState("");
 
   const [fetchMerchantPaymentData] = useMerchantGetQrDetailsLazyQuery();
 
@@ -39,7 +39,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   };
 
   const handleChangeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(e.target.value));
+    setAmount(e.target.value);
   };
 
   const handleClose = () => {
@@ -49,8 +49,8 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
   };
 
   const handleBack = () => {
-    setAmount(undefined);
-    setUsername(undefined);
+    setAmount("");
+    setUsername("");
     setQRString("");
     setModal(ModalType.SCAN);
   };
@@ -82,7 +82,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, setOpen }) => {
       return;
     }
 
-    if (amount < 0) {
+    if (+amount < 0) {
       toast.error("Amount must be greater than 0");
       return;
     }

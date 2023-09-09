@@ -16,9 +16,6 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  {
-    /*Due to some shit code and my suckishness i had to hardcode this ~ marcus*/
-  }
   useEffect(() => {
     // Get the pathname from the location object
     const pathname = location.pathname;
@@ -31,9 +28,7 @@ const Navbar = () => {
     } else if (pathname === "/Roadmap") {
       setActiveTab("Roadmap");
     } else {
-      setActiveTab(
-        pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2)
-      );
+      setActiveTab(pathname.substring(1).charAt(0).toUpperCase() + pathname.slice(2));
     }
   }, []);
 
@@ -61,6 +56,7 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(onLogout());
     navigate("/");
+    location.reload();
   };
 
   const toggleMenu = () => {
@@ -72,10 +68,7 @@ const Navbar = () => {
       {isLoggedIn ? (
         <div className="flex flex-row items-center justify-between gap-3">
           <img src="/assets/logo.svg" alt="Logo" />
-          <div
-            className="md:hidden flex items-center text-4xl"
-            onClick={toggleMenu}
-          >
+          <div className="md:hidden flex items-center text-4xl" onClick={toggleMenu}>
             &#9776;
           </div>{" "}
           {/* Hamburger Menu */}
@@ -84,10 +77,9 @@ const Navbar = () => {
             {/* Desktop Menu tabs */}
             {tabs.map((tab) => (
               <li
-                className={`cursor-pointer font-bold ${tab === activeTab
-                  ? "underline decoration-red-500 underline-offset-4"
-                  : ""
-                  }`}
+                className={`cursor-pointer font-bold ${
+                  tab === activeTab ? "underline decoration-red-500 underline-offset-4" : ""
+                }`}
                 key={tab}
                 onClick={() => handleTabChange(tab)}
               >
@@ -121,11 +113,7 @@ const Navbar = () => {
             {!error && "|"}
             {meData && <p>{meData.me.username}</p> /*Added username*/}
             <button className="bg-white py-2" onClick={handleLogout}>
-              <img
-                src="/assets/icons/signout.svg"
-                alt="signout"
-                className=" w-4 h-4"
-              />{" "}
+              <img src="/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />{" "}
               {/*Changed from logout to the signout sign*/}
             </button>
           </div>
@@ -139,10 +127,9 @@ const Navbar = () => {
         <ul className="md:hidden flex flex-col gap-3 py-3 items-center">
           {tabs.map((tab) => (
             <li
-              className={`cursor-pointer font-bold ${tab === activeTab
-                ? "underline decoration-red-500 underline-offset-4"
-                : ""
-                }`}
+              className={`cursor-pointer font-bold ${
+                tab === activeTab ? "underline decoration-red-500 underline-offset-4" : ""
+              }`}
               key={tab}
               onClick={() => handleTabChange(tab)}
             >
@@ -177,12 +164,8 @@ const Navbar = () => {
 
             <div className="flex gap-3 items-center">
               {meData && <p>{meData.me.username}</p> /*Added username*/}
-              <button className="bg-white">
-                <img
-                  src="/assets/icons/signout.svg"
-                  alt="signout"
-                  className=" w-4 h-4"
-                />{" "}
+              <button className="bg-white" onClick={handleLogout}>
+                <img src="/assets/icons/signout.svg" alt="signout" className=" w-4 h-4" />{" "}
                 {/*Changed from logout to the signout sign*/}
               </button>
             </div>
