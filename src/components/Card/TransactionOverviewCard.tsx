@@ -19,8 +19,7 @@ const TransactionOverviewCard = () => {
   });
 
   const amountIn = data?.getTransactionSummary?.amountIn?.valueOf() || 0;
-  const amountOut =
-    -1 * (data?.getTransactionSummary?.amountOut?.valueOf() || 0);
+  const amountOut = data?.getTransactionSummary?.amountOut?.valueOf() || 0;
 
   const sum = amountIn - amountOut;
   const navigate = useNavigate();
