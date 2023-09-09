@@ -27,7 +27,7 @@ const WalletBalanceCard = () => {
         <div className="flex flex-col items-start px-3 py-1 bg-gray-200 w-full rounded-t-lg">
           <p className="text-3xl">
             $
-            {balance?.amount.toLocaleString("en-SG", {
+            {(balance?.amount ?? 0).toLocaleString("en-SG", {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
             })}{" "}

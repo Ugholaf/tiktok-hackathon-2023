@@ -103,6 +103,8 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
     }
   };
 
+  const invalidAmount = parseFloat(amount) > (balance?.amount || 0);
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
@@ -111,11 +113,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
         </label>
         <div className="flex flex-col w-full">
           <div
-            className={`relative ${
-              parseFloat(amount) > (balance?.amount || 0)
-                ? "border border-red-500 rounded-md w-full"
-                : ""
-            }`}
+            className={`relative ${invalidAmount ? "border border-red-500 rounded-md w-full" : ""}`}
           >
             <span className="absolute inset-y-0 left-0 px-3 flex items-center">$</span>
             <input
@@ -127,7 +125,7 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
               className="bg-gray-100 pl-10 py-2 rounded-md w-full"
             />
           </div>
-          {parseFloat(amount) > (balance?.amount || 0) && (
+          {invalidAmount && (
             <p className="text-red-500">Error: Amount is greater than the balance.</p>
           )}
         </div>
@@ -234,7 +232,8 @@ const CashOutModal: React.FC<CashOutModalProps> = ({ open, setOpen }) => {
       </div>
 
       <button
-        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full"
+        className="bg-red-500 py-3 px-5 mt-6 items-center self-stretch rounded-md text-white font-bold hover:opacity-70 transition w-full disabled:bg-red-300 disabled:cursor-not-allowed"
+        disabled={!amount || !email || invaliAmount}
         onClick={() => {
           handleCheck() && setModalNumber(2);
         }}
