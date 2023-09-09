@@ -16,9 +16,6 @@ const Navbar = () => {
   const [activeTab, setActiveTab] = useState<string>("Home");
   const [showMenu, setShowMenu] = useState<boolean>(false);
 
-  {
-    /*Due to some shit code and my suckishness i had to hardcode this ~ marcus*/
-  }
   useEffect(() => {
     // Get the pathname from the location object
     const pathname = location.pathname;
@@ -52,9 +49,6 @@ const Navbar = () => {
       setActiveTab("Roadmap");
       setShowMenu(true);
       navigate("/Roadmap");
-    }
-    {
-      /*Set effect to auto close menu or not or not*/
     }
   };
 
@@ -179,7 +173,7 @@ const Navbar = () => {
 
             <div className="flex gap-3 items-center">
               {meData && <p>{meData.me.username}</p> /*Added username*/}
-              <button className="bg-white">
+              <button className="bg-white" onClick={handleLogout}>
                 <img
                   src="/assets/icons/signout.svg"
                   alt="signout"
