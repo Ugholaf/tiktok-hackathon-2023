@@ -59,10 +59,7 @@ const WalletBalanceCard = () => {
               className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
               onClick={() => setOpenP2PTransfer(true)}
             >
-              <img
-                src="/assets/buttons/p2pTransfer.svg"
-                alt="p2p transfer"
-              />
+              <img src="/assets/buttons/p2pTransfer.svg" alt="p2p transfer" />
               P2P Transfer
             </button>
             <button
@@ -79,10 +76,13 @@ const WalletBalanceCard = () => {
               <img src="/assets/buttons/qrcode.svg" alt="qrcode" />
               Display QR
             </button>
-            <div className="flex flex-row gap-2 bg-white py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base">
+            <button
+              disabled={true}
+              className="flex flex-row gap-2 disabled:bg-slate-300 disabled:cursor-not-allowed disabled:text-gray-600 py-2 px-2 md:px-3 justify-start items-center shadow-md rounded-md text-sm md:text-base"
+            >
               <img src="/assets/buttons/conversion.svg" alt="qrcode" />
               Conversion
-            </div>
+            </button>
           </div>
         </div>
       </div>

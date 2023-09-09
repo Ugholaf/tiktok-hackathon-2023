@@ -23,11 +23,12 @@ function App() {
     <Routes>
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/roadmapWithoutLogin" element={<GoToMarketPage />} />
       </Route>
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<Homepage />} />
-        <Route path="/roadmap" element={<GoToMarketPage />} />
         <Route path="/transaction" element={<TransactionPage />} />
+        <Route path="/roadmap" element={<GoToMarketPage />} />
       </Route>
     </Routes>
   );
